@@ -1,27 +1,21 @@
-Hello team
+# Forkcast
 
-## AWS Amplify React+Vite Starter Template
+**Forkcast** is an open-source application designed to help users find meals they enjoy based on their preferences and meal history. 
+ A user will be able to choose a recipe from a list of ones they might enjoy, and see all of the ingredients for the dish, and the cooking instructions for it. 
 
-This repository provides a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
-
-## Overview
-
-This template equips you with a foundational React application integrated with AWS Amplify, streamlined for scalability and performance. It is ideal for developers looking to jumpstart their project with pre-configured AWS services like Cognito, AppSync, and DynamoDB.
+**Link to JIRA:**
+https://deal-dash-sd.atlassian.net/jira/software/projects/SCRUM/boards/1 
 
 ## Features
+
+- **User Preference**: The user should be able to select dishes which they either enjoy or dislike.
+- **Meal List Recommendation**: The user should be given a list of dishes based on their personal selections.
+- **Recipe Selection**: The user should be able to select a specific meal and receive the ingredients required for that dish.
+- **Recipe Retrieval and Storage**: The user should be able to receive the recipe for the selected meal, and be able to save/export the recipe/ingredients for later use.
+- **User Authentication**: The user should be able to create an account and be able to use that account across multiple devices. 
+
+## AWS Features
 
 - **Authentication**: Setup with Amazon Cognito for secure user authentication.
 - **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
 - **Database**: Real-time database powered by Amazon DynamoDB.
-
-## Deploying to AWS
-
-For detailed instructions on deploying your application, refer to the [deployment section](https://docs.amplify.aws/react/start/quickstart/#deploy-a-fullstack-app-to-aws) of our documentation.
-
-## Security
-
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
-
-## License
-
-This library is licensed under the MIT-0 License. See the LICENSE file.
