@@ -1,7 +1,7 @@
 # Forkcast
 
 **Forkcast** is an open-source application designed to help users find meals they enjoy based on their preferences and meal history. 
- A user will be able to choose a recipe from a list of ones they might enjoy, and see all of the ingredients for the dish, and the cooking instructions for it. 
+  A user will be able to choose a recipe from a list of ones they might enjoy, and see all of the ingredients for the dish, and the cooking instructions for it. 
 
 **Link to JIRA:**
 https://deal-dash-sd.atlassian.net/jira/software/projects/SCRUM/boards/1 
