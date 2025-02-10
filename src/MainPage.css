@@ -1,0 +1,42 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  display: flex;
+  height: 100vh;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 80px;
+  background-color: #333;
+  padding-top: 20px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.icon-image {
+  width: 40px;
+  height: 40px;
+}
+
+.content {
+  flex-grow: 1;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
