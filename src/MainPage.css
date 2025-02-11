@@ -2,6 +2,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: black; /* Set background color to black */
 }
 
 .main-container {
@@ -39,4 +40,11 @@ html, body {
   flex-grow: 1;
   background-color: #f1f1f1;
   padding: 20px;
+}
+
+.meal-request {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 20px;
 }
