@@ -48,7 +48,7 @@ const MainPage: React.FC = () => {
 
       {isMealRequestOpen && (
         <RuxContainer className="meal-request-container">
-          <RuxInput label="Meal Request" type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
+          <RuxInput class="MRInput" label="Meal Request" type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
           <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
         </RuxContainer>
       )}
