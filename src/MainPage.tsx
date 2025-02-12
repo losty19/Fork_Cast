@@ -1,10 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
-import { RuxTabs, RuxTab } from "@astrouxds/react";
 import './MainPage.css';
 import { Authenticator } from '@aws-amplify/ui-react';
-import { RuxIcon, RuxContainer, RuxInput, RuxButton } from "@astrouxds/react";
+import { RuxIcon, RuxContainer, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
 
 
 const MainPage: React.FC = () => {
@@ -21,6 +20,11 @@ const MainPage: React.FC = () => {
 
   const handleSubmit = () => {
     console.log(inputValue);
+    setIsMealRequestOpen(false); // Close the dialog after submission
+  }
+
+  const handleDialogClose = () => {
+    setIsMealRequestOpen(false);
   }
 
   return (
@@ -41,16 +45,27 @@ const MainPage: React.FC = () => {
         </div>
       </div>
       <div className="meal-request">
-        <button className="icon-button" onClick={() => buttonPressed()}>
+        <button className="icon-button" onClick={buttonPressed}>
           <RuxIcon size="normal" icon="add-circle"></RuxIcon>
         </button>
       </div>
 
       {isMealRequestOpen && (
-        <RuxContainer className="meal-request-container">
-          <RuxInput class="MRInput" label="Meal Request" type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
-          <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
-        </RuxContainer>
+        <RuxDialog 
+          className="meal-request-container" 
+          open={isMealRequestOpen} 
+          header="Meal Request" 
+          message="Content goes here" 
+          confirmText=""
+          denyText=""
+          onRuxdialogclosed={handleDialogClose}
+        >
+          <RuxInput class="MRInput" /*label=""*/ type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
+          <div className="dialog-buttons">
+            <RuxButton className="mrCancel" onClick={handleDialogClose}>Cancel</RuxButton>
+            <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
+          </div>
+        </RuxDialog>
       )}
     </>
   );
