@@ -13,7 +13,7 @@ const ForkCast: React.FC = () => {
         <h1 className="Title">ForkCast</h1>
         <div className="button-container">
           <RuxButton class="astro-button" onClick={() => navigate("/main")}>Sign In</RuxButton>
-          <RuxButton class="astro-button" onClick={() => navigate("/signin")}>Sign Up</RuxButton>
+          <RuxButton class="astro-button" onClick={() => navigate("/signup")}>Sign Up</RuxButton>
         </div>
       </div>
     );

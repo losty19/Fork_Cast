@@ -32,13 +32,16 @@ const MainPage: React.FC = () => {
       <div className="main-container">
         <div className="sidebar">
           <button className="icon-button">
-            <RuxIcon size="normal" icon="local-grocery-store"></RuxIcon>
+            <RuxIcon size="small" icon="account-circle"></RuxIcon>
+            </button>
+          <button className="icon-button">
+            <RuxIcon size="small" icon="local-grocery-store"></RuxIcon>
           </button>
           <button className="icon-button">
-            <img src="icon2.png" alt="Icon 2" className="icon-image" />
+            <RuxIcon size="small" icon="calendar-today"></RuxIcon>
           </button>
           <button className="icon-button">
-            <img src="icon3.png" alt="Icon 3" className="icon-image" />
+            <RuxIcon size="small" icon="settings"></RuxIcon>
           </button>
         </div>
         <div className="content">
