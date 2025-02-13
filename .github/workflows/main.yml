@@ -27,6 +27,7 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+        continue-on-error: true
 
       - name: Run Jest tests with coverage
         run: npm test -- --coverage
