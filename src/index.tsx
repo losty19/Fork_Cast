@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import MainPage from './MainPage';
-import Profile from './Profile/Profile';
+import Profile from './Profile';
 
 ReactDOM.render(
   <React.StrictMode>

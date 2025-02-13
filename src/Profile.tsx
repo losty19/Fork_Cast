@@ -1,13 +1,14 @@
 import React from "react";
-import { useState } from "react";
-import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
-import { RuxIcon, RuxContainer, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
+import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
+import { RuxButton } from "@astrouxds/react";
 import './Profile.css';
 
 const Profile: React.FC = () => {
   // Here I am making a profile page for the user to view their profile, and change their preferences
   const navigate = useNavigate();
+
+  console.log("Profile component rendered");
 
   return (
     <div className="container">
