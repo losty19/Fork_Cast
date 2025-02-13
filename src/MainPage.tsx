@@ -4,11 +4,14 @@ import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-comp
 import './MainPage.css';
 import { Authenticator } from '@aws-amplify/ui-react';
 import { RuxIcon, RuxContainer, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
+import { useNavigate } from "react-router-dom";
+
 
 
 const MainPage: React.FC = () => {
   const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const navigate = useNavigate();
 
   const buttonPressed = () => {
     setIsMealRequestOpen(!isMealRequestOpen);
@@ -20,7 +23,7 @@ const MainPage: React.FC = () => {
 
   const handleSubmit = () => {
     console.log(inputValue);
-    setIsMealRequestOpen(false); // Close the dialog after submission
+    setIsMealRequestOpen(false); 
   }
 
   const handleDialogClose = () => {
@@ -31,9 +34,9 @@ const MainPage: React.FC = () => {
     <>
       <div className="main-container">
         <div className="sidebar">
-          <button className="icon-button">
+          <button className="icon-button" onClick={() => navigate("/profile")}>
             <RuxIcon size="small" icon="account-circle"></RuxIcon>
-            </button>
+          </button>
           <button className="icon-button">
             <RuxIcon size="small" icon="local-grocery-store"></RuxIcon>
           </button>
