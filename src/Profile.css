@@ -2,10 +2,10 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: black; /* Set background color to black */
-}
-
-.container {
+  background-color: black;
+  }
+  
+  .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,23 +15,27 @@ html, body {
   background-color: black;
   color: white;
   text-align: center;
-}
-
-h1 {
+  }
+  
+  h1 {
   font-size: 4rem;
   margin-bottom: 1.5rem;
-}
-
-.button-container {
+  }
+  
+  .button-container {
   display: flex;
   gap: 1rem;
-}
-
-.astro-button {
+  }
+  
+  .astro-button {
   font-size: 1.2rem;
-}
+  }
+  
+  .Title {
+      padding-bottom: 200px;
+      font-size: 120px;
+  }
 
-.Title {
-  padding-bottom: 200px;
-  font-size: 120px;
+.checkbox {
+  border: 1px solid #ccc;
 }

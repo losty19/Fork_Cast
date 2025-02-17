@@ -6,8 +6,6 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import { RuxIcon, RuxContainer, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
 
-
-
 const MainPage: React.FC = () => {
   const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -66,7 +64,7 @@ const MainPage: React.FC = () => {
           denyText=""
           onRuxdialogclosed={handleDialogClose}
         >
-          <RuxInput class="MRInput" /*label=""*/ type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
+          <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
           <div className="dialog-buttons">
             <RuxButton className="mrCancel" onClick={handleDialogClose}>Cancel</RuxButton>
             <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
