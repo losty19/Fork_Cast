@@ -10,6 +10,12 @@ on:
       - development
       - main
 
+permissions:
+  contents: read
+  id-token: write
+  actions: write
+  checks: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
