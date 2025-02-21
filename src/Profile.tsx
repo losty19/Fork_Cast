@@ -4,6 +4,7 @@ import { useState } from 'react';
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import { RuxButton, RuxContainer, RuxInput } from "@astrouxds/react";
 import './Profile.css';
+import SideBar from "./SideBar";
 
 
 const Profile: React.FC = () => {
@@ -22,6 +23,8 @@ const Profile: React.FC = () => {
   }
   
   return (
+    <>
+    <SideBar />
     <div>
       <RuxContainer className="profile-container">
         <div slot="header">Profile</div>
@@ -38,6 +41,7 @@ const Profile: React.FC = () => {
         </div>
       </RuxContainer>
     </div>
+    </>
   );
 };
 

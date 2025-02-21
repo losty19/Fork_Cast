@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import './MainPage.css';
+import SideBar from "./SideBar";
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
@@ -30,29 +31,12 @@ const MainPage: React.FC = () => {
 
   return (
     <>
-      <div className="main-container">
-        <div className="sidebar">
-          <button className="icon-button" onClick={() => navigate("/profile")}>
-            <RuxIcon size="small" icon="account-circle"></RuxIcon>
-          </button>
-          <button className="icon-button">
-            <RuxIcon size="small" icon="local-grocery-store"></RuxIcon>
-          </button>
-          <button className="icon-button">
-            <RuxIcon size="small" icon="calendar-today"></RuxIcon>
-          </button>
-          <button className="icon-button">
-            <RuxIcon size="small" icon="settings"></RuxIcon>
-          </button>
-        </div>
-        <div className="content">
-        </div>
-      </div>
+      <SideBar />
       <div className="meal-request">
         <button className="icon-button" onClick={buttonPressed}>
           <RuxIcon size="normal" icon="add-circle"></RuxIcon>
         </button>
-      </div>
+      </div> 
 
       {isMealRequestOpen && (
         <RuxDialog 
@@ -76,3 +60,5 @@ const MainPage: React.FC = () => {
 }
 
 export default MainPage;
+
+
