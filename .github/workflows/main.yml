@@ -31,7 +31,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --silent
 
       - name: Run ESLint
         run: npm run lint
@@ -74,18 +74,38 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Install dependencies
+      - name: Install backend dependencies
         run: npm ci --cache .npm --prefer-offline
 
-      - name: Deploy to Amplify
+      - name: Deploy backend
         env:
           AMPLIFY_APP_ID: ${{ secrets.AWS_APP_ID }}
+          AWS_BRANCH: ${{ github.ref_name }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AMPLIFY_ENVIRONMENT: ${{ github.ref_name }}
-        run: npx ampx pipeline-deploy --branch ${{ github.ref_name }} --app-id ${{ secrets.AWS_APP_ID }}
+        run: npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AMPLIFY_APP_ID
 
-      - name: Upload Amplify build logs
+      - name: Build frontend
+        run: npm run build
+      
+      - name: Upload build artifacts
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
         with:
-          name: amplify-build-logs
-          path: amplify/backend/build.log
+          name: dist
+          path: dist/**/*
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            .npm
+            node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      # - name: Upload Amplify build logs
+      #   uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+      #   with:
+      #     name: amplify-build-logs
+      #     path: amplify/backend/build.log
