@@ -21,3 +21,4 @@ https://main.d27o27lj2j9o1h.amplifyapp.com/
 - **Authentication**: Setup with Amazon Cognito for secure user authentication.
 - **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
 - **Database**: Real-time database powered by Amazon DynamoDB.
+- 
