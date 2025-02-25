@@ -38,7 +38,9 @@ jobs:
         continue-on-error: true
 
       - name: Run Jest tests with coverage
-        run: npm test --coverage
+        env:
+          SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
+        run: npm test -- --coverage
 
       - name: Upload test results
         uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
