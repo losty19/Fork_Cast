@@ -5,18 +5,22 @@ import './MainPage.css';
 import SideBar from "./SideBar";
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+
+interface RuxInputEvent extends Event {
+  target: HTMLInputElement;
+}
 
 const MainPage: React.FC = () => {
   const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const buttonPressed = () => {
     setIsMealRequestOpen(!isMealRequestOpen);
   }
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: RuxInputEvent) => {
     setInputValue(e.target.value);
   }
 
@@ -48,7 +52,7 @@ const MainPage: React.FC = () => {
           denyText=""
           onRuxdialogclosed={handleDialogClose}
         >
-          <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
+          <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e) => handleInputChange(e as unknown as RuxInputEvent)}/>
           <div className="dialog-buttons">
             <RuxButton className="mrCancel" onClick={handleDialogClose}>Cancel</RuxButton>
             <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
