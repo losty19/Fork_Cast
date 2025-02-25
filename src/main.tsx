@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react"; // Wasn't being used so I commented it out for 'npm run build'
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from "./HomePage";
