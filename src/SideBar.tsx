@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 // import { useState } from "react";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import './MainPage.css';
