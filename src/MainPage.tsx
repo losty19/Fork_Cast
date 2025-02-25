@@ -5,12 +5,12 @@ import './MainPage.css';
 import SideBar from "./SideBar";
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const MainPage: React.FC = () => {
   const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const buttonPressed = () => {
     setIsMealRequestOpen(!isMealRequestOpen);
