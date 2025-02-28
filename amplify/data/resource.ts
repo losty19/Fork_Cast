@@ -21,7 +21,7 @@ const schema = a.schema({
       userId: a.string(),
       username: a.string(),
       email: a.string(),
-      dietaryPreferences: a.enum(["Vegetarian", "Gluten-Free"]),
+      dietaryPreferences: a.enum(["Vegetarian", "Gluten_Free"]),
       allergies: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish", "Tree_Nut"]), 
       savedRecipes: a.hasMany("SavedRecipe", "recipeId"), // Reference to SavedRecipe
       createdAt: a.datetime(),
