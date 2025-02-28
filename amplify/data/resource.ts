@@ -32,6 +32,7 @@ const schema = a.schema({
   // Saved Recipes - Cache of Spoonacular recipes
   SavedRecipe: a
     .model({
+      userProfile: a.belongsTo("UserProfile", "recipeId"), // Reference to UserProfile
       recipeId: a.string(), // Spoonacular ID
       title: a.string(),
       image: a.string(),
@@ -102,7 +103,8 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.owner()]),
 
-});
+})
+.authorization((allow) => [allow.publicApiKey()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
