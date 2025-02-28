@@ -21,9 +21,9 @@ const schema = a.schema({
       userId: a.string(),
       username: a.string(),
       email: a.string(),
-      dietaryPreferences: a.enum([""]), // e.g., ["vegetarian", "gluten-free"]
-      allergies: a.enum([""]),
-      favoriteRecipes: a.enum([""]), // Array of recipe IDs
+      dietaryPreferences: a.enum(["Vegetarian", "Gluten-Free"]),
+      allergies: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish", "Tree Nut"]), 
+      savedRecipes: a.hasMany("SavedRecipe", "recipeId"), // Reference to SavedRecipe
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
@@ -53,7 +53,6 @@ const schema = a.schema({
         carbs: a.string(),
         fat: a.string(),
       }),
-      tags: a.enum([""]), // e.g., ["vegetarian", "quick"]
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
@@ -98,36 +97,6 @@ const schema = a.schema({
         checked: a.boolean(),
         recipeId: a.string(), // Reference to recipe this came from
       }),
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.owner()]),
-
-  // User's Pantry/Inventory
-  Pantry: a
-    .model({
-      userId: a.string(),
-      ingredients: a.customType({
-        ingredientId: a.string(),
-        name: a.string(),
-        amount: a.float(),
-        unit: a.string(),
-        category: a.string(), // e.g., "spices", "dairy"
-        expirationDate: a.datetime(),
-      }),
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.owner()]),
-
-  // Recipe Collections (e.g., "Quick Dinners", "Holiday Recipes")
-  Collection: a
-    .model({
-      userId: a.string(),
-      name: a.string(),
-      description: a.string(),
-      // recipeIds: a.list(a.string()), // References to SavedRecipes
-      recipeIds: a.enum([""]),
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
