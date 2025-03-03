@@ -4,6 +4,8 @@
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "esModuleInterop": true,  // Add this line
+
     "allowSyntheticDefaultImports": true,
     "strict": true
   },

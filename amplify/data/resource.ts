@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+// import { spoonacularFunction } from "../functions/spoonacular/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -6,13 +7,104 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
+
 const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
     })
     .authorization((allow) => [allow.owner()]),
-});
+
+  // User Profile - Extended user information
+  UserProfile: a
+    .model({
+      userId: a.string(),
+      username: a.string(),
+      email: a.string(),
+      dietaryPreferences: a.enum(["Vegetarian", "Gluten_Free"]),
+      allergies: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish", "Tree_Nut"]), 
+      savedRecipes: a.hasMany("SavedRecipe", "recipeId"), // Reference to SavedRecipe
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
+    })
+    .authorization((allow) => [allow.owner()]),
+
+  // Saved Recipes - Cache of Spoonacular recipes
+  SavedRecipe: a
+    .model({
+      userProfile: a.belongsTo("UserProfile", "recipeId"), // Reference to UserProfile
+      recipeId: a.string(), // Spoonacular ID
+      title: a.string(),
+      image: a.string(),
+      servings: a.integer(),
+      readyInMinutes: a.integer(),
+      summary: a.string(),
+      instructions: a.string(),
+      sourceUrl: a.string(),
+      ingredients: a.customType({
+        id: a.integer(),
+        name: a.string(),
+        amount: a.float(),
+        unit: a.string(),
+        original: a.string(),
+      }),
+      nutrition: a.customType({
+        calories: a.string(),
+        protein: a.string(),
+        carbs: a.string(),
+        fat: a.string(),
+      }),
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
+    })
+    .authorization((allow) => [allow.authenticated()]), // Any authenticated user can CRUD
+
+  // User's Favorite Recipes
+  FavoriteRecipe: a
+    .model({
+      userId: a.string(),
+      recipeId: a.string(), // Reference to SavedRecipe
+      notes: a.string(),
+      rating: a.integer(), // 1-5 stars
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
+    })
+    .authorization((allow) => [allow.owner()]),
+
+  // Meal Plan
+  MealPlan: a
+    .model({
+      userId: a.string(),
+      date: a.datetime(),
+      meals: a.customType({
+        recipeId: a.string(),
+        mealType: a.string(), // breakfast, lunch, dinner, snack
+        servings: a.integer(),
+      }),
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
+    })
+    .authorization((allow) => [allow.owner()]),
+
+  // Shopping List
+  ShoppingList: a
+    .model({
+      userId: a.string(),
+      items: a.customType({
+        ingredientId: a.string(),
+        name: a.string(),
+        amount: a.float(),
+        unit: a.string(),
+        checked: a.boolean(),
+        recipeId: a.string(), // Reference to recipe this came from
+      }),
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
+    })
+    .authorization((allow) => [allow.owner()]),
+
+})
+.authorization((allow) => [allow.publicApiKey()]);
 
 export type Schema = ClientSchema<typeof schema>;
 

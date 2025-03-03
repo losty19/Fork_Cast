@@ -6,6 +6,9 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+    "esModuleInterop": true,  // Got message about this from ts-jest warning
+
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
