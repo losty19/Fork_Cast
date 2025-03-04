@@ -148,7 +148,7 @@ const OverlayRuxIcon = styled(RuxIcon)<{ color: string }>`
   z-index: 2;
   position: absolute;
   top: 9.6%; 
-  left: 17.8%; 
+  left: 18.5%; 
   right: 0; 
   bottom: 0; 
 `;
