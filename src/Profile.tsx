@@ -3,7 +3,6 @@ import { useState } from 'react';
 // import { useNavigate } from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import { RuxButton, RuxContainer, RuxInput } from "@astrouxds/react";
-import './Profile.css';
 import SideBar from "./SideBar";
 
 
@@ -21,7 +20,7 @@ const Profile: React.FC = () => {
     console.log(inputValueLike);
     console.log(inputValueDislike);
   }
-  
+
   return (
     <>
     <SideBar />
@@ -46,4 +45,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-
