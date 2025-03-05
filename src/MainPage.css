@@ -25,12 +25,12 @@ html, body {
   justify-content: flex-start;
   align-items: flex-start;
   width: 80px;
-  top:-10;
+  top:-30%;
   left:-15px;
   background-color: #0d2732;
   padding-top: 20px;
-  padding-bottom: 10;
-  padding-left: 10;
+  padding-bottom: 0.5%;
+  padding-left: 1%;
   position:absolute;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -38,31 +38,30 @@ html, body {
 
 
 
-
 .icon-button {
-
   background: none;
-
   border: none;
-
   margin: 10px 0;
-
   cursor: pointer;
-
+  transition: transform 0.2s ease;
 }
 
+.icon-button:focus {
+  outline: none;
+}
 
+.icon-button:hover {
+  transform: scale(1.1);
+}
 
+.icon-button:active {
+  transform: scale(0.9);
+}
 
 .icon-image {
-
   width: 40px;
-
   height: 40px;
-
-  
 }
-
 
 .content {
   flex-grow: 1;
@@ -70,39 +69,23 @@ html, body {
   padding: 20px;
 }
 
-
-
-
 .meal-request {
-
   position: absolute;
-
   bottom: 0;
-
   right: 0;
-
   margin: 20px;
-
 }
 
 .meal-request-container {
   color: white;
   background-color: white;
   border-color: white;
-
 }
 
-
-
-
 .dialog-buttons {
-
   display: flex;
-
   justify-content: center;
-
   gap: 10px;
-
   margin-top: 20px;
 }
 

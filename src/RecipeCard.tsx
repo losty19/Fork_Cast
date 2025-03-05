@@ -106,7 +106,7 @@ const StyledImage = styled.img`
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 15px;
   overflow: hidden;
   margin-bottom: -15px;
   `;
@@ -117,7 +117,7 @@ const VignetteOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 15px;
   background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.5));
   z-index: 2;
 `;
@@ -126,44 +126,20 @@ const FavorButton = styled.button`
   background: none;
   border: none;
   cursor: pointe
-  top: 0px;
-  left: -10px;
+  bottom: 0%;
+  margin-top:-4%;
+  left: -11px;
   position: absolute;
     z-index: 3;
-
   &:focus {
     outline: none;
   }
-`;
-const StyledRuxIcon = styled(RuxIcon)`
-  color:rgb(255, 238, 4);
-  
-  }
-`;
-
-const OverlayRuxIcon = styled(RuxIcon)<{ color: string }>`
-  border: none;
-  color: ${(props) => props.color};
-  transform: scale(0.7);
-  z-index: 2;
-  position: absolute;
-  top: 9.6%; 
-  left: 18.5%; 
-  right: 0; 
-  bottom: 0; 
-`;
-const IconContainer = styled.div`
-  position: relative;
-  display: inline-block;
-
-  &:hover ${StyledRuxIcon}, &:hover ${OverlayRuxIcon} {
-    ${StyledRuxIcon} transform: scale(1.1);
-  }
-
-  &:active ${StyledRuxIcon}{
+    &:active {
     transform: scale(0.9);
   }
+
 `;
+
 const ButtonContainer = styled.div`
   margin-top: auto;
   display: flex;
@@ -174,37 +150,30 @@ const ButtonContainer = styled.div`
 
 const RecipeCard: React.FC = () => {
   const navigate = useNavigate();
-  const [recipes] = useState<Recipe[]>(initialRecipes);
-  const [favorites, setFavorites] = useState<Recipe[]>(initialFavorites);
-  const [iconColors, setIconColors] = useState<string[]>(Array(initialRecipes.length).fill("rgb(255, 238, 4)"));
+  const [favorites, setFavorites] = useState<Recipe[]>([]);
 
   const handleFavorButtonClick = (index: number) => {
-    const newIconColors = [...iconColors];
-    const recipe = recipes[index];
-
-    if (newIconColors[index] === "rgb(126, 83, 172)") {
-      newIconColors[index] = "rgb(255, 238, 4)";
-      setFavorites([...favorites, recipe].sort((a, b) => a.title.localeCompare(b.title)));
-    } else {
-      newIconColors[index] = "rgb(126, 83, 172)";
-      setFavorites(favorites.filter((fav: Recipe) => fav.title !== recipe.title));
-    }
-
-    setIconColors(newIconColors);
-};
+    const recipe = initialFavorites[index];
+    setFavorites((prevFavorites) => {
+      if (prevFavorites.some((fav) => fav.title === recipe.title)) {
+        return prevFavorites.filter((fav) => fav.title !== recipe.title);
+      } else {
+        return [...prevFavorites, recipe].sort((a, b) => a.title.localeCompare(b.title));
+      }
+    });
+  };
 const handleViewRecipeClick = (recipe: Recipe) => {
     navigate("/recipeDetails", { state: { recipe } });
   };
   return (
     <MyRecipes>
-      {recipes.map((recipe, index) => (
+      {initialRecipes.map((recipe, index) => (
         <Card key={index}>
-          <IconContainer>
-            <FavorButton onClick={() => handleFavorButtonClick(index)}>
-              <StyledRuxIcon icon="star" />
-              <OverlayRuxIcon icon="star" color={iconColors[index]} />
-            </FavorButton>
-          </IconContainer>
+         
+         <FavorButton onClick={() => handleFavorButtonClick(index)}>
+            <RuxIcon className= "favorbutton_icon" icon={favorites.some((fav) => fav.title === recipe.title) ? "star-border" : "star"} />
+          </FavorButton>
+
           <ImageContainer>
             <StyledImage src={recipe.image} alt="Food" />
             <VignetteOverlay />

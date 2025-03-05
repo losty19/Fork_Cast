@@ -5,6 +5,9 @@ import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-comp
 import {RuxIcon } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import styled from "styled-components";
+import "./RecipeDetails.css";
+import Left_SideBar from "./Left_SideBar.tsx";
+
 
 
 interface Recipe {
@@ -14,38 +17,31 @@ interface Recipe {
   extraContent: string;
 }
 
-const RecipeImage = styled.img`
-  width:50%;
-  height: auto;
-  float:left;
-  margin-right:1rem;
-  margin-bottom:2rem;
-`;
-
-
 const MainContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   max-height: 100vh;
   overflow: auto;
-  padding: 30px;
+  padding: 10px;
   scrollbar-width: none;
+  position:relative;
+
 `;
 
 const OuterContainer = styled.div`
   flex-direction: column;
   padding: 20px;
-  justify-content:center;
   background-color: rgb(13, 39, 50);
   border-radius: 15px;
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.64);
   margin-top: 5%;
-  margin-left:5%; 
   margin-bottom:-150;
   font-size: 200%;
   overflow-y: hidden;
-  position: relative;
+  padding-right:90px;
+  margin-left:5%;
+  max-width:1200px;
 `;
 
 const ContentContainer = styled.div`
@@ -56,13 +52,10 @@ const ContentContainer = styled.div`
   position:relative;
   background-color: rgb(140, 124, 194);
   border-radius: 10px;
+  
 `;
 
-const DescriptionContainer = styled.div`
-  flex:1;
-  color: white;
-  font-size: 60%; 
-`;
+
 const ExpandableContent = styled.div<{ expanded: boolean }>`
   margin-top: -15px;
   padding: 10px;
@@ -75,49 +68,57 @@ const ExpandableContent = styled.div<{ expanded: boolean }>`
 `;
 const ButtonContainer = styled.div<{ expanded: boolean }>`
   display: flex;
+  position:relative;
   justify-content: center;
-  margin-top: ${({ expanded }) => (expanded ? "10px" : "-4%")}; /* Ensure margin moves it to the bottom when expanded */
-  margin-bottom: ${({ expanded }) => (expanded ? "-2%" : "-5%")};
-   position: ${({ expanded }) => (expanded ? "absolute" : "relative")};
+  margin-top: ${({ expanded }) => (expanded ? "0%" : "-3%")};
+  margin-bottom: ${({ expanded }) => (expanded ? "-1%" : "-3%")};
+  position: ${({ expanded }) => (expanded ? "absolute" : "relative")};
   bottom: ${({ expanded }) => (expanded ? "0" : "auto")}; 
 `;
 const StyleButton = styled.button`
-  background: none;
+  background:none;
+  padding: 0px;
+  margin:0;
   border: none;
   cursor: pointe
-  
   z-index: 3;
   &:hover {
-    transform:scale(1.3);
+    transform:scale(1.2);
   }
   &:focus {
     outline: none;
   }
 `;
+
 const TextWrapper = styled.div`
   display: flex;
-  align-items: flex-start; /* Align text to the top */
+  align-items: flex-start;
   flex-wrap: wrap;
   width: 100%;
 `;
+
 
 const RecipeDetails: React.FC = () => {
   const location = useLocation();
   const { recipe } = location.state as { recipe: Recipe };
   const [expanded, setExpanded] = useState(false);
 
+
   return (
     <>
-      <SideBar />
+      <SideBar/>
+      <Left_SideBar/>
+
       <MainContainer>
         <OuterContainer>
-          <div slot="header">{recipe.title}</div>
+          <div className = "Title_recipe">{recipe.title}</div>
           <ContentContainer>
+  
   <TextWrapper>
-    <RecipeImage src={recipe.image} alt="Food" />
-    <DescriptionContainer>
-      <p>{recipe.description}</p>
-    </DescriptionContainer>
+            <img className="recipe_image" src={recipe.image} alt="Food" />    
+              <div className="description-container">
+              <p>{recipe.description}</p>
+            </div>
   </TextWrapper>
 
   <ButtonContainer expanded={expanded}>
@@ -177,7 +178,7 @@ It's not hard to make homemade pancakes — you just need a good recipe. That's 
 </ContentContainer>
           
      
-        </OuterContainer>
+        </OuterContainer>        
       </MainContainer>
     </>
   );

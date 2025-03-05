@@ -1,6 +1,5 @@
 .my-recipes-text {
     margin-top: -15px;
-
     font-size: 40px;
     position: absolute;
     font-family:Cambria, Cochin;
@@ -36,5 +35,30 @@
   .view-recipe:hover {
     background-color:#333;
   }
-  
+  .favorbutton{
+    background:none;
+    position: relative;
+    transition: transform 0.2s ease;
+    padding:0;
+    border: none;
+    margin: 20px;
+    display: inline-flex;
+  }
+  .favorbutton_icon{
+    color: yellow;
+    margin: -1;
+    transform-origin: left;
+    transition: transform 0.2s ease;
 
+;
+  }
+  .favorbutton_icon:hover{
+    transform: scale(1.1);
+    
+  }
+  .favorbutton:focus {
+    outline: none;
+  }
+  .favorbutton:active {
+    transform: scale(0.9);
+  }

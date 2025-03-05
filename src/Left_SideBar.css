@@ -1,0 +1,7 @@
+.side_container{
+    flex-direction: column;
+    position: absolute;
+    right:3.4%;
+    top:110px;
+    display: flex;
+}

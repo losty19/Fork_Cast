@@ -5,6 +5,7 @@ import './MainPage.css';
 import './RecipeCard.css'
 import SideBar from "./SideBar";
 import MyRecipes from "./RecipeCard";
+
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
 // import { useNavigate } from "react-router-dom";

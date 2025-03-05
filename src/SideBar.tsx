@@ -16,7 +16,7 @@ const SideBar = () => {
             <button className="icon-button" onClick={() => navigate("/main")}>
               <RuxIcon size="small" icon="home"></RuxIcon>
             </button>
-            <button className="icon-button">
+            <button className="icon-button" onClick={() => navigate("/grocery-list")}>
               <RuxIcon size="small" icon="local-grocery-store"></RuxIcon>
             </button>
             <button className="icon-button">
