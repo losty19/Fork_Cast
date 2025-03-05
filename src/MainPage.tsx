@@ -10,6 +10,10 @@ import MyRecipes from "./RecipeCard";
 import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
 // import { useNavigate } from "react-router-dom";
 
+interface RuxInputEvent extends Event {
+  target: HTMLInputElement;
+}
+
 const MainPage: React.FC = () => {
   const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -19,7 +23,7 @@ const MainPage: React.FC = () => {
     setIsMealRequestOpen(!isMealRequestOpen);
   }
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: RuxInputEvent) => {
     setInputValue(e.target.value);
   }
 
@@ -58,7 +62,7 @@ const MainPage: React.FC = () => {
           denyText=""
           onRuxdialogclosed={handleDialogClose}
         >
-          <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e: any) => handleInputChange(e)}/>
+          <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e) => handleInputChange(e as unknown as RuxInputEvent)}/>
           <div className="dialog-buttons">
             <RuxButton className="mrCancel" onClick={handleDialogClose}>Cancel</RuxButton>
             <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
