@@ -12,6 +12,9 @@ specifies that any user authenticated via an API key can "create", "read",
 const spoonacularHandler = defineFunction({
   entry: "../functions/spoonacular/handler.ts",
 })
+const saveFavoriteHandler = defineFunction({
+  entry: "../functions/saveFavoriteRecipe/handler.ts",
+})
 
 const schema = a.schema({
   GetRecipeResponse: a.customType({
@@ -68,7 +71,7 @@ const schema = a.schema({
         maxProtein: a.integer(),
         minCalories: a.integer(),
         maxCalories: a.integer(),
-      }),
+      }), // <-- queryStringParameters
       // queryStringParameters: a.enum(["query", "number", "offset", "diet", "intolerances", "equipment", 
       //   "type", "cuisine", "includeIngredients", "excludeIngredients", "instructionsRequired", "fillIngredients", 
       //   "addRecipeInformation", "addRecipeNutrition", "author", "tags", "recipeBoxId", "titleMatch", "maxReadyTime", 
@@ -77,13 +80,24 @@ const schema = a.schema({
         id: a.integer(),
       }),
     }) // <-- .arguments
-    // .returns(a.json())
+    .returns(a.json())
     // Can include the return type:
-    .returns(a.ref("GetRecipeResponse").required())
+    // .returns(a.ref("GetRecipeResponse").required())
     // .authorization((allow) => [allow.authenticated()])
     .authorization((allow) => [allow.publicApiKey()])
     .handler(a.handler.function(spoonacularHandler)),
 
+  SaveFavoriteRecipe: a
+    .mutation()
+    .arguments({
+      userId: a.string().required(),
+      recipeId: a.string().required(),
+      image: a.string(),
+      title: a.string().required(),
+    })
+    .returns(a.ref("SavedRecipe"))
+    .authorization((allow) => [allow.authenticated()])
+    .handler(a.handler.function(saveFavoriteHandler)),
 
   Todo: a
     .model({

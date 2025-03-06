@@ -6,9 +6,7 @@ import type { Schema } from '../../data/resource';
 // Axios instance in my Lambda function making requests to the Spoonacular API
 const spoonacularClient: AxiosInstance = axios.create({
   baseURL: 'https://api.spoonacular.com',
-  headers: {
-    'Content-Type': 'application/json',
-  }
+  headers: { 'Content-Type': 'application/json' }
 });
 
 const headers = {
@@ -50,11 +48,12 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
               apiKey: process.env.SPOONACULAR_API_KEY
             }
           });
-          return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify(response.data)
-          };
+          return response.data; // Amplify adds statusCode, headers I think
+          // return {
+          //   statusCode: 200,
+          //   headers,
+          //   body: JSON.stringify(response.data)
+          // };
           /*  Format of response.data
           {
               "offset": 0,
@@ -78,11 +77,12 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
           */
         } catch (error) {
           console.error('Error searching recipes:', error);
-          return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({ message: 'Error searching recipes' })
-          };
+          throw new Error('Error searching recipes');
+          // return {
+          //   statusCode: 500,
+          //   headers,
+          //   body: JSON.stringify({ message: 'Error searching recipes' })
+          // };
         }
       }
       // Get similar recipes by recipe ID
@@ -182,10 +182,11 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
       }
 
       default:
+        throw new Error('Route Not Found');
         return {
           statusCode: 404,
           headers,
-          body: JSON.stringify({ message: 'Not Found' })
+          body: JSON.stringify({ message: 'Route Not Found' })
         };
     }
   } catch (error) {
