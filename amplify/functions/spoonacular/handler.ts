@@ -1,6 +1,7 @@
 // amplify/functions/spoonacular/handler.ts
 import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 import axios, { AxiosInstance } from 'axios';
+import type { Schema } from '../../data/resource';
 
 // Axios instance in my Lambda function making requests to the Spoonacular API
 const spoonacularClient: AxiosInstance = axios.create({
@@ -26,11 +27,11 @@ Here is a link to the documentation page for Spoonacluar API:
     https://spoonacular.com/food-api/docs
 */
 
-export const handler: APIGatewayProxyHandler = async (event): Promise<APIGatewayProxyResult> => {
+export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
   // Frontend makes request, this function handles it
 
   try {
-    const { path, httpMethod, queryStringParameters, pathParameters } = event;
+    const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
 
     if (httpMethod === 'OPTIONS') {
       return { statusCode: 200, headers, body: '' };
@@ -54,6 +55,27 @@ export const handler: APIGatewayProxyHandler = async (event): Promise<APIGateway
             headers,
             body: JSON.stringify(response.data)
           };
+          /*  Format of response.data
+          {
+              "offset": 0,
+              "number": 2,
+              "results": [
+                  {
+                      "id": 716429,
+                      "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
+                      "image": "https://img.spoonacular.com/recipes/716429-312x231.jpg",
+                      "imageType": "jpg",
+                  },
+                  {
+                      "id": 715538,
+                      "title": "What to make for dinner tonight?? Bruschetta Style Pork & Pasta",
+                      "image": "https://img.spoonacular.com/recipes/715538-312x231.jpg",
+                      "imageType": "jpg",
+                  }
+              ],
+              "totalResults": 86
+          }
+          */
         } catch (error) {
           console.error('Error searching recipes:', error);
           return {

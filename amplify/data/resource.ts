@@ -1,4 +1,5 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData, defineFunction } from "@aws-amplify/backend";
+import { QueryString } from "aws-cdk-lib/aws-logs";
 // import { spoonacularFunction } from "../functions/spoonacular/resource";
 
 /*== STEP 1 ===============================================================
@@ -8,7 +9,82 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 
+const spoonacularHandler = defineFunction({
+  entry: "../functions/spoonacular/handler.ts",
+})
+
 const schema = a.schema({
+  GetRecipeResponse: a.customType({
+    statusCode: a.integer().required(),
+    headers: a.customType({ // Not totally sure about this
+      "Access-Control-Allow-Origin": a.string(),
+      "Access-Control-Allow-Methods": a.string(),
+    }),
+    body: a.json().required(),
+  }),
+  // THIS IS THE BODY JSON OBJECT THAT IS RETURNED FROM THE SPOONACULAR API
+  //   offset: a.integer(),
+  //   number: a.integer(),
+  //   results: a.customType({
+  //       id: a.integer(),
+  //       title: a.string(),
+  //       image: a.string(),
+  //       imageType: a.string(),
+  //     }),
+  //   totalResults: a.integer(),
+
+  SpoonacularGetRecipe: a
+    .query()
+    .arguments({
+      path:  a.string().required(),
+      httpMethod: a.string().required(),
+      // There are more options in the Spoonacular API, but these are the ones I think we will use the most
+      queryStringParameters: a.customType({
+        query: a.string(),
+        number: a.integer(),
+        offset: a.integer(),
+        diet: a.enum(["Gluten_Free", "Ketogenic", "Vegetarian", "Lacto_Vegetarian", "Ovo_Vegetarian", "Vegan", "Pescetarian", "Paleo", "Primal", "Whole30"]),
+        intolerances: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish"]),
+        type: a.enum(["main_course", "side_dish", "dessert", "appetizer", "salad", "bread", "breakfast", 
+                      "soup", "beverage", "sauce", "marinade", "fingerfood", "snack", "drink"]),
+        cuisine: a.enum(["American", "Chinese", "Italian", "Southern", "Spanish"]),
+        includeIngredients: a.string(),
+        excludeIngredients: a.string(),
+        instructionsRequired: a.boolean(),
+        fillIngredients: a.boolean(),
+        addRecipeInformation: a.boolean(),
+        addRecipeNutrition: a.boolean(),
+        author: a.string(),
+        tags: a.string(),
+        recipeBoxId: a.integer(),
+        titleMatch: a.string(),
+        maxReadyTime: a.integer(),
+        ignorePantry: a.boolean(),
+        sort: a.enum(["popularity", "healthiness", "random", "time", "price", "sustainability"]),
+        sortDirection: a.enum(["asc", "desc"]),
+        minCarbs: a.integer(),
+        maxCarbs: a.integer(),
+        minProtein: a.integer(),
+        maxProtein: a.integer(),
+        minCalories: a.integer(),
+        maxCalories: a.integer(),
+      }),
+      // queryStringParameters: a.enum(["query", "number", "offset", "diet", "intolerances", "equipment", 
+      //   "type", "cuisine", "includeIngredients", "excludeIngredients", "instructionsRequired", "fillIngredients", 
+      //   "addRecipeInformation", "addRecipeNutrition", "author", "tags", "recipeBoxId", "titleMatch", "maxReadyTime", 
+      //   "ignorePantry", "sort", "sortDirection", "minCarbs", "maxCarbs", "minProtein", "maxProtein", "minCalories", ]),
+      pathParameters: a.customType({
+        id: a.integer(),
+      }),
+    }) // <-- .arguments
+    // .returns(a.json())
+    // Can include the return type:
+    .returns(a.ref("GetRecipeResponse").required())
+    // .authorization((allow) => [allow.authenticated()])
+    .authorization((allow) => [allow.publicApiKey()])
+    .handler(a.handler.function(spoonacularHandler)),
+
+
   Todo: a
     .model({
       content: a.string(),
@@ -103,7 +179,7 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.owner()]),
 
-})
+}) // <-- .schema
 .authorization((allow) => [allow.publicApiKey()]);
 
 export type Schema = ClientSchema<typeof schema>;
