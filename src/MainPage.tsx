@@ -7,15 +7,25 @@ import SideBar from "./SideBar";
 import MyRecipes from "./RecipeCard";
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import type { Schema } from '../amplify/data/resource';
+import { Amplify } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api';
+import outputs from '../amplify_outputs.json';  // Make sure this is updated with newest functions/tables
+
+Amplify.configure(outputs);
+const client = generateClient<Schema>()
 
 interface RuxInputEvent extends Event {
   target: HTMLInputElement;
 }
 
 const MainPage: React.FC = () => {
+  const navigate = useNavigate();
   const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   // const navigate = useNavigate();
 
   const buttonPressed = () => {
@@ -26,9 +36,31 @@ const MainPage: React.FC = () => {
     setInputValue(e.target.value);
   }
 
-  const handleSubmit = () => {
-    console.log(inputValue);
-    setIsMealRequestOpen(false); 
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    setError(null);
+    console.log("Input Value: ", inputValue);
+    try {
+      const spoonacular_response = await client.queries.SpoonacularGetRecipe({
+        path: '/recipes/search', 
+        httpMethod: 'GET', 
+        queryStringParameters: {query: inputValue},
+        pathParameters: {}
+      });
+      console.log("spoonacular_response is: ", spoonacular_response);
+      if (spoonacular_response.data) {
+        // const recipes = spoonacular_response.data.body as Schema["GetRecipeResponse"];
+        navigate('/searchResults', { state: { recipes:  spoonacular_response.data } });
+      } else {
+        console.error('Error searching recipes: Invalid response format. This is spoonacular_response: ', spoonacular_response);
+      }
+    } catch (error) {
+      setError('Failed to fetch recipe');
+      console.error('Error searching recipes:', error);
+    } finally {
+      setIsLoading(false);
+      setIsMealRequestOpen(false);
+    }
   }
 
   const handleDialogClose = () => {
@@ -68,6 +100,9 @@ const MainPage: React.FC = () => {
           </div>
         </RuxDialog>
       )}
+
+      {isLoading && <div className="loading">Loading...</div>}
+      {error && <div className="error">{error}</div>}
     </>
   );
 }
