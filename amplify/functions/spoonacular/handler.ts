@@ -1,5 +1,5 @@
 // amplify/functions/spoonacular/handler.ts
-import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
+// import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'; // Not using anymore since I am using the Schema way instead
 import axios, { AxiosInstance } from 'axios';
 import type { Schema } from '../../data/resource';
 
