@@ -16,30 +16,30 @@ const initialFavorites: Recipe[] = [
   {
     image: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
     title: "Recipe Title 1",
-    description: "Recipe description 1. Long description to test the overflow of the text. Recipe description 1. Long description to test the overflow of the text. Recipe description 1. Long description to test the overflow of the text.ecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lon"
+    description: "Recipe description 1. Long description to test the overflow of the text. Recipe description 1. Long description to test the overflow of the text.Recipe description 1. Long description to test the overflow of the text.Recipe description 1. Long description to test the overflow of the text.Recipe description 1. Long description to test the overflow of the text."
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLQzQqVBk7LmMbMSaEuRy3AkVv1lyGqThm4Q&s",
     title: "Recipe Title 2",
     description: "Recipe description 2"
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRALAGFcVj2zAWMAViVc4z4RQAFQFvO5sKSKw&s",
     title: "Recipe Title 3",
     description: "Recipe description 3"
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzUXwxKjDkf17YKakug9okRsOuGVhZD8h6RA&s",
     title: "Recipe Title 4",
     description: "Recipe description 3"
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVZZkox8oCsYvgrvXyV1mdYUsCRGfqBMoGTA&s",
     title: "Recipe Title 5",
     description: "Recipe description 3"
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa00fqLGUjL3fBsJhUkUBN__VP3Mq_1W6NpQ&s",
     title: "Recipe Title 6",
     description: "Recipe description 3"
   },
@@ -81,31 +81,42 @@ const MyRecipes = styled.div`
   justify-content: center;
   max-height: 100vh;
   overflow: auto;
-  padding: 50px;
+  padding-top:100px;
+  padding-left:0px;
+  padding-right: 0px;
   scrollbar-width: none;
+  padding-bottom:50px;
   top:30%;
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  width: 250px;
-  border-radius: 20px;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.76);
-  background-color: rgba(140, 124, 194);
+  width: 190px;
+  border-radius: 15px;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.61);
+  background-color:rgb(255, 255, 255);
   padding: 10px;
-  margin: 0px;
+  margin-top: 20px;
+  margin-left:-13px;
   position: relative;
+  max-height:400px;
+  min-height: 350px;
+  transition: transform 0.5s ease;
+  &:hover {
+    transform:scale(1.1);
+    z-index:2;
+  }
 `;
 
 const StyledImage = styled.img`
   width: 100%;
   min-height:100%;
+  object-fit: cover;
 `;
 
 const ImageContainer = styled.div`
   position: relative;
-  width: 100%;
   border-radius: 15px;
   overflow: hidden;
   margin-bottom: -15px;
@@ -118,7 +129,7 @@ const VignetteOverlay = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 15px;
-  background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.5));
+  background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.2));
   z-index: 2;
 `;
 
@@ -144,7 +155,7 @@ const ButtonContainer = styled.div`
   margin-top: auto;
   display: flex;
   justify-content: center;
-  padding-top: 10px;
+  padding-top: 7px;
 `;
 
 
@@ -167,6 +178,9 @@ const handleViewRecipeClick = (recipe: Recipe) => {
   };
   return (
     <MyRecipes>
+      <div className="My-recipes-text">
+          My Recipes
+        </div>
       {initialRecipes.map((recipe, index) => (
         <Card key={index}>
          

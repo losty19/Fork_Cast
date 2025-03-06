@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import {RuxIcon } from "@astrouxds/react";
-import SideBar from "./SideBar";
+import SideBar from "./SideBar.tsx";
 import styled from "styled-components";
 import "./RecipeDetails.css";
 import Left_SideBar from "./Left_SideBar.tsx";
@@ -102,13 +102,15 @@ const RecipeDetails: React.FC = () => {
   const location = useLocation();
   const { recipe } = location.state as { recipe: Recipe };
   const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
 
 
   return (
     <>
       <SideBar/>
+      
       <Left_SideBar/>
-
+      
       <MainContainer>
         <OuterContainer>
           <div className = "Title_recipe">{recipe.title}</div>

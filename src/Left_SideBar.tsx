@@ -2,12 +2,17 @@ import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-comp
 import './MainPage.css';
 import './Left_SideBar.css';
 import { useState } from "react";
-import { RuxIcon } from "@astrouxds/react";
+import { RuxIcon, RuxDialog } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
+import EditRecipe from './EditRecipe';
 
 const SideBar = () => {
+   const [EditOpen, setEditOpen] = useState(false);
     const navigate = useNavigate();
     const [icon, setIcon] = useState("start");
+    const buttonPressed = () => {
+      setEditOpen(!EditOpen);
+    }
     return (
       <div className="main-container">
       <div className="side_container">
@@ -26,10 +31,13 @@ const SideBar = () => {
             style={{ color: 'rgb(113, 171, 251)' }}
               />
             </button>
-            <button className="icon-button" onClick={() => navigate("/editRecipe")}>
+            <button className="icon-button" onClick={buttonPressed}>
               <RuxIcon icon="edit" size="2.2rem" />
          </button> 
             </div>
+            <EditRecipe/>
+	        <RuxDialog open={EditOpen}  header="Header" message="Content goes here" confirm-text="Confirm" deny-text="Cancel">
+	          </RuxDialog>
             </div>
     )
 }

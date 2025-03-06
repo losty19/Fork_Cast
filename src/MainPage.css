@@ -19,39 +19,41 @@ html, body {
 
 
 .sidebar {
-
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: right;
   align-items: flex-start;
   width: 80px;
-  top:-30%;
-  left:-15px;
-  background-color: #0d2732;
+  top:-40%;
+  right: 20px;
+  background-color: none;
   padding-top: 20px;
   padding-bottom: 0.5%;
   padding-left: 1%;
   position:absolute;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 
 
 .icon-button {
-  background: none;
+  min-height: 50px;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   border: none;
-  margin: 10px 0;
+  margin: 10px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  padding: 0%;
 }
-
+.icon-button:hover {
+  background-color: #a5561e; 
+}
 .icon-button:focus {
   outline: none;
-}
-
-.icon-button:hover {
-  transform: scale(1.1);
 }
 
 .icon-button:active {
@@ -59,14 +61,14 @@ html, body {
 }
 
 .icon-image {
-  width: 40px;
-  height: 40px;
+  color: #333;
 }
 
 .content {
   flex-grow: 1;
-  background-color: #f1f1f1;
-  padding: 20px;
+  background-color: #e27e36;
+  padding: 30px;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.418);
 }
 
 .meal-request {
@@ -93,5 +95,16 @@ html, body {
   margin-top: -15px;
   font-size: 14px;
   color: #333; 
+  
+}
+.logo-text {
+  margin-top: -15px;
+  font-size: 30px;
+  position: absolute;
+  font-family:Cambria, Cochin;
+  color: #ffffff;
+  z-index: 5;
+  left:7%;
+  top:3.7%;
   
 }
