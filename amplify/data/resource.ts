@@ -1,5 +1,5 @@
 import { type ClientSchema, a, defineData, defineFunction } from "@aws-amplify/backend";
-import { QueryString } from "aws-cdk-lib/aws-logs";
+// import { QueryString } from "aws-cdk-lib/aws-logs";
 // import { spoonacularFunction } from "../functions/spoonacular/resource";
 
 /*== STEP 1 ===============================================================
