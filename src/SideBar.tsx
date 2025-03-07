@@ -4,6 +4,9 @@ import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-comp
 import './MainPage.css';
 // import { Authenticator } from '@aws-amplify/ui-react';
 // import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react"; // Wasn't being used so I commented it out for 'npm run build'
+import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
+import './MainPage.css';
+
 import { RuxIcon } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
 

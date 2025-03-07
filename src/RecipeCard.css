@@ -1,0 +1,40 @@
+.my-recipes-text {
+    margin-top: -15px;
+
+    font-size: 40px;
+    position: absolute;
+    font-family:Cambria, Cochin;
+    color: #333;
+    z-index: 5;
+    left:10%;
+    
+  }
+
+  .recipe-title {
+    font-size: 20;
+    font-family:Cambria, Cochin;
+    color: #f1f1f1;
+  }
+  .description {
+    margin-top: -20px;
+    margin-left: 10;
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-family:Cambria, Cochin;
+    color: #f1f1f1;
+  }
+
+  .view-recipe {
+    cursor: pointer;
+    margin-top: -5px;
+    margin-bottom: 3px;
+    background-color: #000000;
+    color: white;
+    border: none;
+  }
+  
+  .view-recipe:hover {
+    background-color:#333;
+  }
+  
+
