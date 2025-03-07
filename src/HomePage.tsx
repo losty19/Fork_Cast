@@ -21,28 +21,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="container">
       <h1 className="Title">ForkCast</h1>
-      <Authenticator
-        // Customize the sign-in/sign-up UI if needed
-        components={{
-          SignIn: (props) => (
-            <Authenticator.SignIn {...props}>
-              <div className="button-container">
-                <h2>Sign In</h2>
-                {props.children}
-                {/* Optionally add custom buttons or styling */}
-              </div>
-            </Authenticator.SignIn>
-          ),
-          SignUp: (props) => (
-            <Authenticator.SignUp {...props}>
-              <div className="button-container">
-                <h2>Sign Up</h2>
-                {props.children}
-              </div>
-            </Authenticator.SignUp>
-          ),
-        }}
-      >
+      <Authenticator>
         {({ signOut, user }) => (
           <div className="button-container">
             {user ? (
@@ -56,7 +35,7 @@ const HomePage: React.FC = () => {
                 </RuxButton>
               </>
             ) : (
-              <p>Please sign in or sign up above</p>
+              <p>Please sign in or sign up using the form above</p>
             )}
           </div>
         )}
