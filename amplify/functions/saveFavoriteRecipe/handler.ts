@@ -14,8 +14,6 @@ export const handler: Schema["SaveFavoriteRecipe"]["functionHandler"] = async (e
         userId,
         title,
         image,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
     };
 
     try {
