@@ -9,12 +9,11 @@ export const handler: Schema["SaveFavoriteRecipe"]["functionHandler"] = async (e
     const { recipeId, userId, title, image } = event.arguments;
 
     // Save the recipe to the database
-    const savedRecipe {
+    const savedRecipe = {
         recipeId,
         userId,
         title,
         image,
-
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
     };
