@@ -17,14 +17,15 @@ const saveFavoriteHandler = defineFunction({
 })
 
 const schema = a.schema({
-  GetRecipeResponse: a.customType({
-    statusCode: a.integer().required(),
-    headers: a.customType({ // Not totally sure about this
-      "Access-Control-Allow-Origin": a.string(),
-      "Access-Control-Allow-Methods": a.string(),
-    }),
-    body: a.json().required(),
-  }),
+  // GetRecipeResponse: a.customType({
+  //   statusCode: a.integer().required(),
+  //   headers: a.customType({ // Not totally sure about this
+  //     "Access-Control-Allow-Origin": a.string(),
+  //     "Access-Control-Allow-Methods": a.string(),
+  //   }),
+  //   body: a.json().required(),
+  // }),  USING .returns(a.json()) INSTEAD FOR NOW
+
   // THIS IS THE BODY JSON OBJECT THAT IS RETURNED FROM THE SPOONACULAR API
   //   offset: a.integer(),
   //   number: a.integer(),
@@ -50,7 +51,6 @@ const schema = a.schema({
         intolerances: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish"]),
         type: a.enum(["main_course", "side_dish", "dessert", "appetizer", "salad", "bread", "breakfast", 
                       "soup", "beverage", "sauce", "marinade", "fingerfood", "snack", "drink"]),
-        cuisine: a.enum(["American", "Chinese", "Italian", "Southern", "Spanish"]),
         includeIngredients: a.string(),
         excludeIngredients: a.string(),
         instructionsRequired: a.boolean(),
@@ -77,11 +77,11 @@ const schema = a.schema({
       //   "addRecipeInformation", "addRecipeNutrition", "author", "tags", "recipeBoxId", "titleMatch", "maxReadyTime", 
       //   "ignorePantry", "sort", "sortDirection", "minCarbs", "maxCarbs", "minProtein", "maxProtein", "minCalories", ]),
       pathParameters: a.customType({
-        id: a.integer(),
+        path_id: a.integer(),
       }),
     }) // <-- .arguments
     .returns(a.json())
-    // Can include the return type:
+    // FCan include the return type:
     // .returns(a.ref("GetRecipeResponse").required())
     // .authorization((allow) => [allow.authenticated()])
     .authorization((allow) => [allow.publicApiKey()])
@@ -134,7 +134,7 @@ const schema = a.schema({
       instructions: a.string(),
       sourceUrl: a.string(),
       ingredients: a.customType({
-        id: a.integer(),
+        ingredients_id: a.integer(),
         name: a.string(),
         amount: a.float(),
         unit: a.string(),
