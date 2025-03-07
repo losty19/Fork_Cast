@@ -86,7 +86,7 @@ const schema = a.schema({
     // FCan include the return type:
     // .returns(a.ref("GetRecipeResponse").required())
     // .authorization((allow) => [allow.authenticated()])
-    .authorization((allow) => [allow.publicApiKey()])
+    .authorization((allow) => [allow.authenticated()])
     .handler(a.handler.function(spoonacularHandler)),
 
   SaveFavoriteRecipe: a
@@ -189,7 +189,7 @@ const schema = a.schema({
     .authorization((allow) => [allow.owner()]),
 
 }) // <-- .schema
-.authorization((allow) => [allow.publicApiKey()]);
+.authorization((allow) => [allow.authenticated()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
