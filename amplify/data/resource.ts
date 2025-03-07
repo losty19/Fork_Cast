@@ -10,11 +10,13 @@ specifies that any user authenticated via an API key can "create", "read",
 =========================================================================*/
 
 const spoonacularHandler = defineFunction({
+  name: "spoonacularHandler",
   entry: "../functions/spoonacular/handler.ts",
-})
+});
 const saveFavoriteHandler = defineFunction({
+  name: "saveFavoriteHandler",
   entry: "../functions/saveFavoriteRecipe/handler.ts",
-})
+});
 
 const schema = a.schema({
   // GetRecipeResponse: a.customType({
