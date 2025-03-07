@@ -89,8 +89,8 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
       // DOCS: https://spoonacular.com/food-api/docs#Get-Similar-Recipes
       case 'GET /recipes/{id}/similar': {
         try {
-          const id = pathParameters?.id;
-          if (!id) {
+          const path_id = pathParameters?.path_id;
+          if (!path_id) {
             return {
               statusCode: 400,
               headers,
@@ -98,7 +98,7 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
             };
           }
           
-          const response = await spoonacularClient.get(`/recipes/${id}/similar`, {
+          const response = await spoonacularClient.get(`/recipes/${path_id}/similar`, {
             params: { 
               apiKey: process.env.SPOONACULAR_API_KEY,
               number: queryStringParameters?.number || 2
@@ -124,8 +124,8 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
       // GET https://api.spoonacular.com/recipes/{id}/ingredientWidget.json
       case 'GET /recipes/{id}/ingredientWidget.json': {
         try {
-          const id = pathParameters?.id;
-          if (!id) {
+          const path_id = pathParameters?.path_id;
+          if (!path_id) {
             return {
               statusCode: 400,
               headers,
@@ -133,7 +133,7 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
             };
           }
 
-          const response = await spoonacularClient.get(`/recipes/${id}/ingredientWidget.json`, {
+          const response = await spoonacularClient.get(`/recipes/${path_id}/ingredientWidget.json`, {
             params: { apiKey: process.env.SPOONACULAR_API_KEY }
           });
           

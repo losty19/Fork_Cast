@@ -100,7 +100,7 @@ const SearchResultsPage: React.FC = () => {
     try {
       const { userId } = await getCurrentUser();
       const response = await client.mutations.SaveFavoriteRecipe({
-        recipeId: recipe.id.toString(),
+        recipeId: recipe.id,
         userId,
         title: recipe.title,
         image: recipe.image,
