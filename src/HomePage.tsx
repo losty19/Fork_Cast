@@ -4,6 +4,7 @@ import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-comp
 import { RuxButton } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
 import { Authenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
