@@ -6,13 +6,13 @@ import Profile from "./Profile";
 import RecipeDetails from './RecipeDetails';
 import SearchResultsPage from "./SearchResultsPage";
 import "./index.css";
-import { Amplify } from "aws-amplify";
-import outputs from "../amplify_outputs.json";
+//import { Amplify } from "aws-amplify";
+//import outputs from "../amplify_outputs.json";
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
-Amplify.configure(outputs);
+//Amplify.configure(outputs);
 
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const { user } = useAuthenticator((context) => [context.user]);
@@ -27,50 +27,42 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 };
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <Authenticator.Provider>
     <Router>
       <Routes>
         {/* Public Route */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<MainPage />} />
 
         {/* Protected Routes */}
         <Route 
           path="/main" 
           element={ 
-            <ProtectedRoute> 
+            
               <MainPage /> 
-            </ProtectedRoute>
+            
           }
         />
         
         <Route 
           path="/profile" 
           element={
-            <ProtectedRoute>
             <Profile />
-            </ProtectedRoute>
           } 
         />
 
         <Route 
           path="/recipeDetails" 
           element={
-            <ProtectedRoute>
             <RecipeDetails />
-            </ProtectedRoute>
           } 
         />
 
         <Route 
           path="/searchResults" 
           element={
-            <ProtectedRoute>
             <SearchResultsPage />
-            </ProtectedRoute>
           } 
         />
 
       </Routes>
     </Router>
-  </Authenticator.Provider>
 );

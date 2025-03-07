@@ -17,7 +17,6 @@ html, body {
   /* background-color: black; */
 }
 
-
 .sidebar {
   display: flex;
   flex-direction: row;
@@ -32,9 +31,6 @@ html, body {
   padding-left: 1%;
   position:absolute;
 }
-
-
-
 .icon-button {
   min-height: 50px;
   min-width: 50px;
@@ -71,40 +67,26 @@ html, body {
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.418);
 }
 
-.meal-request {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 20px;
-}
-
-.meal-request-container {
-  color: white;
-  background-color: white;
-  border-color: white;
-}
-
 .dialog-buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-top: 20px;
 }
-
-.button-text-meal-request {
-  margin-top: -15px;
-  font-size: 14px;
-  color: #333; 
-  
-}
 .logo-text {
-  margin-top: -15px;
-  font-size: 30px;
+  font-size: 40px;
   position: absolute;
-  font-family:Cambria, Cochin;
+  font-family:monospace;
   color: #ffffff;
   z-index: 5;
-  left:7%;
-  top:3.7%;
-  
+  left:5%;
+  top:0%; 
+}
+.My-recipes-text{
+  top:11%;
+  left:8%;
+  font-size:30px;
+  font-family:fantasy;
+  position: absolute;
+  color: #000000;
 }
