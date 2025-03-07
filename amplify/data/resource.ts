@@ -122,6 +122,7 @@ const schema = a.schema({
   // Saved Recipes - Cache of Spoonacular recipes
   SavedRecipe: a
     .model({
+      id: a.id(),
       userProfile: a.belongsTo("UserProfile", "recipeId"), // Reference to UserProfile
       userId: a.string(),
       recipeId: a.string(), // Spoonacular ID
@@ -152,18 +153,6 @@ const schema = a.schema({
     .secondaryIndexes((index) => [
       index('userId'),
     ]),
-
-  // User's Favorite Recipes
-  FavoriteRecipe: a
-    .model({
-      userId: a.string(),
-      recipeId: a.string(), // Reference to SavedRecipe
-      notes: a.string(),
-      rating: a.integer(), // 1-5 stars
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.owner()]),
 
   // Meal Plan
   MealPlan: a
