@@ -16,14 +16,14 @@ export const handler: Schema["SaveFavoriteRecipe"]["functionHandler"] = async (e
         image,
 
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
     };
 
     try {
         await docClient.send(
             new PutCommand({
                 TableName: "SavedRecipes",
-                Item: savedRecipe
+                Item: savedRecipe,
             })
         );
 
