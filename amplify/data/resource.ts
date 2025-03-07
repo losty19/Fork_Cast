@@ -123,6 +123,7 @@ const schema = a.schema({
   SavedRecipe: a
     .model({
       userProfile: a.belongsTo("UserProfile", "recipeId"), // Reference to UserProfile
+      userId: a.string(),
       recipeId: a.string(), // Spoonacular ID
       title: a.string(),
       image: a.string(),
@@ -147,7 +148,10 @@ const schema = a.schema({
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
-    .authorization((allow) => [allow.authenticated()]), // Any authenticated user can CRUD
+    .authorization((allow) => [allow.authenticated()]) // Any authenticated user can CRUD
+    .secondaryIndexes((index) => [
+      index('userId'),
+    ]),
 
   // User's Favorite Recipes
   FavoriteRecipe: a
