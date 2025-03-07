@@ -5,9 +5,34 @@ import './RecipeCard.css'
 import SideBar from "./SideBar";
 import MyRecipes from "./RecipeCard";
 // import { Authenticator } from '@aws-amplify/ui-react';
+import { RuxIcon, RuxInput, RuxButton, RuxDialog } from "@astrouxds/react";
 // import { useNavigate } from "react-router-dom";
 
+interface RuxInputEvent extends Event {
+  target: HTMLInputElement;
+}
+
 const MainPage: React.FC = () => {
+  const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  // const navigate = useNavigate();
+
+  const buttonPressed = () => {
+    setIsMealRequestOpen(!isMealRequestOpen);
+  }
+
+  const handleInputChange = (e: RuxInputEvent) => {
+    setInputValue(e.target.value);
+  }
+
+  const handleSubmit = () => {
+    console.log(inputValue);
+    setIsMealRequestOpen(false); 
+  }
+
+  const handleDialogClose = () => {
+    setIsMealRequestOpen(false);
+  }
 
   return (
     <>
@@ -18,6 +43,32 @@ const MainPage: React.FC = () => {
         </div>
         </button>
         <MyRecipes />
+      <div className="meal-request">
+        <button className="icon-button" onClick={buttonPressed}>
+          <RuxIcon size="normal" icon="add-circle"></RuxIcon>
+        </button>
+        <div className="button-text-meal-request">
+          Meal Request
+        </div>
+      </div> 
+
+      {isMealRequestOpen && (
+        <RuxDialog 
+          className="meal-request-container" 
+          open={isMealRequestOpen} 
+          header="Meal Request" 
+          message="Content goes here" 
+          confirmText=""
+          denyText=""
+          onRuxdialogclosed={handleDialogClose}
+        >
+          <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e) => handleInputChange(e as unknown as RuxInputEvent)}/>
+          <div className="dialog-buttons">
+            <RuxButton className="mrCancel" onClick={handleDialogClose}>Cancel</RuxButton>
+            <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
+          </div>
+        </RuxDialog>
+      )}
     </>
   );
 }

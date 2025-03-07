@@ -157,24 +157,6 @@ It's not hard to make homemade pancakes — you just need a good recipe. That's 
 1. Sift the dry ingredients togeth Scratch
 It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
 
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
 1. Sift the dry ingredients togeth
 2. Make a well, then add the wet ingredients. Stir to combine...</ExpandableContent>
 </ContentContainer>

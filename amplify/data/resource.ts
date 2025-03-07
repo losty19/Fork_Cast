@@ -1,4 +1,5 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData, defineFunction } from "@aws-amplify/backend";
+// import { QueryString } from "aws-cdk-lib/aws-logs";
 // import { spoonacularFunction } from "../functions/spoonacular/resource";
 
 /*== STEP 1 ===============================================================
@@ -8,7 +9,98 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 
+const spoonacularHandler = defineFunction({
+  name: "spoonacularHandler",
+  entry: "../functions/spoonacular/handler.ts",
+});
+const saveFavoriteHandler = defineFunction({
+  name: "saveFavoriteHandler",
+  entry: "../functions/saveFavoriteRecipe/handler.ts",
+});
+
 const schema = a.schema({
+  // GetRecipeResponse: a.customType({
+  //   statusCode: a.integer().required(),
+  //   headers: a.customType({ // Not totally sure about this
+  //     "Access-Control-Allow-Origin": a.string(),
+  //     "Access-Control-Allow-Methods": a.string(),
+  //   }),
+  //   body: a.json().required(),
+  // }),  USING .returns(a.json()) INSTEAD FOR NOW
+
+  // THIS IS THE BODY JSON OBJECT THAT IS RETURNED FROM THE SPOONACULAR API
+  //   offset: a.integer(),
+  //   number: a.integer(),
+  //   results: a.customType({
+  //       id: a.integer(),
+  //       title: a.string(),
+  //       image: a.string(),
+  //       imageType: a.string(),
+  //     }),
+  //   totalResults: a.integer(),
+
+  SpoonacularGetRecipe: a
+    .query()
+    .arguments({
+      path:  a.string().required(),
+      httpMethod: a.string().required(),
+      // There are more options in the Spoonacular API, but these are the ones I think we will use the most
+      queryStringParameters: a.customType({
+        query: a.string(),
+        number: a.integer(),
+        offset: a.integer(),
+        diet: a.enum(["Gluten_Free", "Ketogenic", "Vegetarian", "Lacto_Vegetarian", "Ovo_Vegetarian", "Vegan", "Pescetarian", "Paleo", "Primal", "Whole30"]),
+        intolerances: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish"]),
+        type: a.enum(["main_course", "side_dish", "dessert", "appetizer", "salad", "bread", "breakfast", 
+                      "soup", "beverage", "sauce", "marinade", "fingerfood", "snack", "drink"]),
+        includeIngredients: a.string(),
+        excludeIngredients: a.string(),
+        instructionsRequired: a.boolean(),
+        fillIngredients: a.boolean(),
+        addRecipeInformation: a.boolean(),
+        addRecipeNutrition: a.boolean(),
+        author: a.string(),
+        tags: a.string(),
+        recipeBoxId: a.integer(),
+        titleMatch: a.string(),
+        maxReadyTime: a.integer(),
+        ignorePantry: a.boolean(),
+        sort: a.enum(["popularity", "healthiness", "random", "time", "price", "sustainability"]),
+        sortDirection: a.enum(["asc", "desc"]),
+        minCarbs: a.integer(),
+        maxCarbs: a.integer(),
+        minProtein: a.integer(),
+        maxProtein: a.integer(),
+        minCalories: a.integer(),
+        maxCalories: a.integer(),
+      }), // <-- queryStringParameters
+      // queryStringParameters: a.enum(["query", "number", "offset", "diet", "intolerances", "equipment", 
+      //   "type", "cuisine", "includeIngredients", "excludeIngredients", "instructionsRequired", "fillIngredients", 
+      //   "addRecipeInformation", "addRecipeNutrition", "author", "tags", "recipeBoxId", "titleMatch", "maxReadyTime", 
+      //   "ignorePantry", "sort", "sortDirection", "minCarbs", "maxCarbs", "minProtein", "maxProtein", "minCalories", ]),
+      pathParameters: a.customType({
+        path_id: a.integer(),
+      }),
+    }) // <-- .arguments
+    .returns(a.json())
+    // FCan include the return type:
+    // .returns(a.ref("GetRecipeResponse").required())
+    // .authorization((allow) => [allow.authenticated()])
+    .authorization((allow) => [allow.authenticated()])
+    .handler(a.handler.function(spoonacularHandler)),
+
+  SaveFavoriteRecipe: a
+    .mutation()
+    .arguments({
+      userId: a.string().required(),
+      recipeId: a.string().required(),
+      image: a.string(),
+      title: a.string().required(),
+    })
+    .returns(a.ref("SavedRecipe"))
+    .authorization((allow) => [allow.authenticated()])
+    .handler(a.handler.function(saveFavoriteHandler)),
+
   Todo: a
     .model({
       content: a.string(),
@@ -32,7 +124,9 @@ const schema = a.schema({
   // Saved Recipes - Cache of Spoonacular recipes
   SavedRecipe: a
     .model({
+      id: a.id(),
       userProfile: a.belongsTo("UserProfile", "recipeId"), // Reference to UserProfile
+      userId: a.string(),
       recipeId: a.string(), // Spoonacular ID
       title: a.string(),
       image: a.string(),
@@ -42,7 +136,7 @@ const schema = a.schema({
       instructions: a.string(),
       sourceUrl: a.string(),
       ingredients: a.customType({
-        id: a.integer(),
+        ingredients_id: a.integer(),
         name: a.string(),
         amount: a.float(),
         unit: a.string(),
@@ -57,19 +151,10 @@ const schema = a.schema({
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
-    .authorization((allow) => [allow.authenticated()]), // Any authenticated user can CRUD
-
-  // User's Favorite Recipes
-  FavoriteRecipe: a
-    .model({
-      userId: a.string(),
-      recipeId: a.string(), // Reference to SavedRecipe
-      notes: a.string(),
-      rating: a.integer(), // 1-5 stars
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [allow.authenticated()]) // Any authenticated user can CRUD
+    .secondaryIndexes((index) => [
+      index('userId'),
+    ]),
 
   // Meal Plan
   MealPlan: a
@@ -103,8 +188,8 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.owner()]),
 
-})
-.authorization((allow) => [allow.publicApiKey()]);
+}) // <-- .schema
+.authorization((allow) => [allow.authenticated()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
