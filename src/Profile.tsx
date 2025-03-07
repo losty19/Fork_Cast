@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from 'react';
-// import { useNavigate } from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import { RuxButton, RuxContainer, RuxInput } from "@astrouxds/react";
 import './Profile.css';
@@ -11,7 +10,6 @@ interface RuxInputEvent extends Event {
 }
 
 const Profile: React.FC = () => {
-  // console.log("Profile page");
   const [inputValueLike, setInputValueLike] = useState('');
   const handleInputChangeLike = (e: RuxInputEvent) => {
     setInputValueLike(e.target.value);
