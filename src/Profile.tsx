@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
 // import { useNavigate } from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
@@ -19,7 +19,17 @@ const Profile: React.FC = () => {
   const handleInputChangeDislike = (e: RuxInputEvent) => {
     setInputValueDislike(e.target.value);
   }
+
+  useEffect(() => {
+    const savedLike = localStorage.getItem('inputValueLike');
+    const savedDislike = localStorage.getItem('inputValueDislike');
+    if (savedLike) setInputValueLike(savedLike);
+    if (savedDislike) setInputValueDislike(savedDislike);
+  }, []);
+
   const handleSubmit = () => {
+    localStorage.setItem('inputValueLike', inputValueLike);
+    localStorage.setItem('inputValueDislike', inputValueDislike);
     console.log(inputValueLike);
     console.log(inputValueDislike);
   }
@@ -34,10 +44,10 @@ const Profile: React.FC = () => {
           <RuxButton onClick={handleSubmit}>Save</RuxButton>
         </div>
         <div className="profile-content">
-          <RuxInput onRuxchange={(e) => handleInputChangeLike(e as unknown as RuxInputEvent)}>
+          <RuxInput value={inputValueLike} onRuxchange={(e) => handleInputChangeLike(e as unknown as RuxInputEvent)}>
             <div slot="label" >Liked Foods</div>
           </RuxInput>
-          <RuxInput onRuxchange={(e) => handleInputChangeDislike(e as unknown as RuxInputEvent)}>
+          <RuxInput value={inputValueDislike} onRuxchange={(e) => handleInputChangeDislike(e as unknown as RuxInputEvent)}>
             <div slot="label">Disliked Foods</div>
           </RuxInput>
         </div>
