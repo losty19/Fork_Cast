@@ -49,11 +49,6 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
             }
           });
           return response.data; // Amplify adds statusCode, headers I think
-          // return {
-          //   statusCode: 200,
-          //   headers,
-          //   body: JSON.stringify(response.data)
-          // };
           /*  Format of response.data
           {
               "offset": 0,
@@ -77,12 +72,7 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
           */
         } catch (error) {
           console.error('Error searching recipes:', error);
-          throw new Error('Error searching recipes');
-          // return {
-          //   statusCode: 500,
-          //   headers,
-          //   body: JSON.stringify({ message: 'Error searching recipes' })
-          // };
+          throw new Error('Error searching recipes: ' + error);
         }
       }
       // Get similar recipes by recipe ID
