@@ -36,19 +36,19 @@
     transition: transform 0.2s ease;
     padding:0;
     border: none;
-    margin: 20px;
+    margin: 10px;
     display: inline-flex;
   }
   .favorbutton_icon{
     color: rgb(255, 225, 0);
     margin: -1;
-    transform-origin: left;
-    transition: transform 0.2s ease;
+    transform-origin: center;
+    transition:0.3s ease;
 
 ;
   }
   .favorbutton_icon:hover{
-    transform: scale(1.1);
+    color: #483e22;
     
   }
   .favorbutton:focus {

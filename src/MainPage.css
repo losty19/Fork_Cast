@@ -6,15 +6,13 @@ html, body {
 
 .main-container {
   display: flex;
-  width: 100vw; 
+  width: 100%;
   align-items: flex-start;
   justify-content: flex-start;
   top: 0;
   left: 0;
   position: absolute;
   z-index: 4;
-  
-  /* background-color: black; */
 }
 
 .sidebar {
@@ -61,9 +59,10 @@ html, body {
 }
 
 .content {
-  flex-grow: 1;
   background-color: #e27e36;
   padding: 30px;
+  width: 100%;
+  margin-left: -40px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.418);
 }
 
@@ -83,7 +82,7 @@ html, body {
   top:0%; 
 }
 .My-recipes-text{
-  top:11%;
+  top:12%;
   left:8%;
   font-size:30px;
   font-family:fantasy;

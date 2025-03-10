@@ -25,6 +25,10 @@ const SideBar = () => {
  
     const navigate = useNavigate();
 
+    const toggleMealRequest = () => {
+      setIsMealRequestOpen(prev => !prev);
+    }
+
     const buttonPressed = () => {
       setIsMealRequestOpen(!isMealRequestOpen);
     }
@@ -65,10 +69,11 @@ const SideBar = () => {
 
     return (
       <>
-        <button onClick={() => navigate("/main")}>
+        
+    <div className="main-container">
+      <button onClick={() => navigate("/main")}>
             <div className="logo-text">ForkCast</div>
               </button>
-    <div className="main-container">
           <div className="sidebar">
             <button className="icon-button" onClick={buttonPressed}>
               <RuxIcon className="icon-image" size="35px" icon="add-circle-outline"></RuxIcon>
@@ -104,7 +109,7 @@ const SideBar = () => {
                 </RuxDialog>
               )}
               {isLoading && <div className="loading">Loading...</div>}
-              {error && <div className="error">{error}</div>}
+          {error && <div className="error">{error}</div>}
 
               </>
     );

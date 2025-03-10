@@ -1,21 +1,23 @@
 .Title_recipe{
-    font-size: 90%;
+    font-size: 100%;
     margin-left: 2%;
-    margin-top: -1%;
+    margin-top: 0%;
 }
 
   .recipe_image {
-    width: 50%;
+    width: 400px;
     height: auto;
     margin-right: 1rem;
     margin-bottom: 2rem;
     border-radius: 15px;
+    max-width: 50%;
   }
 
   .description-container {
     flex: 1;
     color: white;
     font-size: 50%;
+    width: 750px;
   }
   
   .icon-container {
