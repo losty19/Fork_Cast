@@ -8,6 +8,10 @@ import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-comp
 import { useState } from "react";
 import { RuxIcon, RuxDialog, RuxInput, RuxButton} from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
+import { generateClient } from 'aws-amplify/api';
+import type { Schema } from '../amplify/data/resource';
+
+const client = generateClient<Schema>()
 
 interface RuxInputEvent extends Event {
   target: HTMLInputElement;
@@ -16,8 +20,14 @@ interface RuxInputEvent extends Event {
 const SideBar = () => {
     const [isMealRequestOpen, setIsMealRequestOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
-  
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+ 
     const navigate = useNavigate();
+
+    const toggleMealRequest = () => {
+      setIsMealRequestOpen(prev => !prev);
+    }
 
     const buttonPressed = () => {
       setIsMealRequestOpen(!isMealRequestOpen);
@@ -27,21 +37,43 @@ const SideBar = () => {
       setInputValue(e.target.value);
     }
   
-    const handleSubmit = () => {
-      console.log(inputValue);
-      setIsMealRequestOpen(false); 
+    const handleSubmit = async () => {
+      setIsLoading(true);
+      setError(null);
+      console.log("Input Value: ", inputValue);
+      try {
+        const spoonacular_response = await client.queries.SpoonacularGetRecipe({
+          path: '/recipes/search', 
+          httpMethod: 'GET', 
+          queryStringParameters: {query: inputValue},
+          pathParameters: {}
+        });
+        console.log("spoonacular_response is: ", spoonacular_response);
+        if (spoonacular_response.data) {
+          // const recipes = spoonacular_response.data.body as Schema["GetRecipeResponse"];
+          navigate('/searchResults', { state: { recipes:  spoonacular_response.data } });
+        } else {
+          console.error('Error searching recipes: Invalid response format. This is spoonacular_response: ', spoonacular_response);
+        }
+      } catch (error) {
+        setError('Failed to fetch recipe');
+        console.error('Error searching recipes:', error);
+      } finally {
+        setIsLoading(false);
+        setIsMealRequestOpen(false);
+      }
     }
-  
     const handleDialogClose = () => {
       setIsMealRequestOpen(false);
     }
 
     return (
       <>
-        <button onClick={() => navigate("/main")}>
+        
+    <div className="main-container">
+      <button onClick={() => navigate("/main")}>
             <div className="logo-text">ForkCast</div>
               </button>
-    <div className="main-container">
           <div className="sidebar">
             <button className="icon-button" onClick={buttonPressed}>
               <RuxIcon className="icon-image" size="35px" icon="add-circle-outline"></RuxIcon>
@@ -76,6 +108,9 @@ const SideBar = () => {
                   </div>
                 </RuxDialog>
               )}
+              {isLoading && <div className="loading">Loading...</div>}
+          {error && <div className="error">{error}</div>}
+
               </>
     );
   }

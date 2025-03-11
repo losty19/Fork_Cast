@@ -6,7 +6,7 @@ import {RuxIcon } from "@astrouxds/react";
 import SideBar from "./SideBar.tsx";
 import styled from "styled-components";
 import "./RecipeDetails.css";
-import Left_SideBar from "./Left_SideBar.tsx";
+import LSideBar from "./Left_SideBar.tsx";
 
 
 
@@ -23,25 +23,22 @@ const MainContainer = styled.div`
   justify-content: center;
   max-height: 100vh;
   overflow: auto;
-  padding: 10px;
   scrollbar-width: none;
   position:relative;
-
+  top:50px;
 `;
 
 const OuterContainer = styled.div`
   flex-direction: column;
   padding: 20px;
-  background-color: rgb(13, 39, 50);
+  background-color:rgb(50, 41, 35);
   border-radius: 15px;
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.64);
   margin-top: 5%;
-  margin-bottom:-150;
+  margin-bottom:5%;
   font-size: 200%;
   overflow-y: hidden;
   padding-right:90px;
-  margin-left:5%;
-  max-width:1200px;
 `;
 
 const ContentContainer = styled.div`
@@ -50,27 +47,27 @@ const ContentContainer = styled.div`
   align-items: center; 
   padding: 20px;
   position:relative;
-  background-color: rgb(140, 124, 194);
+  background-color:rgb(241, 136, 61);
   border-radius: 10px;
   
+  
 `;
-
 
 const ExpandableContent = styled.div<{ expanded: boolean }>`
   margin-top: -15px;
   padding: 10px;
-  padding-bottom:5%;
-  background-color: rgb(140, 124, 194);
+  padding-bottom:3%;
   border-radius: 10px;
   color: white;
   font-size: 18px;
+  width: 1100px;
   display: ${({ expanded }) => (expanded ? "block" : "none")};
 `;
 const ButtonContainer = styled.div<{ expanded: boolean }>`
   display: flex;
   position:relative;
   justify-content: center;
-  margin-top: ${({ expanded }) => (expanded ? "0%" : "-3%")};
+  margin-top: ${({ expanded }) => (expanded ? "-3%" : "-1%")};
   margin-bottom: ${({ expanded }) => (expanded ? "-1%" : "-3%")};
   position: ${({ expanded }) => (expanded ? "absolute" : "relative")};
   bottom: ${({ expanded }) => (expanded ? "0" : "auto")}; 
@@ -80,7 +77,7 @@ const StyleButton = styled.button`
   padding: 0px;
   margin:0;
   border: none;
-  cursor: pointe
+  cursor: pointer;
   z-index: 3;
   &:hover {
     transform:scale(1.2);
@@ -102,16 +99,12 @@ const RecipeDetails: React.FC = () => {
   const location = useLocation();
   const { recipe } = location.state as { recipe: Recipe };
   const [expanded, setExpanded] = useState(false);
-  const navigate = useNavigate();
-
-
+  
   return (
     <>
       <SideBar/>
-      
-      <Left_SideBar/>
-      
       <MainContainer>
+        <LSideBar/>
         <OuterContainer>
           <div className = "Title_recipe">{recipe.title}</div>
           <ContentContainer>
@@ -143,24 +136,6 @@ It's not hard to make homemade pancakes — you just need a good recipe. That's 
 
 1. Sift the dry ingredients together. Scratch
 It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
 It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
 
 1. Sift the dry ingredients togeth Scratch

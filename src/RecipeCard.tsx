@@ -16,7 +16,7 @@ const initialFavorites: Recipe[] = [
   {
     image: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
     title: "Recipe Title 1",
-    description: "Recipe description 1. Long description to test the overflow of the text. Recipe description 1. Long description to test the overflow of the text.Recipe description 1. Long description to test the overflow of the text.Recipe description 1. Long description to test the overflow of the text.Recipe description 1. Long description to test the overflow of the text."
+    description: "Recipe description 1. Long description to test the overflow of the text. Recipe description 1. Long description to test the overflow of the text. Recipe description 1. Long description to test the overflow of the text.ecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lonecipe description 1. Long description to test the overflow of the text. Recipe description 1. Lon"
   },
   {
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLQzQqVBk7LmMbMSaEuRy3AkVv1lyGqThm4Q&s",
@@ -79,26 +79,28 @@ const MyRecipes = styled.div`
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
-  max-height: 100vh;
+  max-height: 90vh;
   overflow: auto;
-  padding-top:100px;
+  padding-top:60px;
   padding-left:0px;
   padding-right: 0px;
   scrollbar-width: none;
   padding-bottom:50px;
-  top:30%;
+  margin:120px;
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  width: 190px;
+  width: 210px;
   border-radius: 15px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.61);
   background-color:rgb(255, 255, 255);
   padding: 10px;
   margin-top: 20px;
-  margin-left:-13px;
+  margin-left:-5px;
+  margin-right:-5px;
+
   position: relative;
   max-height:400px;
   min-height: 350px;
@@ -121,6 +123,7 @@ const ImageContainer = styled.div`
   overflow: hidden;
   margin-bottom: -15px;
   `;
+
 const VignetteOverlay = styled.div`
   content: '';
   position: absolute;
@@ -129,7 +132,7 @@ const VignetteOverlay = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 15px;
-  background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.2));
+  background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.19));
   z-index: 2;
 `;
 
