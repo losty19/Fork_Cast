@@ -21,13 +21,13 @@ const LSideBar = () => {
               {/* Back Button */}
               <button className="side-button" onClick={() => navigate("/main")}>
                   <RuxIcon className="side-image" icon="reply" size="3.3rem" />
-                  <h1 style={{marginTop:'-10%'}}>BACK</h1>
+                  <h2 style={{marginTop:'-10%'}}>BACK</h2>
               </button>
 
               {/* Grocery List Button */}
               <button className="side-button" onClick={() => navigate("/grocery-list")}>
                   <RuxIcon className="side-image" icon="add-shopping-cart" size="3.3rem" />
-                  <h1 style={{marginTop:'-5%',marginBottom:'-4%'}}>ADD TO GROCERY LIST</h1>
+                  <h2 style={{marginTop:'-5%',marginBottom:'-4%'}}>ADD TO GROCERY LIST</h2>
               </button>
 
               {/* Star Icon Button */}
@@ -38,13 +38,13 @@ const LSideBar = () => {
                       icon={icon === "start" ? "star-border" : "star"}
                       onClick={() => setIcon(icon === "start" ? "star" : "start")}
                   />
-                  <h1 style={{marginTop:'-5%'}}>FAVOR</h1>
+                  <h2 style={{marginTop:'-5%'}}>FAVOR</h2>
               </button>
 
               {/* Edit Button */}
               <button className="side-button" onClick={buttonPressed}>
                   <RuxIcon className="side-image" icon="edit" size="2.9rem" />
-                  <h1 style={{marginTop:'0%'}}>EDIT RECIPE</h1>
+                  <h2 style={{marginTop:'0%'}}>EDIT RECIPE</h2>
               </button>
           </div>
 

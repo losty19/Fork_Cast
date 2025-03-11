@@ -6,7 +6,9 @@
     display: flex;
     max-width:4%;
 }
- 
+ h2{
+  font-size: 15px;
+ }
   .side-button {
     color: #855353;
     font-size: 7px;

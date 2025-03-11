@@ -64,7 +64,7 @@ const GroceryList: React.FC = () => {
     <div className="grocery-list-container">
       <div className="list-container">
         <SideBar/>
-        <h2>Grocery List</h2>
+        <h3>Grocery List</h3>
         <ul className="grocery-list">
           {items.map((item) => (
             <GroceryListItem
