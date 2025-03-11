@@ -1,10 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import {RuxIcon } from "@astrouxds/react";
-import SideBar from "./SideBar";
+import SideBar from "./SideBar.tsx";
 import styled from "styled-components";
+import "./RecipeDetails.css";
+import LSideBar from "./Left_SideBar.tsx";
 
 
 interface Recipe {
@@ -14,38 +16,28 @@ interface Recipe {
   extraContent: string;
 }
 
-const RecipeImage = styled.img`
-  width:50%;
-  height: auto;
-  float:left;
-  margin-right:1rem;
-  margin-bottom:2rem;
-`;
-
-
 const MainContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   max-height: 100vh;
   overflow: auto;
-  padding: 30px;
   scrollbar-width: none;
+  position:relative;
+  top:50px;
 `;
 
 const OuterContainer = styled.div`
   flex-direction: column;
   padding: 20px;
-  justify-content:center;
-  background-color: rgb(13, 39, 50);
+  background-color:rgb(50, 41, 35);
   border-radius: 15px;
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.64);
   margin-top: 5%;
-  margin-left:5%; 
-  margin-bottom:-150;
+  margin-bottom:5%;
   font-size: 200%;
   overflow-y: hidden;
-  position: relative;
+  padding-right:90px;
 `;
 
 const ContentContainer = styled.div`
@@ -54,70 +46,73 @@ const ContentContainer = styled.div`
   align-items: center; 
   padding: 20px;
   position:relative;
-  background-color: rgb(140, 124, 194);
+  background-color:rgb(241, 136, 61);
   border-radius: 10px;
+  
+  
 `;
 
-const DescriptionContainer = styled.div`
-  flex:1;
-  color: white;
-  font-size: 60%; 
-`;
 const ExpandableContent = styled.div<{ expanded: boolean }>`
   margin-top: -15px;
   padding: 10px;
-  padding-bottom:5%;
-  background-color: rgb(140, 124, 194);
+  padding-bottom:3%;
   border-radius: 10px;
   color: white;
   font-size: 18px;
+  width: 1100px;
   display: ${({ expanded }) => (expanded ? "block" : "none")};
 `;
 const ButtonContainer = styled.div<{ expanded: boolean }>`
   display: flex;
+  position:relative;
   justify-content: center;
-  margin-top: ${({ expanded }) => (expanded ? "10px" : "-4%")}; /* Ensure margin moves it to the bottom when expanded */
-  margin-bottom: ${({ expanded }) => (expanded ? "-2%" : "-5%")};
-   position: ${({ expanded }) => (expanded ? "absolute" : "relative")};
+  margin-top: ${({ expanded }) => (expanded ? "-3%" : "-1%")};
+  margin-bottom: ${({ expanded }) => (expanded ? "-1%" : "-3%")};
+  position: ${({ expanded }) => (expanded ? "absolute" : "relative")};
   bottom: ${({ expanded }) => (expanded ? "0" : "auto")}; 
 `;
 const StyleButton = styled.button`
-  background: none;
+  background:none;
+  padding: 0px;
+  margin:0;
   border: none;
-  cursor: pointe
-  
+  cursor: pointer;
   z-index: 3;
   &:hover {
-    transform:scale(1.3);
+    transform:scale(1.2);
   }
   &:focus {
     outline: none;
   }
 `;
+
 const TextWrapper = styled.div`
   display: flex;
-  align-items: flex-start; /* Align text to the top */
+  align-items: flex-start;
   flex-wrap: wrap;
   width: 100%;
 `;
+
 
 const RecipeDetails: React.FC = () => {
   const location = useLocation();
   const { recipe } = location.state as { recipe: Recipe };
   const [expanded, setExpanded] = useState(false);
-
+  
   return (
     <>
-      <SideBar />
+      <SideBar/>
       <MainContainer>
+        <LSideBar/>
         <OuterContainer>
-          <div slot="header">{recipe.title}</div>
+          <div className = "Title_recipe">{recipe.title}</div>
           <ContentContainer>
+  
   <TextWrapper>
-    <RecipeImage src={recipe.image} alt="Food" />
-    <DescriptionContainer>
-      <p>{recipe.description}</p>
-    </DescriptionContainer>
+            <img className="recipe_image" src={recipe.image} alt="Food" />    
+              <div className="description-container">
+              <p>{recipe.description}</p>
+            </div>
   </TextWrapper>
 
   <ButtonContainer expanded={expanded}>
@@ -125,41 +120,55 @@ const RecipeDetails: React.FC = () => {
     <RuxIcon icon={expanded ? "keyboard-arrow-up" : "keyboard-arrow-down"} style={{ color: 'rgb(31, 39, 50)' }} />
     </StyleButton>
   </ButtonContainer>
-  <ExpandableContent expanded={expanded}>Pancake Ingredients
-You likely already have everything you need to make this pancake recipe. If not, here's what to add to your grocery list:
+  <ExpandableContent expanded={expanded}>
+    <h1>Ingredients:</h1>
+    <li>2 1/4 cups all-purpose flour</li>
+                <li>1 tsp salt</li>
+                <li>1 tsp sugar</li>
+                <li>1 tbsp olive oil</li>
+                <li>1 packet (2 1/4 tsp) active dry yeast</li>
+                <li>3/4 cup warm water (about 110°F)</li>
+                <li>1 cup crushed tomatoes</li>
+                <li>1 tbsp olive oil</li>
+                <li>1 garlic clove, minced</li>
+                <li>1 tsp dried oregano</li>
+                <li>1 tsp dried basil</li>
+                <li>Salt and pepper, to taste</li>
+                <li>1 1/2 cups shredded mozzarella cheese</li>
+                <li>1/2 cup sliced pepperoni (or any other topping of choice)</li>
+                <li>Fresh basil leaves (optional)</li>
+            
 
-· Flour: This homemade pancake recipe starts with all-purpose flour.
-· Baking powder: Baking powder, a leavener, is the secret to fluffy pancakes.
-· Sugar: Just a tablespoon of white sugar is all you'll need for subtly sweet pancakes.
-· Salt: A pinch of salt will enhance the overall flavor without making your pancakes taste salty.
-· Milk and butter: Milk and butter add moisture and richness to the pancakes.
-· Egg: A whole egg lends even more moisture. Plus, it helps bind the pancake batter together.
-
-How to Make Pancakes From Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients together. Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth Scratch
-It's not hard to make homemade pancakes — you just need a good recipe. That's where we come in! You'll find the step-by-step recipe below, but here's a brief overview of what you can expect:
-
-1. Sift the dry ingredients togeth
-2. Make a well, then add the wet ingredients. Stir to combine...</ExpandableContent>
+              <h1>Instructions:</h1>
+              <p>
+                1. Sift the dry ingredients together: flour, salt, and sugar.
+              </p>
+              <p>
+                2. Make a well in the center and add the wet ingredients (olive oil, yeast, and warm water).
+              </p>
+              <p>
+                3. Stir to combine until a dough forms. Knead the dough for about 5-7 minutes until smooth.
+              </p>
+              <p>
+                4. Place the dough in a greased bowl, cover, and let rise for 1 hour.
+              </p>
+              <p>
+                5. Preheat your oven to 475°F (245°C).
+              </p>
+              <p>
+                6. Roll out the dough onto a pizza stone or baking sheet.
+              </p>
+              <p>
+                7. Spread the tomato sauce over the dough, sprinkle with cheese, and add toppings.
+              </p>
+              <p>
+                8. Bake for 12-15 minutes, or until the crust is golden and the cheese is bubbly.
+              </p>
+              </ExpandableContent>
 </ContentContainer>
           
      
-        </OuterContainer>
+        </OuterContainer>        
       </MainContainer>
     </>
   );

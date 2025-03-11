@@ -5,6 +5,7 @@ import MainPage from "./MainPage";
 import Profile from './Profile';
 import RecipeDetails from './RecipeDetails';
 import SearchResultsPage from "./SearchResultsPage";
+import GroceryList from "./GroceryList";
 import "./index.css";
 import { Amplify } from "aws-amplify";
 import outputs from "../amplify_outputs.json";
@@ -66,6 +67,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           element={
             <ProtectedRoute>
             <SearchResultsPage />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/grocery-list" 
+          element={
+            <ProtectedRoute>
+            <GroceryList />
             </ProtectedRoute>
           } 
         />
