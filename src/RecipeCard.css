@@ -12,7 +12,7 @@
     padding-bottom: 0px;
     font-size: 14px;
     font-family:Cambria, Cochin;
-    max-height: 120px;
+    max-height: 180px;
     color: #1f1e1e;
     overflow: scroll;
     scrollbar-width: none;;
@@ -48,8 +48,7 @@
 ;
   }
   .favorbutton_icon:hover{
-    color: #483e22;
-    
+      transform: scale(1.2);
   }
   .favorbutton:focus {
     outline: none;

@@ -3,11 +3,11 @@
     display: flex;
     justify-content: space-between;
     padding: 20px;
- 
     background-color: #f4f4f4;
     border-radius: 15px;
     width: 80rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-height: 500px;
   }
   
   .list-container {
@@ -59,6 +59,8 @@
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: scroll;
+    scrollbar-width: none;
   }
   
   .grocery-list {
@@ -71,7 +73,7 @@
   
   .grocery-item {
     background-color:transparent;
-    padding: 15px;
+    padding: 5px;
     margin: 10px 0;
     display: flex;
     align-items: center;

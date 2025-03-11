@@ -11,11 +11,23 @@ interface GroceryItem {
 }
 
 const GroceryList: React.FC = () => {
-  const [items, setItems] = useState<GroceryItem[]>([
-    { id: 1, name: 'Apples', measurement: '1 kg', checked: false },
-    { id: 2, name: 'Milk', measurement: '1 liter', checked: false },
-    { id: 3, name: 'Bread', measurement: '1 loaf', checked: false },
-  ]);
+    const [items, setItems] = useState<GroceryItem[]>([
+        { id: 1, name: 'Pepperoni', measurement: '1/2 cup, sliced', checked: false },
+        { id: 2, name: 'Milk', measurement: '1 liter', checked: false },
+        { id: 3, name: 'Bread', measurement: '1 loaf', checked: false },
+        { id: 4, name: 'All-purpose flour', measurement: '2 1/4 cups', checked: false },
+        { id: 5, name: 'Salt', measurement: '1 tsp', checked: false },
+        { id: 6, name: 'Sugar', measurement: '1 tsp', checked: false },
+        { id: 7, name: 'Olive oil', measurement: '1 tbsp', checked: false },
+        { id: 8, name: 'Active dry yeast', measurement: '1 packet (2 1/4 tsp)', checked: false },
+        { id: 9, name: 'Warm water', measurement: '3/4 cup', checked: false },
+        { id: 10, name: 'Crushed tomatoes', measurement: '1 cup', checked: false },
+        { id: 11, name: 'Garlic clove', measurement: '1, minced', checked: false },
+        { id: 12, name: 'Dried oregano', measurement: '1 tsp', checked: false },
+        { id: 13, name: 'Dried basil', measurement: '1 tsp', checked: false },
+        { id: 14, name: 'Mozzarella cheese', measurement: '1 1/2 cups', checked: false },
+        { id: 15, name: 'Fresh basil leaves', measurement: 'optional', checked: false },
+      ]);
 
   const [newItemName, setNewItemName] = useState('');
   const [newItemMeasurement, setNewItemMeasurement] = useState('');

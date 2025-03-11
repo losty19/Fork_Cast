@@ -25,10 +25,6 @@ const SideBar = () => {
  
     const navigate = useNavigate();
 
-    const toggleMealRequest = () => {
-      setIsMealRequestOpen(prev => !prev);
-    }
-
     const buttonPressed = () => {
       setIsMealRequestOpen(!isMealRequestOpen);
     }
