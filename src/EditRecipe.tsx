@@ -6,7 +6,7 @@ import { RuxDialog } from "@astrouxds/react";
 // import { useNavigate } from "react-router-dom";
 
 const EditRecipe = () => {
-   const [EditOpen, setEditOpen] = useState(false);
+   const [EditOpen] = useState(false);
     // const navigate = useNavigate();
     // const [icon, setIcon] = useState("start");
     // const buttonPressed = () => {
