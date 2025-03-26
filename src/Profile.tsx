@@ -50,6 +50,11 @@ const Profile: React.FC = () => {
     setDislikedFoods(selectedOptions);
   };
 
+  const [selectedDiet, setSelectedDiet] = useState<OptionType[]>([]);
+  const handleDietChange = (selectedOptions: OptionType[]) => {
+    setSelectedDiet(selectedOptions);
+  };
+
   const intolerances = [
     { value: 'dairy', label: 'Dairy' },
     { value: 'egg', label: 'Egg' },
@@ -95,6 +100,20 @@ const Profile: React.FC = () => {
     { value: 'vietnamese', label: 'Vietnamese' }
   ];
 
+  const dietOptions = [
+    { value: 'glutenFree', label: 'Gluten Free' },
+    { value: 'ketogenic', label: 'Ketogenic' },
+    { value: 'vegetarian', label: 'Vegetarian' },
+    { value: 'lactoVegetarian', label: 'Lacto-Vegetarian' },
+    { value: 'ovoVegetarian', label: 'Ovo-Vegetarian' },
+    { value: 'vegan', label: 'Vegan' },
+    { value: 'pescetarian', label: 'Pescetarian' },
+    { value: 'paleo', label: 'Paleo' },
+    { value: 'primal', label: 'Primal' },
+    { value: 'lowFODMAP', label: 'Low FODMAP' },
+    { value: 'whole30', label: 'Whole30' }
+  ];
+
   const ingredientOptions = Object.keys(commonIngredients).map(ingredient => ({
     value: ingredient,
     label: ingredient,
@@ -125,11 +144,13 @@ const Profile: React.FC = () => {
     const savedIntolerances = localStorage.getItem('selectedIntolerances');
     const savedLikedFoods = localStorage.getItem('likedFoods');
     const savedDislikedFoods = localStorage.getItem('dislikedFoods');
+    const savedDiet = localStorage.getItem('selectedDiet');
     if (savedPrefCuisines) setSelectedPrefCuisines(JSON.parse(savedPrefCuisines));
     if (savedExcludeCuisines) setSelectedExcludeCuisines(JSON.parse(savedExcludeCuisines));
     if (savedIntolerances) setSelectedIntolerances(JSON.parse(savedIntolerances));
     if (savedLikedFoods) setLikedFoods(JSON.parse(savedLikedFoods));
     if (savedDislikedFoods) setDislikedFoods(JSON.parse(savedDislikedFoods));
+    if (savedDiet) setSelectedDiet(JSON.parse(savedDiet));
   }, []);
 
   const handleSubmit = () => {
@@ -138,11 +159,13 @@ const Profile: React.FC = () => {
     localStorage.setItem('selectedIntolerances', JSON.stringify(selectedIntolerances));
     localStorage.setItem('likedFoods', JSON.stringify(likedFoods));
     localStorage.setItem('dislikedFoods', JSON.stringify(dislikedFoods));
+    localStorage.setItem('selectedDiet', JSON.stringify(selectedDiet));
     console.log(exportLikedFoods());
     console.log(exportDislikedFoods());
     console.log(exportPrefCuisines());
     console.log(exportExcludeCuisines());
     console.log(exportIntolerances());
+    console.log(selectedDiet.map(option => option.label).join(', '));
   }
 
   return (
@@ -185,6 +208,13 @@ const Profile: React.FC = () => {
               isMulti
               value={selectedExcludeCuisines}
               onChange={handleExcludeCuisinesChange}
+            />
+            <div slot="label">Diet</div>
+            <Select
+              options={dietOptions}
+              isMulti
+              value={selectedDiet}
+              onChange={handleDietChange}
             />
             <div slot="label">Intolerances</div>
             <Select
