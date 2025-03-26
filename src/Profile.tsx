@@ -7,6 +7,7 @@ import { RuxButton, RuxContainer, RuxInput } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import './Profile.css';
 import CreatableSelect from 'react-select/creatable';
+import { commonIngredients } from './data/ingredients'; // Import commonIngredients
 
 interface RuxInputEvent extends Event {
   target: HTMLInputElement;
@@ -37,6 +38,16 @@ const Profile: React.FC = () => {
   const [selectedIntolerances, setSelectedIntolerances] = useState<OptionType[]>([]);
   const handleIntolerancesChange = (selectedOptions: OptionType[]) => {
     setSelectedIntolerances(selectedOptions);
+  };
+
+  const [likedFoods, setLikedFoods] = useState<OptionType[]>([]);
+  const handleLikedFoodsChange = (selectedOptions: OptionType[]) => {
+    setLikedFoods(selectedOptions);
+  };
+
+  const [dislikedFoods, setDislikedFoods] = useState<OptionType[]>([]);
+  const handleDislikedFoodsChange = (selectedOptions: OptionType[]) => {
+    setDislikedFoods(selectedOptions);
   };
 
   const intolerances = [
@@ -84,39 +95,10 @@ const Profile: React.FC = () => {
     { value: 'vietnamese', label: 'Vietnamese' }
   ];
 
-  // const customStyles = {
-  //   control: (provided) => ({
-  //     ...provided,
-  //     backgroundColor: '#e27e36',
-  //     border: 'none',
-  //     boxShadow: '0 20px 20px rgba(0, 0, 0, 0.418)',
-  //     padding: '5px',
-  //     margin: '10px 0',
-  //   }),
-  //   option: (provided, state) => ({
-  //     ...provided,
-  //     backgroundColor: state.isSelected ? '#a5561e' : '#e27e36',
-  //     color: state.isSelected ? '#fff' : '#000',
-  //     padding: '10px',
-  //   }),
-  //   multiValue: (provided) => ({
-  //     ...provided,
-  //     backgroundColor: '#a5561e',
-  //     color: '#fff',
-  //   }),
-  //   multiValueLabel: (provided) => ({
-  //     ...provided,
-  //     color: '#fff',
-  //   }),
-  //   multiValueRemove: (provided) => ({
-  //     ...provided,
-  //     color: '#fff',
-  //     ':hover': {
-  //       backgroundColor: '#e27e36',
-  //       color: '#000',
-  //     },
-  //   }),
-  // };
+  const ingredientOptions = Object.keys(commonIngredients).map(ingredient => ({
+    value: ingredient,
+    label: ingredient,
+  }));
 
   const exportPrefCuisines = (): string => {
     return selectedPrefCuisines.map(option => option.label).join(', ');
@@ -129,27 +111,35 @@ const Profile: React.FC = () => {
     return selectedIntolerances.map(option => option.label).join(', ');
   };
 
+  const exportLikedFoods = (): string => {
+    return likedFoods.map(option => option.label).join(', ');
+  };
+
+  const exportDislikedFoods = (): string => {
+    return dislikedFoods.map(option => option.label).join(', ');
+  };
+
   useEffect(() => {
-    const savedLike = localStorage.getItem('inputValueLike');
-    const savedDislike = localStorage.getItem('inputValueDislike');
     const savedPrefCuisines = localStorage.getItem('selectedPrefCuisines');
     const savedExcludeCuisines = localStorage.getItem('selectedExcludeCuisines');
     const savedIntolerances = localStorage.getItem('selectedIntolerances');
-    if (savedLike) setInputValueLike(savedLike);
-    if (savedDislike) setInputValueDislike(savedDislike);
+    const savedLikedFoods = localStorage.getItem('likedFoods');
+    const savedDislikedFoods = localStorage.getItem('dislikedFoods');
     if (savedPrefCuisines) setSelectedPrefCuisines(JSON.parse(savedPrefCuisines));
     if (savedExcludeCuisines) setSelectedExcludeCuisines(JSON.parse(savedExcludeCuisines));
     if (savedIntolerances) setSelectedIntolerances(JSON.parse(savedIntolerances));
+    if (savedLikedFoods) setLikedFoods(JSON.parse(savedLikedFoods));
+    if (savedDislikedFoods) setDislikedFoods(JSON.parse(savedDislikedFoods));
   }, []);
 
   const handleSubmit = () => {
-    localStorage.setItem('inputValueLike', inputValueLike);
-    localStorage.setItem('inputValueDislike', inputValueDislike);
     localStorage.setItem('selectedPrefCuisines', JSON.stringify(selectedPrefCuisines));
     localStorage.setItem('selectedExcludeCuisines', JSON.stringify(selectedExcludeCuisines));
     localStorage.setItem('selectedIntolerances', JSON.stringify(selectedIntolerances));
-    console.log(inputValueLike);
-    console.log(inputValueDislike);
+    localStorage.setItem('likedFoods', JSON.stringify(likedFoods));
+    localStorage.setItem('dislikedFoods', JSON.stringify(dislikedFoods));
+    console.log(exportLikedFoods());
+    console.log(exportDislikedFoods());
     console.log(exportPrefCuisines());
     console.log(exportExcludeCuisines());
     console.log(exportIntolerances());
@@ -165,23 +155,28 @@ const Profile: React.FC = () => {
             <RuxButton onClick={handleSubmit}>Save</RuxButton>
           </div>
           <div className="profile-content">
-            <RuxInput value={inputValueLike} onRuxchange={(e) => handleInputChangeLike(e as unknown as RuxInputEvent)}>
-              <div slot="label" >Liked Foods</div>
-            </RuxInput>
+            <div slot="label" >Liked Foods</div>
             <CreatableSelect
             isClearable
             isMulti
-             />;
-            <RuxInput value={inputValueDislike} onRuxchange={(e) => handleInputChangeDislike(e as unknown as RuxInputEvent)}>
-              <div slot="label">Disliked Foods</div>
-            </RuxInput>
+            options={ingredientOptions} // Use ingredientOptions for likedFoods
+            value={likedFoods}
+            onChange={handleLikedFoodsChange}
+             />
+            <div slot="label">Disliked Foods</div>
+            <CreatableSelect
+              isClearable
+              isMulti
+              options={ingredientOptions} // Use ingredientOptions for dislikedFoods
+              value={dislikedFoods}
+              onChange={handleDislikedFoodsChange}
+            />
             <div slot="label">Preferred Cuisines</div>
             <Select
               options={cuisineOptions}
               isMulti
               value={selectedPrefCuisines}
               onChange={handlePrefCuisinesChange}
-              // styles={customStyles}
             />
             <div slot="label">Cuisines to Exclude</div>
 
@@ -190,7 +185,6 @@ const Profile: React.FC = () => {
               isMulti
               value={selectedExcludeCuisines}
               onChange={handleExcludeCuisinesChange}
-              // styles={customStyles}
             />
             <div slot="label">Intolerances</div>
             <Select
@@ -198,7 +192,6 @@ const Profile: React.FC = () => {
               isMulti
               value={selectedIntolerances}
               onChange={handleIntolerancesChange}
-              // styles={customStyles}
             />
           </div>
         </RuxContainer>
