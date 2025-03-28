@@ -1,4 +1,5 @@
 import { util } from '@aws-appsync/utils';
+import { secret } from '@aws-amplify/backend';
 
 export function request(ctx) {
     const { path, httpMethod, queryStringParameters, pathParameters } = ctx.arguments;
@@ -12,7 +13,7 @@ export function request(ctx) {
     // Add API key to query parameters
     const params = {
         ...queryStringParameters,
-        apiKey: process.env.SPOONACULAR_API_KEY,
+        apiKey: secret('SPOONACULAR_API_KEY'),
     };
 
     // Convert params to URL query string

@@ -19,7 +19,7 @@ const spoon_httpDataSource = backend.data.addHttpDataSource(
     authorizationConfig: {
       signingRegion: 'us-east-1',
       signingServiceName: 'appsync',
-    },
+    }
   }
 );
 
