@@ -36,7 +36,39 @@ const SideBar = () => {
     const handleSubmit = async () => {
       setIsLoading(true);
       setError(null);
+      console.log("Input Value:", inputValue);
+  
+      try {
+        const response = await client.queries.getComplexRecipe({
+          query: inputValue,
+          number: 5, // Optional: adjust as needed
+          instructionsRequired: true,
+          addRecipeInformation: true,
+        });
+        console.log("Search Recipes Response:", response);
+  
+        if (response.data) {
+          const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+          console.log("Parsed Data:", data);
+          navigate('/searchResults', { state: { recipes: data } });
+        } else {
+          setError('No data returned from Spoonacular');
+          console.error('Invalid response format:', response);
+        }
+      } catch (error) {
+        setError('Failed to fetch recipes');
+        console.error('Error fetching recipes:', error);
+      } finally {
+        setIsLoading(false);
+        setIsMealRequestOpen(false);
+      }
+    };
+    /*
+    const handleSubmit = async () => {
+      setIsLoading(true);
+      setError(null);
       console.log("Input Value: ", inputValue);
+
       try {
         const spoonacular_response = await client.queries.SpoonacularGetRecipe({
           path: '/recipes/search', 
@@ -45,8 +77,13 @@ const SideBar = () => {
           pathParameters: {}
         });
         console.log("spoonacular_response is: ", spoonacular_response);
+
         if (spoonacular_response.data) {
-          // const recipes = spoonacular_response.data.body as Schema["GetRecipeResponse"];
+          const data = typeof spoonacular_response.data === 'string'
+            ? JSON.parse(spoonacular_response.data)
+            : spoonacular_response.data;
+          console.log("Parsed Data:", data);
+
           navigate('/searchResults', { state: { recipes:  spoonacular_response.data } });
         } else {
           console.error('Error searching recipes: Invalid response format. This is spoonacular_response: ', spoonacular_response);
@@ -58,7 +95,9 @@ const SideBar = () => {
         setIsLoading(false);
         setIsMealRequestOpen(false);
       }
-    }
+    }*/
+
+
     const handleDialogClose = () => {
       setIsMealRequestOpen(false);
     }
@@ -80,7 +119,7 @@ const SideBar = () => {
             <button className="icon-button" onClick={() => navigate("/profile")}>
               <RuxIcon className="icon-image" size="small" icon="account-circle"></RuxIcon>
             </button>
-            <button className="icon-button">
+            <button className="icon-button" onClick={() => navigate("/")}>
               <RuxIcon className="icon-image"size="small" icon="settings"></RuxIcon>
             </button>
           </div>

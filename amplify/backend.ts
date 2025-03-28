@@ -5,9 +5,14 @@ import { spoonacularFunction } from './functions/spoonacular/resource';
 import { saveFavoriteRecipe } from './functions/saveFavoriteRecipe/resource';
 // import { Environment } from 'aws-cdk-lib/aws-appconfig';
 
-defineBackend({
+const backend = defineBackend({
   auth,
   data,
   spoonacularFunction,
   saveFavoriteRecipe,
 });
+
+const spoon_httpDataSource = backend.data.addHttpDataSource(
+  'spoon_httpDataSource', 
+  'https://api.spoonacular.com'
+);
