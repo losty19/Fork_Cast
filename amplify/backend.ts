@@ -15,5 +15,11 @@ const backend = defineBackend({
 const spoon_httpDataSource = backend.data.addHttpDataSource(
   'spoon_httpDataSource', 
   'https://api.spoonacular.com',
+  {
+    authorizationConfig: {
+      signingRegion: 'us-east-1',
+      signingServiceName: 'appsync',
+    },
+  }
 );
 
