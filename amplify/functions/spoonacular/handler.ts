@@ -1,13 +1,13 @@
 // amplify/functions/spoonacular/handler.ts
 // import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'; // Not using anymore since I am using the Schema way instead
-import axios, { AxiosInstance } from 'axios';
+// import axios, { AxiosInstance } from 'axios';
 import type { Schema } from '../../data/resource';
 
 // Axios instance in my Lambda function making requests to the Spoonacular API
-const spoonacularClient: AxiosInstance = axios.create({
-  baseURL: 'https://api.spoonacular.com',
-  headers: { 'Content-Type': 'application/json' }
-});
+// const spoonacularClient: AxiosInstance = axios.create({
+//   baseURL: 'https://api.spoonacular.com',
+//   headers: { 'Content-Type': 'application/json' }
+// });
 /*
 Our API limits: 
     - 150 points per day
@@ -19,6 +19,68 @@ Here is a link to the documentation page for Spoonacluar API:
     https://spoonacular.com/food-api/docs
 */
 
+const BASE_URL = 'https://api.spoonacular.com';
+
+async function getComplexSearch(queryStringParameters: Record<string, any>) {
+  const url = new URL(`${BASE_URL}/recipes/complexSearch`);
+  const apiKey = process.env.SPOONACULAR_API_KEY || ''; // Need this line to fix the possible undefined error
+  const params = new URLSearchParams({
+     ...queryStringParameters,
+     apiKey,
+  });
+
+  try {
+    console.log('URL:', url.toString());
+    console.log('Params:', params.toString());
+
+    const response = await fetch(url.toString() + '?' + params.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Data complex search response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching complex recipe:', error);
+    throw error;
+  }
+}
+
+// Main handler
+export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
+  console.log("HELLO I AM HERE IN THE HANDLER");
+  const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
+  console.log('Event is :', event);
+  try {
+    console.log('Event:', event);
+    const route = `${httpMethod} ${path}`;
+    console.log('Route:', route);
+    console.log('Query Parameters:', queryStringParameters);
+    console.log('Path Parameters:', pathParameters);
+
+    const searchData = await getComplexSearch(queryStringParameters || {});
+    return searchData; // Amplify wraps this in { statusCode: 200, body: ... }
+    
+  } catch (error) {
+    console.error('Handler Error:', error);
+    return {
+      statusCode: 501,
+      body: JSON.stringify({
+        message: 'Internal Server Error',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      }),
+    };
+  }
+};
+
+/*
 export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
   // Frontend makes request, this function handles it
 
@@ -46,27 +108,6 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
           });
           console.log('Response:', response.data);
           return response.data; // Amplify adds statusCode, headers I think
-          /*  Format of response.data
-          {
-              "offset": 0,
-              "number": 2,
-              "results": [
-                  {
-                      "id": 716429,
-                      "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
-                      "image": "https://img.spoonacular.com/recipes/716429-312x231.jpg",
-                      "imageType": "jpg",
-                  },
-                  {
-                      "id": 715538,
-                      "title": "What to make for dinner tonight?? Bruschetta Style Pork & Pasta",
-                      "image": "https://img.spoonacular.com/recipes/715538-312x231.jpg",
-                      "imageType": "jpg",
-                  }
-              ],
-              "totalResults": 86
-          }
-          */
         } catch (error) {
           console.error('Error searching recipes:', error);
           if (axios.isAxiosError(error)) {
@@ -95,3 +136,4 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
     };
   }
 };
+*/

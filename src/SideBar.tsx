@@ -39,11 +39,16 @@ const SideBar = () => {
       console.log("Input Value:", inputValue);
   
       try {
-        const response = await client.queries.getComplexRecipe({
-          query: inputValue,
-          number: 5, // Optional: adjust as needed
-          instructionsRequired: true,
-          addRecipeInformation: true,
+        const response = await client.queries.SpoonacularGetRecipe({
+          path: '/recipes/ComplexSearch',
+          httpMethod: 'GET',
+          queryStringParameters: { 
+            query: inputValue,
+            number: 5,
+            instructionsRequired: true,
+            addRecipeInformation: true,
+          },
+          pathParameters: {},
         });
         console.log("Search Recipes Response:", response);
   
