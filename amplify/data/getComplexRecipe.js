@@ -15,10 +15,18 @@ export function request(ctx) {
         apiKey: process.env.SPOONACULAR_API_KEY,
     };
 
+    // Convert params to URL query string
+    const queryString = Object.entries(params)
+        .filter(([_, value]) => value !== undefined && value !== null)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+
     return {
         method: httpMethod,
-        resourcePath,
-        params,
+        resourcePath: `${resourcePath}${queryString ? `?${queryString}` : ''}`,
+        headers: {
+            'Content-Type': 'application/json',
+        },
     };
 }
 
