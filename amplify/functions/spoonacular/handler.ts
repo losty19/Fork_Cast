@@ -3,6 +3,7 @@
 // import axios, { AxiosInstance } from 'axios';
 import type { Schema } from '../../data/resource';
 import { secret } from '@aws-amplify/backend';
+import fetch from 'node-fetch';
 
 // Axios instance in my Lambda function making requests to the Spoonacular API
 // const spoonacularClient: AxiosInstance = axios.create({
@@ -64,7 +65,7 @@ async function getComplexSearch(queryStringParameters: Record<string, any>) {
 }
 
 // Main handler
-export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
+export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event): Promise<string | number | boolean | {} | any[] | null> => {
   console.log("HELLO I AM HERE IN THE HANDLER");
   const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
   console.log('Event is :', event);
@@ -77,7 +78,10 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
 
     const searchData = await getComplexSearch(queryStringParameters || {});
     console.log('Search Data in handler: ', searchData);
-    return searchData; // Amplify wraps this in { statusCode: 200, body: ... }
+    if (searchData) {
+      return searchData;
+    }
+    return {}; // Amplify wraps this in { statusCode: 200, body: ... }
     
   } catch (error) {
     console.error('Handler Error:', error);
