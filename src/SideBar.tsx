@@ -13,6 +13,38 @@ import type { Schema } from '../amplify/data/resource';
 
 const client = generateClient<Schema>()
 
+interface SpoonacularRecipe {
+  id: number;
+  title: string;
+  image: string;
+  imageType: string;
+  servings: number;
+  readyInMinutes: number;
+  sourceUrl: string;
+  summary: string;
+  instructions: string;
+  ingredients: Array<{
+    id: number;
+    name: string;
+    amount: number;
+    unit: string;
+    original: string;
+  }>;
+  nutrition: {
+    calories: string;
+    protein: string;
+    carbs: string;
+    fat: string;
+  };
+}
+
+interface SpoonacularResponse {
+  results: SpoonacularRecipe[];
+  offset: number;
+  number: number;
+  totalResults: number;
+}
+
 interface RuxInputEvent extends Event {
   target: HTMLInputElement;
 }
@@ -39,30 +71,40 @@ const SideBar = () => {
       console.log("Input Value:", inputValue);
   
       try {
+        console.log("Making Spoonacular API request...");
         const response = await client.queries.SpoonacularGetRecipe({
-          path: '/recipes/ComplexSearch',
+          path: '/recipes/complexSearch',
           httpMethod: 'GET',
           queryStringParameters: { 
             query: inputValue,
             number: 5,
             instructionsRequired: true,
             addRecipeInformation: true,
+            fillIngredients: true,
+            addRecipeNutrition: true,
           },
           pathParameters: {},
         });
-        console.log("Search Recipes Response:", response);
+        console.log("Raw API Response:", response);
   
         if (response.data) {
-          const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
-          console.log("Parsed Data:", data);
-          navigate('/searchResults', { state: { recipes: data } });
+          const recipes = response.data as SpoonacularResponse;
+          console.log("Parsed Recipes Data:", recipes);
+          
+          if (recipes.results && Array.isArray(recipes.results)) {
+            console.log("Found recipes:", recipes.results.length);
+            navigate('/searchResults', { state: { recipes: recipes.results } });
+          } else {
+            console.error("Invalid recipe data format:", recipes);
+            setError('Invalid recipe data format received');
+          }
         } else {
+          console.error("No data in response:", response);
           setError('No data returned from Spoonacular');
-          console.error('Invalid response format:', response);
         }
       } catch (error) {
+        console.error("Detailed error:", error);
         setError('Failed to fetch recipes');
-        console.error('Error fetching recipes:', error);
       } finally {
         setIsLoading(false);
         setIsMealRequestOpen(false);
