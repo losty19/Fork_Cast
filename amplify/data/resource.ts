@@ -39,6 +39,23 @@ const schema = a.schema({
   //     }),
   //   totalResults: a.integer(),
 
+  getComplexRecipe: a
+    .query()
+    .arguments({
+      query: a.string().required(),
+      number: a.integer(),
+      instructionsRequired: a.boolean(),
+      addRecipeInformation: a.boolean(),
+    })
+    .returns(a.json())
+    .authorization((allow) => [allow.authenticated()])
+    .handler(
+      a.handler.custom({
+        dataSource: "spoon_httpDataSource",
+        entry: "./getComplexRecipe.js",
+      })
+    ),
+  
   SpoonacularGetRecipe: a
     .query()
     .arguments({
@@ -195,12 +212,12 @@ export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
-  authorizationModes: {
-    // This tells the data client in your app (generateClient())
-    // to sign API requests with the user authentication token.
+  // authorizationModes: {
+  //   // This tells the data client in your app (generateClient())
+  //   // to sign API requests with the user authentication token.
 
-    defaultAuthorizationMode: "userPool",
-  },
+  //   defaultAuthorizationMode: "userPool",
+  // },
 });
 
 /*== STEP 2 ===============================================================
