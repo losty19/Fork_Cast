@@ -65,7 +65,7 @@ async function getComplexSearch(queryStringParameters: Record<string, any>) {
 }
 
 // Main handler
-export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event): Promise<string | number | boolean | {} | any[] | null> => {
+export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
   console.log("HELLO I AM HERE IN THE HANDLER");
   const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
   console.log('Event is :', event);

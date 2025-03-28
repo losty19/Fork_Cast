@@ -66,9 +66,8 @@ const schema = a.schema({
   SpoonacularGetRecipe: a
     .query()
     .arguments({
-      path:  a.string().required(),
+      path: a.string().required(),
       httpMethod: a.string().required(),
-      // There are more options in the Spoonacular API, but these are the ones I think we will use the most
       queryStringParameters: a.customType({
         query: a.string(),
         number: a.integer(),
@@ -97,21 +96,17 @@ const schema = a.schema({
         maxProtein: a.integer(),
         minCalories: a.integer(),
         maxCalories: a.integer(),
-      }), // <-- queryStringParameters
-      // queryStringParameters: a.enum(["query", "number", "offset", "diet", "intolerances", "equipment", 
-      //   "type", "cuisine", "includeIngredients", "excludeIngredients", "instructionsRequired", "fillIngredients", 
-      //   "addRecipeInformation", "addRecipeNutrition", "author", "tags", "recipeBoxId", "titleMatch", "maxReadyTime", 
-      //   "ignorePantry", "sort", "sortDirection", "minCarbs", "maxCarbs", "minProtein", "maxProtein", "minCalories", ]),
+      }),
       pathParameters: a.customType({
         path_id: a.integer(),
       }),
-    }) // <-- .arguments
+    })
     .returns(a.json())
-    // FCan include the return type:
-    // .returns(a.ref("GetRecipeResponse").required())
-    // .authorization((allow) => [allow.authenticated()])
     .authorization((allow) => [allow.authenticated()])
-    .handler(a.handler.function(spoonacularHandler)),
+    .handler(a.handler.custom({
+      dataSource: "spoon_httpDataSource",
+      entry: "./getComplexRecipe.js",
+    })),
 
   SaveFavoriteRecipe: a
     .mutation()
