@@ -27,6 +27,9 @@ async function getComplexSearch(queryStringParameters: Record<string, any>) {
   const url = new URL(`${BASE_URL}/recipes/complexSearch`);
   // const apiKey = process.env.SPOONACULAR_API_KEY || ''; // Need this line to fix the possible undefined error
   const apiKey = String(secret('SPOONACULAR_API_KEY')); // Convert BackendSecret to string
+  if (!apiKey) {
+    throw new Error('SPOONACULAR_API_KEY is not defined');
+  }
   const params = new URLSearchParams({
      ...queryStringParameters,
      apiKey,
@@ -36,13 +39,16 @@ async function getComplexSearch(queryStringParameters: Record<string, any>) {
     console.log('URL:', url.toString());
     console.log('Params:', params.toString());
     console.log("The URL will look like: ", url.toString() + '?' + params.toString());
-    
+
+    const startTime = Date.now();
     const response = await fetch(url.toString() + '?' + params.toString(), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
+    const endTime = Date.now();
+    console.log('Time taken:', endTime - startTime, 'ms');
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -70,6 +76,7 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
     console.log('Path Parameters:', pathParameters);
 
     const searchData = await getComplexSearch(queryStringParameters || {});
+    console.log('Search Data in handler: ', searchData);
     return searchData; // Amplify wraps this in { statusCode: 200, body: ... }
     
   } catch (error) {

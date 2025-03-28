@@ -15,6 +15,7 @@ const spoonacularHandler = defineFunction({
   environment: {
     SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
   },
+  timeoutSeconds: 30,
 });
 const saveFavoriteHandler = defineFunction({
   name: "saveFavoriteHandler",
