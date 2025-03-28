@@ -1,4 +1,4 @@
-import { type ClientSchema, a, defineData, defineFunction } from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData, defineFunction, secret } from "@aws-amplify/backend";
 // import { QueryString } from "aws-cdk-lib/aws-logs";
 // import { spoonacularFunction } from "../functions/spoonacular/resource";
 
@@ -12,10 +12,16 @@ specifies that any user authenticated via an API key can "create", "read",
 const spoonacularHandler = defineFunction({
   name: "spoonacularHandler",
   entry: "../functions/spoonacular/handler.ts",
+  environment: {
+    SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+  },
 });
 const saveFavoriteHandler = defineFunction({
   name: "saveFavoriteHandler",
   entry: "../functions/saveFavoriteRecipe/handler.ts",
+  environment: {
+    SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+  },
 });
 
 const schema = a.schema({

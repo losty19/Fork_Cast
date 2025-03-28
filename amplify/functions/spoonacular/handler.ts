@@ -2,6 +2,7 @@
 // import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'; // Not using anymore since I am using the Schema way instead
 // import axios, { AxiosInstance } from 'axios';
 import type { Schema } from '../../data/resource';
+import { secret } from '@aws-amplify/backend';
 
 // Axios instance in my Lambda function making requests to the Spoonacular API
 // const spoonacularClient: AxiosInstance = axios.create({
@@ -20,10 +21,12 @@ Here is a link to the documentation page for Spoonacluar API:
 */
 
 const BASE_URL = 'https://api.spoonacular.com';
+console.log("I am in the handler file at the top.");
 
 async function getComplexSearch(queryStringParameters: Record<string, any>) {
   const url = new URL(`${BASE_URL}/recipes/complexSearch`);
-  const apiKey = process.env.SPOONACULAR_API_KEY || ''; // Need this line to fix the possible undefined error
+  // const apiKey = process.env.SPOONACULAR_API_KEY || ''; // Need this line to fix the possible undefined error
+  const apiKey = String(secret('SPOONACULAR_API_KEY')); // Convert BackendSecret to string
   const params = new URLSearchParams({
      ...queryStringParameters,
      apiKey,
@@ -32,7 +35,8 @@ async function getComplexSearch(queryStringParameters: Record<string, any>) {
   try {
     console.log('URL:', url.toString());
     console.log('Params:', params.toString());
-
+    console.log("The URL will look like: ", url.toString() + '?' + params.toString());
+    
     const response = await fetch(url.toString() + '?' + params.toString(), {
       method: 'GET',
       headers: {
