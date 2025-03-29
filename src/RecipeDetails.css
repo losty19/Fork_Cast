@@ -1,29 +1,29 @@
 .Title_recipe{
-    font-size: 100%;
-    margin-left: 2%;
-    margin-top: 0%;
+  font-size: 100%;
+  margin-left: 1%;
+  margin-top: -1%;
+  font-family:monospace;
+  color: #ffffff;
 }
 
-  .recipe_image {
-    width: 400px;
-    height: auto;
-    margin-right: 1rem;
-    margin-bottom: 2rem;
-    border-radius: 15px;
-    max-width: 50%;
-  }
 
-  .description-container {
-    flex: 1;
-    color: white;
-    font-size: 70%;
-    width: 750px;
-  }
-  
-  .icon-container {
-    justify-content: center;
-    position: absolute;
-    left:20px;
-  }
+.recipe_image {
+width: 35vw;
+max-width: 50%;
+height: auto; /* Ensures aspect ratio is maintained */
+max-height: 40vh;
 
-  
+margin-right: 1rem;
+margin-bottom: 2rem;
+border-radius: 15px;
+object-fit: cover;
+}
+
+.description-container {
+  flex: 1;
+  color: white;
+  font-size: 70%;
+  width: 40rem;
+  overflow: hidden;
+}
+

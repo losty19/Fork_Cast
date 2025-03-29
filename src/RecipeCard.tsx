@@ -16,7 +16,7 @@ const initialFavorites: Recipe[] = [
   {
     image: "https://www.seriouseats.com/thmb/SAarhxihKDIr2q-SKqqvVazzxw4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__09__20150909-nicoise-salad-vicky-wasik-9-1a849c1baf5e4ce0a48bd6cd386ded94.jpg",
     title: "Niçoise Salad",
-    description: "Steamed nine-minute eggs have perfect, just-set yolks that are still moist and creamy.Cooking the potatoes in heavily salted water with aromatics yields the densest, most deeply flavored flesh, without making them overly salty."
+    description: "Steamed nine-minute eggs the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone.have psalty."
   },
   {
     image: "https://realfood.tesco.com/media/images/179274-HERO-31ebb66c-f04c-4eab-a9da-ea0154b2d539-0-472x310.jpg",
@@ -77,33 +77,31 @@ const initialRecipes: Recipe[] = [...initialFavorites];
 const MyRecipes = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
-  max-height: 90vh;
+  max-height: 100vh;
   overflow: auto;
-  padding-top:60px;
-  padding-left:0px;
-  padding-right: 0px;
-  scrollbar-width: none;
-  padding-bottom:50px;
-  margin:120px;
+  padding-top:18vh;
+  scrollbar-width:none;
+  padding-bottom:1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  width: 210px;
+  width: 11rem;
   border-radius: 15px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.61);
   background-color:rgb(255, 255, 255);
   padding: 10px;
   margin-top: 20px;
-  margin-left:-5px;
-  margin-right:-5px;
+  margin-left:0.25rem;
+  margin-right:0.25rem;
 
   position: relative;
-  max-height:400px;
-  min-height: 350px;
+  max-height:20rem;
+  min-height: 18rem;
   transition: transform 0.5s ease;
   &:hover {
     transform:scale(1.1);
@@ -118,6 +116,7 @@ const StyledImage = styled.img`
 `;
 
 const ImageContainer = styled.div`
+  min-height: 7rem;
   position: relative;
   border-radius: 15px;
   overflow: hidden;
@@ -139,10 +138,9 @@ const VignetteOverlay = styled.div`
 const FavorButton = styled.button`
   background: none;
   border: none;
-  cursor: pointe
-  bottom: 0%;
-  margin-top:-4%;
-  left: -11px;
+  cursor: pointe;
+  margin-top:-0.2rem;
+  margin-left: -0.5rem;
   position: absolute;
     z-index: 3;
   &:focus {
@@ -188,7 +186,7 @@ const handleViewRecipeClick = (recipe: Recipe) => {
         <Card key={index}>
          
          <FavorButton onClick={() => handleFavorButtonClick(index)}>
-            <RuxIcon className= "favorbutton_icon" icon={favorites.some((fav) => fav.title === recipe.title) ? "star-border" : "star"} />
+            <RuxIcon className= "favorbutton_icon" size="2.5rem" icon={favorites.some((fav) => fav.title === recipe.title) ? "star-border" : "star"} />
           </FavorButton>
 
           <ImageContainer>

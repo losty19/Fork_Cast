@@ -18,27 +18,31 @@ interface Recipe {
 }
 
 const MainContainer = styled.div`
-  display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-content: center;
   max-height: 100vh;
   overflow: auto;
   scrollbar-width: none;
   position:relative;
-  top:50px;
+  margin-left: 4rem;
+  margin-right: 4rem;
+  z-index: 1;
+  padding-top: 18vh;
 `;
 
 const OuterContainer = styled.div`
+  diplay:flex;
   flex-direction: column;
   padding: 20px;
   background-color:rgb(50, 41, 35);
   border-radius: 15px;
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.64);
-  margin-top: 5%;
+  
   margin-bottom:5%;
   font-size: 200%;
   overflow-y: hidden;
-  padding-right:90px;
+  padding-right:4.8rem;
 `;
 
 const ContentContainer = styled.div`
@@ -48,19 +52,14 @@ const ContentContainer = styled.div`
   padding: 20px;
   position:relative;
   background-color:rgb(241, 136, 61);
-  border-radius: 10px;
-  
-  
+  border-radius: 10px;  
 `;
 
 const ExpandableContent = styled.div<{ expanded: boolean }>`
-  margin-top: -15px;
-  padding: 10px;
+  margin-top: -5vh;
   padding-bottom:3%;
-  border-radius: 10px;
   color: white;
   font-size: 18px;
-  width: 1100px;
   display: ${({ expanded }) => (expanded ? "block" : "none")};
 `;
 const ButtonContainer = styled.div<{ expanded: boolean }>`
@@ -92,6 +91,7 @@ const TextWrapper = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   width: 100%;
+  max-height: 52.3vh;
 `;
 
 
@@ -104,17 +104,18 @@ const RecipeDetails: React.FC = () => {
     <>
       <SideBar/>
       <MainContainer>
-        <LSideBar/>
+        
         <OuterContainer>
+          <LSideBar/>
           <div className = "Title_recipe">{recipe.title}</div>
           <ContentContainer>
   
-  <TextWrapper>
+        <TextWrapper>
             <img className="recipe_image" src={recipe.image} alt="Food" />    
               <div className="description-container">
               <p>{recipe.description}</p>
             </div>
-  </TextWrapper>
+        </TextWrapper>
 
   <ButtonContainer expanded={expanded}>
     <StyleButton onClick={() => setExpanded(!expanded)}>
@@ -122,7 +123,7 @@ const RecipeDetails: React.FC = () => {
     </StyleButton>
   </ButtonContainer>
   <ExpandableContent expanded={expanded}>
-    <h1>Ingredients:</h1>
+    <h3>Ingredients:</h3>
     <li>2 1/4 cups all-purpose flour</li>
                 <li>1 tsp salt</li>
                 <li>1 tsp sugar</li>
@@ -140,7 +141,7 @@ const RecipeDetails: React.FC = () => {
                 <li>Fresh basil leaves (optional)</li>
             
 
-              <h1>Instructions:</h1>
+              <h3>Instructions:</h3>
               <p>
                 1. Sift the dry ingredients together: flour, salt, and sugar.
               </p>
@@ -166,7 +167,7 @@ const RecipeDetails: React.FC = () => {
                 8. Bake for 12-15 minutes, or until the crust is golden and the cheese is bubbly.
               </p>
               </ExpandableContent>
-</ContentContainer>
+        </ContentContainer>
           
      
         </OuterContainer>        
