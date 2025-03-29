@@ -11,9 +11,6 @@ const MainPage: React.FC = () => {
   return (
     <>
       <SideBar />
-      <div className="my-recipes-text">
-          My Recipes
-        </div>
         <MyRecipes />
     </>
   );

@@ -7,11 +7,9 @@ html, body {
 .main-container {
   display: flex;
   width: 100%;
-  align-items: flex-start;
-  justify-content: flex-start;
-  top: 0;
-  left: 0;
-  position: absolute;
+  align-items: start;
+  justify-content: center;
+  position: relative;
   z-index: 4;
 }
 
@@ -19,28 +17,25 @@ html, body {
   display: flex;
   flex-direction: row;
   justify-content: right;
-  align-items: flex-start;
-  width: 80px;
-  top:-40%;
-  right: 20px;
+  top:-1.5rem;
+  right: 1rem;
   background-color: none;
-  padding-top: 20px;
-  padding-bottom: 0.5%;
-  padding-left: 1%;
+  padding-top: 1.3rem;
   position:absolute;
+  z-index: 5;
 }
 .icon-button {
-  min-height: 50px;
-  min-width: 50px;
+  min-height: 40px;
+  min-width: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   border: none;
-  margin: 10px;
+  margin: 0.6rem;
   cursor: pointer;
   background-color: transparent;
-  transition: background-color 0.3s ease;
+  transition: 0.3s ease;
   padding: 0%;
 }
 .icon-button:hover {
@@ -58,11 +53,13 @@ html, body {
   color: #333;
 }
 
-.content {
+.header {
+  justify-content: start;
   background-color: #e27e36;
-  padding: 30px;
+  position: absolute;
+  z-index: 4;
+  padding: 0rem;
   width: 100%;
-  margin-left: -40px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.418);
 }
 
@@ -73,19 +70,35 @@ html, body {
   margin-top: 20px;
 }
 .logo-text {
-  font-size: 40px;
-  position: absolute;
+  font-size: 2rem;
+  position: relative;
   font-family:monospace;
   color: #ffffff;
   z-index: 5;
-  left:5%;
-  top:0%; 
+  left:1rem;
 }
 .My-recipes-text{
-  top:12%;
+  top:10%;
   left:8%;
   font-size:30px;
   font-family:fantasy;
   position: absolute;
   color: #000000;
+}
+
+.mrCancel {
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.mrCancel:hover {
+  background-color: #c97516;
+
+}
+.mrSubmit {
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.mrSubmit:hover {
+  background-color: #c97516;
+
 }
