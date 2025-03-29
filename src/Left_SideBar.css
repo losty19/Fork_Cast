@@ -1,13 +1,13 @@
 .side_container{
   flex-direction: column;
-  position: fixed;
-  left:89.3vw;
-  top: 8.8vw;
+  position:relative;
+  left:85vw;
+  top: -.5vw;
   display: flex;
   max-width:4%;
 }
 h2{
-font-size: 15px;
+font-size: 190%;
 }
 .side-button {
   color: #855353;
@@ -20,7 +20,6 @@ font-size: 15px;
   align-items: center;
   justify-content: center;
   border: none;
-  margin: 10px;
   cursor: pointer;
   background-color: transparent;
   padding: 0%;
@@ -46,8 +45,8 @@ font-size: 15px;
   color: #f48d17;
 }
 .light-theme::part(dialog) {
-  background: #f9f9f9; /* Light gray background */
-  color: #000; /* Black text */
-  border-radius: 15px; /* Adjust as needed */
+  background: #f9f9f9;
+  color: #000; 
+  border-radius: 15px;
   overflow: hidden;
 }

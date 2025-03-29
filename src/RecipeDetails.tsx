@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import {RuxIcon } from "@astrouxds/react";
 import SideBar from "./SideBar.tsx";
-import styled from "styled-components";
 import "./RecipeDetails.css";
 import LSideBar from "./Left_SideBar.tsx";
 
@@ -17,84 +16,6 @@ interface Recipe {
   extraContent: string;
 }
 
-const MainContainer = styled.div`
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
-  max-height: 100vh;
-  overflow: auto;
-  scrollbar-width: none;
-  position:relative;
-  margin-left: 4rem;
-  margin-right: 4rem;
-  z-index: 1;
-  padding-top: 18vh;
-`;
-
-const OuterContainer = styled.div`
-  diplay:flex;
-  flex-direction: column;
-  padding: 20px;
-  background-color:rgb(50, 41, 35);
-  border-radius: 15px;
-  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.64);
-  
-  margin-bottom:5%;
-  font-size: 200%;
-  overflow-y: hidden;
-  padding-right:4.8rem;
-`;
-
-const ContentContainer = styled.div`
-  display:flex;
-  flex-direction: column;
-  align-items: center; 
-  padding: 20px;
-  position:relative;
-  background-color:rgb(241, 136, 61);
-  border-radius: 10px;  
-`;
-
-const ExpandableContent = styled.div<{ expanded: boolean }>`
-  margin-top: -5vh;
-  padding-bottom:3%;
-  color: white;
-  font-size: 18px;
-  display: ${({ expanded }) => (expanded ? "block" : "none")};
-`;
-const ButtonContainer = styled.div<{ expanded: boolean }>`
-  display: flex;
-  position:relative;
-  justify-content: center;
-  margin-top: ${({ expanded }) => (expanded ? "-3%" : "-1%")};
-  margin-bottom: ${({ expanded }) => (expanded ? "-1%" : "-3%")};
-  position: ${({ expanded }) => (expanded ? "absolute" : "relative")};
-  bottom: ${({ expanded }) => (expanded ? "0" : "auto")}; 
-`;
-const StyleButton = styled.button`
-  background:none;
-  padding: 0px;
-  margin:0;
-  border: none;
-  cursor: pointer;
-  z-index: 3;
-  &:hover {
-    transform:scale(1.2);
-  }
-  &:focus {
-    outline: none;
-  }
-`;
-
-const TextWrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  width: 100%;
-  max-height: 52.3vh;
-`;
-
-
 const RecipeDetails: React.FC = () => {
   const location = useLocation();
   const { recipe } = location.state as { recipe: Recipe };
@@ -103,26 +24,26 @@ const RecipeDetails: React.FC = () => {
   return (
     <>
       <SideBar/>
-      <MainContainer>
-        
-        <OuterContainer>
+      <div className="main-con">
+        <div className="outer-container">
           <LSideBar/>
+          <div className="title-and-content">
           <div className = "Title_recipe">{recipe.title}</div>
-          <ContentContainer>
-  
-        <TextWrapper>
+          <div className="content-container">
+          <div className="text-wrapper">
             <img className="recipe_image" src={recipe.image} alt="Food" />    
               <div className="description-container">
               <p>{recipe.description}</p>
             </div>
-        </TextWrapper>
+          </div>
 
-  <ButtonContainer expanded={expanded}>
-    <StyleButton onClick={() => setExpanded(!expanded)}>
-    <RuxIcon icon={expanded ? "keyboard-arrow-up" : "keyboard-arrow-down"} style={{ color: 'rgb(31, 39, 50)' }} />
-    </StyleButton>
-  </ButtonContainer>
-  <ExpandableContent expanded={expanded}>
+        <div className={`button-container ${expanded ? "expanded" : ""}`}>
+                <button className="style-button" onClick={() => setExpanded(!expanded)}>
+                  <RuxIcon icon={expanded ? "keyboard-arrow-up" : "keyboard-arrow-down"} style={{ color: "rgb(31, 39, 50)" }} />
+                </button>
+              </div>
+  
+  <div className={`expandable-content ${expanded ? "expanded" : ""}`}>
     <h3>Ingredients:</h3>
     <li>2 1/4 cups all-purpose flour</li>
                 <li>1 tsp salt</li>
@@ -166,12 +87,12 @@ const RecipeDetails: React.FC = () => {
               <p>
                 8. Bake for 12-15 minutes, or until the crust is golden and the cheese is bubbly.
               </p>
-              </ExpandableContent>
-        </ContentContainer>
-          
+              </div>
+        </div>
+        </div>
      
-        </OuterContainer>        
-      </MainContainer>
+        </div>       
+        </div>
     </>
   );
 };
