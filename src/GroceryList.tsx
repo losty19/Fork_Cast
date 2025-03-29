@@ -61,9 +61,12 @@ const GroceryList: React.FC = () => {
   };
 
   return (
+    <>
+      <SideBar/>
+    
     <div className="grocery-list-container">
       <div className="list-container">
-        <SideBar/>
+        
         <h3>Grocery List</h3>
         <ul className="grocery-list">
           {items.map((item) => (
@@ -98,6 +101,7 @@ const GroceryList: React.FC = () => {
         </button>
       </div>
     </div>
+    </>
   );
 };
 interface GroceryListItemProps {
