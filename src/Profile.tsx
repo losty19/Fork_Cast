@@ -1,58 +1,70 @@
 import React, { useEffect } from "react";
-import Select, { OptionTypeBase } from 'react-select';
+import Select from 'react-select';
 import { useState } from 'react';
-// import { useNavigate } from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
-import { RuxButton, RuxContainer, RuxInput } from "@astrouxds/react";
+import { RuxButton, RuxContainer } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import './Profile.css';
 import CreatableSelect from 'react-select/creatable';
 import { commonIngredients } from './data/ingredients'; // Import commonIngredients
 
-interface RuxInputEvent extends Event {
-  target: HTMLInputElement;
-}
 
-interface OptionType extends OptionTypeBase {
+interface OptionType {
   value: string;
   label: string;
 }
 
 const Profile: React.FC = () => {
-  const [inputValueLike, setInputValueLike] = useState<string>('');
-  const handleInputChangeLike = (e: RuxInputEvent) => {
-    setInputValueLike(e.target.value);
-  }
-  const [inputValueDislike, setInputValueDislike] = useState<string>('');
-  const handleInputChangeDislike = (e: RuxInputEvent) => {
-    setInputValueDislike(e.target.value);
-  }
   const [selectedPrefCuisines, setSelectedPrefCuisines] = useState<OptionType[]>([]);
   const [selectedExcludeCuisines, setSelectedExcludeCuisines] = useState<OptionType[]>([]);
-  const handlePrefCuisinesChange = (selectedOptions: OptionType[]) => {
-    setSelectedPrefCuisines(selectedOptions);
+  const handlePrefCuisinesChange = (newValue: any, actionMeta: any) => {
+    if (actionMeta.action === 'create-option') {
+      setSelectedPrefCuisines((prev) => [...prev, ...newValue]);
+    } else {
+      setSelectedPrefCuisines(newValue);
+    }
   };
-  const handleExcludeCuisinesChange = (selectedOptions: OptionType[]) => {
-    setSelectedExcludeCuisines(selectedOptions);
+  const handleExcludeCuisinesChange = (newValue: any, actionMeta: any) => {
+    if (actionMeta.action === 'create-option') {
+      setSelectedExcludeCuisines((prev) => [...prev, ...newValue]);
+    } else {
+      setSelectedExcludeCuisines(newValue);
+    }
   };
   const [selectedIntolerances, setSelectedIntolerances] = useState<OptionType[]>([]);
-  const handleIntolerancesChange = (selectedOptions: OptionType[]) => {
-    setSelectedIntolerances(selectedOptions);
+  const handleIntolerancesChange = (newValue: any, actionMeta: any) => {
+    if (actionMeta.action === 'create-option') {
+      setSelectedIntolerances((prev) => [...prev, ...newValue]);
+    } else {
+      setSelectedIntolerances(newValue);
+    }
   };
 
   const [likedFoods, setLikedFoods] = useState<OptionType[]>([]);
-  const handleLikedFoodsChange = (selectedOptions: OptionType[]) => {
-    setLikedFoods(selectedOptions);
+  const handleLikedFoodsChange = (newValue: any, actionMeta: any) => {
+    if (actionMeta.action === 'create-option') {
+      setLikedFoods((prev) => [...prev, ...newValue]);
+    } else {
+      setLikedFoods(newValue);
+    }
   };
 
   const [dislikedFoods, setDislikedFoods] = useState<OptionType[]>([]);
-  const handleDislikedFoodsChange = (selectedOptions: OptionType[]) => {
-    setDislikedFoods(selectedOptions);
+  const handleDislikedFoodsChange = (newValue: any, actionMeta: any) => {
+    if (actionMeta.action === 'create-option') {
+      setDislikedFoods((prev) => [...prev, ...newValue]);
+    } else {
+      setDislikedFoods(newValue);
+    }
   };
 
   const [selectedDiet, setSelectedDiet] = useState<OptionType[]>([]);
-  const handleDietChange = (selectedOptions: OptionType[]) => {
-    setSelectedDiet(selectedOptions);
+  const handleDietChange = (newValue: any, actionMeta: any) => {
+    if (actionMeta.action === 'create-option') {
+      setSelectedDiet((prev) => [...prev, ...newValue]);
+    } else {
+      setSelectedDiet(newValue);
+    }
   };
 
   const intolerances = [
