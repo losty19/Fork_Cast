@@ -2,3 +2,10 @@
     color: #a5561e;
     background-color: #ffa500; /* Added background color */
 }
+
+.light-theme::part(dialog) {
+    background: #f9f9f9;
+    color: #000; 
+    border-radius: 15px;
+    overflow: hidden;
+  }

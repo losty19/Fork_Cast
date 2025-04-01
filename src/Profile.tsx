@@ -132,22 +132,22 @@ const Profile: React.FC = () => {
   }));
 
   const exportPrefCuisines = (): string => {
-    return selectedPrefCuisines.map(option => option.label).join(', ');
+    return selectedPrefCuisines.map(option => option.label).join(',');
   };
 
   const exportExcludeCuisines = (): string => {
-    return selectedExcludeCuisines.map(option => option.label).join(', ');
+    return selectedExcludeCuisines.map(option => option.label).join(',');
   };
   const exportIntolerances = (): string => {
-    return selectedIntolerances.map(option => option.label).join(', ');
+    return selectedIntolerances.map(option => option.label).join(',');
   };
 
   const exportLikedFoods = (): string => {
-    return likedFoods.map(option => option.label).join(', ');
+    return likedFoods.map(option => option.label).join(',');
   };
 
   const exportDislikedFoods = (): string => {
-    return dislikedFoods.map(option => option.label).join(', ');
+    return dislikedFoods.map(option => option.label).join(',');
   };
 
   useEffect(() => {
@@ -172,19 +172,21 @@ const Profile: React.FC = () => {
     localStorage.setItem('likedFoods', JSON.stringify(likedFoods));
     localStorage.setItem('dislikedFoods', JSON.stringify(dislikedFoods));
     localStorage.setItem('selectedDiet', JSON.stringify(selectedDiet));
-    console.log(exportLikedFoods());
-    console.log(exportDislikedFoods());
-    console.log(exportPrefCuisines());
-    console.log(exportExcludeCuisines());
-    console.log(exportIntolerances());
-    console.log(selectedDiet.map(option => option.label).join(', '));
+    console.log(`&likedfoods=${exportLikedFoods().toLowerCase()}`);
+    console.log(`&dislikedfoods=${exportDislikedFoods().toLowerCase()}`);
+    console.log(`&preferredcuisines=${exportPrefCuisines().toLowerCase()}`);
+    console.log(`&excludedcuisines=${exportExcludeCuisines().toLowerCase()}`);
+    console.log(`&intolerances=${exportIntolerances().toLowerCase()}`);
+    console.log(`&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`);
+    const submitVar = `&likedfoods=${exportLikedFoods().toLowerCase()}&dislikedfoods=${exportDislikedFoods().toLowerCase()}&preferredcuisines=${exportPrefCuisines().toLowerCase()}&excludedcuisines=${exportExcludeCuisines().toLowerCase()}&intolerances=${exportIntolerances().toLowerCase()}&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`;
+    console.log(submitVar);
   }
 
   return (
     <>
     <SideBar />
-    <div className="profile-container">
-        <RuxContainer>
+    <div>
+        <RuxContainer className="profile-container light-theme">
           <div slot="header">Profile</div>
           <div slot="footer">
             <RuxButton onClick={handleSubmit}>Save</RuxButton>
