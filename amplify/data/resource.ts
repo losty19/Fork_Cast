@@ -1,4 +1,7 @@
 import { type ClientSchema, a, defineData, defineFunction, secret } from "@aws-amplify/backend";
+// import { saveFavoriteRecipe } from "../functions/saveFavoriteRecipe/resource";
+//import { type ClientSchema, a, defineData, defineFunction, secret } from "@aws-amplify/backend";
+
 // import { QueryString } from "aws-cdk-lib/aws-logs";
 // import { spoonacularFunction } from "../functions/spoonacular/resource";
 
@@ -9,13 +12,18 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 
-const spoonacularHandler = defineFunction({
-  name: "spoonacularHandler",
+// WAS DEFINING THESE FUNCTION TWICE
+// THE DEFINITIONS ARE NOW ONLY HERE
+// ********************************************************************
+
+const searchHandler = defineFunction({
+  name: "searchHandler",
   entry: "../functions/spoonacular/handler.ts",
   environment: {
     SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+    // SPOONACULAR_API_KEY_ENV: process.env.SPOONACULAR_API_KEY,
   },
-  timeoutSeconds: 30,
+  timeoutSeconds: 10,
 });
 const saveFavoriteHandler = defineFunction({
   name: "saveFavoriteHandler",
@@ -103,10 +111,11 @@ const schema = a.schema({
     })
     .returns(a.json())
     .authorization((allow) => [allow.authenticated()])
-    .handler(a.handler.custom({
-      dataSource: "spoon_httpDataSource",
-      entry: "./getComplexRecipe.js",
-    })),
+    // .handler(a.handler.custom({
+    //   dataSource: "spoon_httpDataSource",
+    //   entry: "./getComplexRecipe.js",
+    // })),
+    .handler(a.handler.function(searchHandler)),
 
   SaveFavoriteRecipe: a
     .mutation()

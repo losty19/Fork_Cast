@@ -24,5 +24,9 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }],
+  
+  // Told to include this line by AMPLIFY
+  // DOC Page: https://docs.amplify.aws/react/build-a-backend/troubleshooting/cannot-find-module-amplify-env/ 
+  "exclude": ["amplify/**/*"],
 }
