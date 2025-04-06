@@ -1,5 +1,4 @@
-body {
-  margin: 0;
+html, body{
   background: radial-gradient(#ffffff, hsl(28, 91%, 66%));
   display: flex;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -66,4 +65,5 @@ p{
   font-family:monospace;
   padding: -1rem;
 }
+
 

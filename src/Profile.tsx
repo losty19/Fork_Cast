@@ -4,6 +4,8 @@ import { useState } from 'react';
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import { RuxButton, RuxContainer, RuxInput } from "@astrouxds/react";
 import SideBar from "./SideBar";
+import './Profile.css';
+
 
 interface RuxInputEvent extends Event {
   target: HTMLInputElement;
