@@ -44,9 +44,10 @@ const testing: SpoonacularRecipe[] = [
     servings: 4,
     readyInMinutes: 30,
     sourceUrl: "https://example.com",
-    instructions: "This is a test instruction",
+    instructions: "This is a test instructionThis is a test instructionThis is a test instructionThis is a test instructionThis is a test instructionThis is a test instructionThis is a test instruction",
     ingredients: [
       { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+      ,{ id: 2, name: "Test Ingredient 2", amount: 1, unit: "tbsp", original: "1 tbsp of test ingredient 2" }
     ],
     nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
     summary: "Steamed nine-minute eggs the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone.have psalty."
@@ -64,50 +65,102 @@ const testing: SpoonacularRecipe[] = [
       { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
     ],
     nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
-    summary: "Recreate the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+    summary: "calzone pizza joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  },
+  {
+  id: 3,
+  title: "Skillet Flatbread Pizza",
+  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzUXwxKjDkf17YKakug9okRsOuGVhZD8h6RA&s",
+  imageType: "jpg",
+  servings: 4,
+  readyInMinutes: 30,
+  sourceUrl: "https://example.com",
+  instructions: "This is a test instruction",
+  ingredients: [
+    { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+  ],
+  nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+  summary: "Recreate the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  },
+  {
+    id: 4,
+    title: "Ground Orange Chicken",
+    image: "https://dinnerthendessert.com/wp-content/uploads/2017/07/Ground-Orange-Chicken-enhanced.jpg",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction where the ingredients are listed, but the instructions are too. This is a test instructionThis is a test instruction where the ingredients are listed, but the instructions are too. This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+      ,{ id: 2, name: "Test Ingredient 2", amount: 1, unit: "tbsp", original: "1 tbsp of test ingredient 2" }
+      ,{ id: 3, name: "Test Ingredient 3", amount: 1, unit: "tsp", original: "1 tsp of test ingredient 3" }
+      ,{ id: 4, name: "Test Ingredient 4", amount: 1, unit: "cup", original: "1 cup of test ingredient 4" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!"
+  }
+  ,{
+    id: 5,
+    title: "Quinoa Salad",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVZZkox8oCsYvgrvXyV1mdYUsCRGfqBMoGTA&s",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "quinoa joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  },{
+    id: 6,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa00fqLGUjL3fBsJhUkUBN__VP3Mq_1W6NpQ&s",
+    title: "Mexican Tacos",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "mexican joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  },{
+    id: 7,
+    image: "https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fill,g_auto,w_1220,h_915/k%2FPhoto%2FRecipes%2F2024-05-zucchini-butter-pasta%2Fzucchini-butter-pasta-530",
+    title: "Zucchini Butter Pasta",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "butter pasta takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!"
+  }
+  ,{
+    id: 8,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
   }
   ]
 const initialFavorites: Recipe[] = [
-  {
-    image: "https://www.seriouseats.com/thmb/SAarhxihKDIr2q-SKqqvVazzxw4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__09__20150909-nicoise-salad-vicky-wasik-9-1a849c1baf5e4ce0a48bd6cd386ded94.jpg",
-    title: "Niçoise Salad",
-    description: "Steamed nine-minute eggs the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone.have psalty."
-  },
-  {
-    image: "https://realfood.tesco.com/media/images/179274-HERO-31ebb66c-f04c-4eab-a9da-ea0154b2d539-0-472x310.jpg",
-    title: "Chicken Pizza Calzone",
-    description: "Recreate the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
-  },
-  {
-    image: "https://dinnerthendessert.com/wp-content/uploads/2017/07/Ground-Orange-Chicken-enhanced.jpg",
-    title: "Ground Orange Chicken",
-    description: "Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!"
-  },
-  {
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzUXwxKjDkf17YKakug9okRsOuGVhZD8h6RA&s",
-    title: "Skillet Flatbread Pizza",
-    description: "This homemade pizza recipe features a crispy crust, tangy sauce, and gooey cheese with your choice of toppings. Perfect for any occasion, it serves 2–4 and takes about 1 hour, including prep and baking."
-  },
-  {
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVZZkox8oCsYvgrvXyV1mdYUsCRGfqBMoGTA&s",
-    title: "Quinoa Salad",
-    description: "This vibrant quinoa salad is packed with fresh veggies, herbs, and a light, tangy dressing. Healthy and refreshing, it serves 4 and takes about 25 minutes to prepare. Perfect as a side dish or a light meal."
-  },
-  {
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa00fqLGUjL3fBsJhUkUBN__VP3Mq_1W6NpQ&s",
-    title: "Mexican Tacos",
-    description: "This delicious taco recipe features seasoned ground beef, fresh toppings, and a crunchy taco shell. Ready in just 20 minutes, it serves 4 and makes the perfect quick and tasty meal."
-  },
-  {
-    image: "https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fill,g_auto,w_1220,h_915/k%2FPhoto%2FRecipes%2F2024-05-zucchini-butter-pasta%2Fzucchini-butter-pasta-530",
-    title: "Zucchini Butter Pasta",
-    description: "Melted” zucchini is impossibly delicious. When you cook shredded zucchini down for just 15 or so minutes, it nearly melts and takes on a sweet, almost caramelized flavor." 
-  },
-  {
-    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
-    title: "Chicken Soup",
-    description: "Maybe you have heard of Marry Me Chicken before, a delicious dish of sautèed chicken blanketed in a creamy sun-dried tomato sauce that. It can be enjoyed on its own."
-  },
+  
   {
     image: "https://www.feastingathome.com/wp-content/uploads/2024/04/Spicy-Mexican-Shrimp-20.jpg",
     title: "Spicy Mexican Shrimp",
