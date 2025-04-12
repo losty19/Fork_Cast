@@ -11,7 +11,62 @@ interface Recipe {
   description: string;
 
 }
-
+interface SpoonacularRecipe {
+  id: number;
+  title: string;
+  image: string;
+  imageType: string;
+  servings: number;
+  readyInMinutes: number;
+  sourceUrl: string;
+  summary: string;
+  instructions: string;
+  ingredients: Array<{
+    id: number;
+    name: string;
+    amount: number;
+    unit: string;
+    original: string;
+  }>;
+  nutrition: {
+    calories: string;
+    protein: string;
+    carbs: string;
+    fat: string;
+  };
+}
+const testing: SpoonacularRecipe[] = [
+  { 
+    id: 1,
+    title: "Niçoise Salad",
+    image: "https://www.seriouseats.com/thmb/SAarhxihKDIr2q-SKqqvVazzxw4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__09__20150909-nicoise-salad-vicky-wasik-9-1a849c1baf5e4ce0a48bd6cd386ded94.jpg",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "Steamed nine-minute eggs the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone.have psalty."
+  },
+  { 
+    id: 2,
+    title: "Chicken Pizza Calzone",
+    image: "https://realfood.tesco.com/media/images/179274-HERO-31ebb66c-f04c-4eab-a9da-ea0154b2d539-0-472x310.jpg",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "Recreate the feeling of being at your favourite pizza joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  }
+  ]
 const initialFavorites: Recipe[] = [
   {
     image: "https://www.seriouseats.com/thmb/SAarhxihKDIr2q-SKqqvVazzxw4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__09__20150909-nicoise-salad-vicky-wasik-9-1a849c1baf5e4ce0a48bd6cd386ded94.jpg",
@@ -67,12 +122,10 @@ const initialFavorites: Recipe[] = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLQzQqVBk7LmMbMSaEuRy3AkVv1lyGqThm4Q&s",
     title: "Corn Dogs",
     description: "This homemade corn dog recipe delivers a crispy, golden-brown coating with a juicy hot dog inside. Perfect for a snack or meal, it serves 4 and takes about 30 minutes, including prep and frying."
-  },
-
-  // Add more recipes as needed
+  }
 ];
 
-const initialRecipes: Recipe[] = [...initialFavorites];
+const initialRecipes: SpoonacularRecipe[] = [...testing];
 
 const MyRecipes = styled.div`
   display: flex;
@@ -174,7 +227,7 @@ const RecipeCard: React.FC = () => {
       }
     });
   };
-const handleViewRecipeClick = (recipe: Recipe) => {
+const handleViewRecipeClick = (recipe: SpoonacularRecipe) => {
     navigate("/recipeDetails", { state: { recipe } });
   };
   return (
@@ -194,7 +247,7 @@ const handleViewRecipeClick = (recipe: Recipe) => {
             <VignetteOverlay />
           </ImageContainer>
           <h2 className="recipe-title">{recipe.title}</h2>
-          <p className="description">{recipe.description}</p>
+          <p className="description">{recipe.summary}</p>
           <ButtonContainer>
           <button className="view-recipe" onClick={() => handleViewRecipeClick(recipe)}>View Recipe</button>
           </ButtonContainer>

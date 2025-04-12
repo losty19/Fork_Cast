@@ -4,11 +4,36 @@ import { useState, useRef, useEffect } from "react";
 import { RuxIcon, RuxDialog} from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
 
-const LSideBar = () => {
+interface SpoonacularRecipe {
+  id: number;
+  title: string;
+  image: string;
+  imageType: string;
+  servings: number;
+  readyInMinutes: number;
+  sourceUrl: string;
+  summary: string
+  instructions: string;
+  ingredients: Array<{
+    id: number;
+    name: string;
+    amount: number;
+    unit: string;
+    original: string;
+  }>;
+  nutrition: {
+    calories: string;
+    protein: string;
+    carbs: string;
+    fat: string;
+  };
+}
+
+const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   const [EditOpen, setEditOpen] = useState(false);
   const navigate = useNavigate();
   const [icon, setIcon] = useState("start");
-  const [message, setMessage] = useState("Initial messageInitial messageInitial messageInitial messageInitial messageInitial messageInitial messageInitial messageInitial messageInitial messageInitial messageInitial message");
+  const [message, setMessage] = useState(recipe.summary);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const buttonPressed = () => {
       setEditOpen(!EditOpen);
@@ -71,7 +96,7 @@ const LSideBar = () => {
         confirmText=""
         denyText=""
 
-        style={{ width: "80vw", maxWidth: "900px" }} // Adjusted for larger size
+        style={{ width: "80vw", maxWidth: "900px" }} 
       >
         <textarea
           ref={textareaRef}

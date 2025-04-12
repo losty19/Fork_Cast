@@ -1,8 +1,7 @@
 .side_container{
   flex-direction: column;
   position:relative;
-  left:85vw;
-  top: -.5vw;
+  left:101%;
   display: flex;
   max-width:4%;
 }

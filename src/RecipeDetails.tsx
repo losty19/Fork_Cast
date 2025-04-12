@@ -15,10 +15,52 @@ interface Recipe {
   description: string;
   extraContent: string;
 }
+interface SpoonacularRecipe {
+  id: number;
+  title: string;
+  image: string;
+  imageType: string;
+  servings: number;
+  readyInMinutes: number;
+  sourceUrl: string;
+  summary: string;
+  instructions: string;
+  ingredients: Array<{
+    id: number;
+    name: string;
+    amount: number;
+    unit: string;
+    original: string;
+  }>;
+  nutrition: {
+    calories: string;
+    protein: string;
+    carbs: string;
+    fat: string;
+  };
+}
+const testing: SpoonacularRecipe[] = [
+  { 
+    id: 1,
+    title: "Test Recipe",
+    image: "https://example.com/image.jpg",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "This is a test summary"
+  }
+  ]
+  
 
 const RecipeDetails: React.FC = () => {
   const location = useLocation();
-  const { recipe } = location.state as { recipe: Recipe };
+  const { recipe } = location.state as { recipe: SpoonacularRecipe };
   const [expanded, setExpanded] = useState(false);
   
   return (
@@ -26,14 +68,14 @@ const RecipeDetails: React.FC = () => {
       <SideBar/>
       <div className="main-con">
         <div className="outer-container">
-          <LSideBar/>
+          <LSideBar recipe={recipe}/>
           <div className="title-and-content">
           <div className = "Title_recipe">{recipe.title}</div>
           <div className="content-container">
           <div className="text-wrapper">
             <img className="recipe_image" src={recipe.image} alt="Food" />    
               <div className="description-container">
-              <p>{recipe.description}</p>
+              <p>{recipe.summary}</p>
             </div>
           </div>
 
@@ -44,7 +86,7 @@ const RecipeDetails: React.FC = () => {
               </div>
   
   <div className={`expandable-content ${expanded ? "expanded" : ""}`}>
-    <h3>Ingredients:</h3>
+    <h3 style={{color:"white"}}>Ingredients:</h3>
     <li>2 1/4 cups all-purpose flour</li>
                 <li>1 tsp salt</li>
                 <li>1 tsp sugar</li>
@@ -62,7 +104,7 @@ const RecipeDetails: React.FC = () => {
                 <li>Fresh basil leaves (optional)</li>
             
 
-              <h3>Instructions:</h3>
+              <h3 style={{color:"white"}}>Instructions:</h3>
               <p>
                 1. Sift the dry ingredients together: flour, salt, and sugar.
               </p>

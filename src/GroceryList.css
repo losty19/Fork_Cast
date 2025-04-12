@@ -3,12 +3,14 @@
   display: flex;
   margin-top: 4rem;
   justify-content: space-between;
+  align-self: start;
+  justify-self: center;
   padding: 1.5rem;
   background-color: #f4f4f4;
   border-radius: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-height: 500px;
-  width: 50%;
+  height: 85vh;
+  width: 80%;
 }
 
 .list-container {

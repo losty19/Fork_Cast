@@ -34,6 +34,8 @@ interface SpoonacularRecipe {
     fat: string;
   };
 }
+
+
 interface GroceryListItemProps {
   item: GroceryItem;
   onEdit: (id: number, name: string, measurement: string) => void;
