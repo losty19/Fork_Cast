@@ -16,7 +16,7 @@ specifies that any user authenticated via an API key can "create", "read",
 // THE DEFINITIONS ARE NOW ONLY HERE
 // ********************************************************************
 
-const searchHandler = defineFunction({
+export const searchHandler = defineFunction({
   name: "searchHandler",
   entry: "../functions/spoonacular/handler.ts",
   environment: {
@@ -25,7 +25,7 @@ const searchHandler = defineFunction({
   },
   timeoutSeconds: 10,
 });
-const saveFavoriteHandler = defineFunction({
+export const saveFavoriteHandler = defineFunction({
   name: "saveFavoriteHandler",
   entry: "../functions/saveFavoriteRecipe/handler.ts",
   environment: {
