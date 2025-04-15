@@ -1,81 +1,88 @@
+// amplify/functions/spoonacular/handler.ts
+// import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'; // Not using anymore since I am using the Schema way instead
+import axios, { AxiosInstance } from 'axios';
 import type { Schema } from '../../data/resource';
 import { env } from '$amplify/env/spoonacular';
-import fetch from 'node-fetch';
 
-const BASE_URL = 'https://api.spoonacular.com';
-console.log("Handler initialized.");
+// Axios instance in my Lambda function making requests to the Spoonacular API
+const spoonacularClient: AxiosInstance = axios.create({
+  baseURL: 'https://api.spoonacular.com',
+  headers: { 'Content-Type': 'application/json' }
+});
 
-/**
- * Function to make a GET request to the Spoonacular API's complexSearch endpoint.
- * @param queryStringParameters - The query parameters for the API call.
- * @returns The response data from the Spoonacular API.
- */
-async function getComplexSearch(queryStringParameters: Record<string, any>) {
-  const url = new URL(`${BASE_URL}/recipes/complexSearch`);
-  const apiKey = env.SPOONACULAR_API_KEY; // Use the secret from the environment variables
+const headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS'
+};
+/*
+Our API limits: 
+    - 150 points per day
+    - 1 point per request   *(For most requests)
+    - 0.01 points per result returned *(For most requests)
+    - 60 requests per minute
 
-  if (!apiKey) {
-    throw new Error('SPOONACULAR_API_KEY is not defined');
-  }
+Here is a link to the documentation page for Spoonacluar API:
+    https://spoonacular.com/food-api/docs
+*/
 
-  // Add query parameters and the API key
-  const params = new URLSearchParams({
-    ...queryStringParameters,
-    apiKey,
-  });
-
-  try {
-    console.log('Constructed URL:', url.toString() + '?' + params.toString());
-
-    const startTime = Date.now();
-    const response = await fetch(url.toString() + '?' + params.toString(), {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const endTime = Date.now();
-    console.log('Time taken for API call:', endTime - startTime, 'ms');
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('Spoonacular API response:', data);
-    return data;
-  } catch (error) {
-    console.error('Error fetching data from Spoonacular API:', error);
-    throw error;
-  }
-}
-
-/**
- * Main handler function for the Amplify Gen 2 schema.
- * Handles requests to the Spoonacular API's complexSearch endpoint.
- */
 export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
-  console.log("Handler invoked.");
-  const { queryStringParameters } = event.arguments;
-
+  // Frontend makes request, this function handles it
+  console.log("Inside the handler.");
   try {
-    console.log('Received query parameters:', queryStringParameters);
-
-    // Call the Spoonacular API
-    const searchData = await getComplexSearch(queryStringParameters || {});
-    console.log('Search data returned from Spoonacular API:', searchData);
-
-    // Return the data to the client
-    return searchData;
+    const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
+    const route = `${httpMethod} ${path}`;
+    
+    switch (route) {
+      // Get recipe by complex search 
+      // DOCS: https://spoonacular.com/food-api/docs#Search-Recipes-Complex 
+      case 'GET /recipes/search': {
+        try {
+          const response = await spoonacularClient.get('/recipes/complexSearch', {
+            params: {
+              ...queryStringParameters,
+              apiKey: env.SPOONACULAR_API_KEY
+            }
+          });
+          return response.data; // Amplify adds statusCode, headers I think
+          /*  Format of response.data
+          {
+              "offset": 0,
+              "number": 2,
+              "results": [
+                  {
+                      "id": 716429,
+                      "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
+                      "image": "https://img.spoonacular.com/recipes/716429-312x231.jpg",
+                      "imageType": "jpg",
+                  },
+                  {
+                      "id": 715538,
+                      "title": "What to make for dinner tonight?? Bruschetta Style Pork & Pasta",
+                      "image": "https://img.spoonacular.com/recipes/715538-312x231.jpg",
+                      "imageType": "jpg",
+                  }
+              ],
+              "totalResults": 86
+          }
+          */
+        } catch (error) {
+          console.error('Error searching recipes:', error);
+          throw new Error('Error searching recipes');
+        }
+      }
+      default:
+        throw new Error('Route Not Found');
+    }
   } catch (error) {
-    console.error('Error in handler:', error);
+    console.error('Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({
+      headers,
+      body: JSON.stringify({ 
         message: 'Internal Server Error',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }),
+        error: error instanceof Error ? error.message : 'Unknown error'
+      })
     };
   }
 };
-
