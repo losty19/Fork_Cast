@@ -1,5 +1,8 @@
-import { defineFunction } from '@aws-amplify/backend';
+// import { defineFunction, secret } from '@aws-amplify/backend';
 
-export const saveFavoriteRecipe = defineFunction({
-  name: 'saveFavoriteRecipe',
-});
+// export const saveFavoriteFunction = defineFunction({
+//   name: 'saveFavoriteFunction',
+//   environment: {
+//     SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+//   },
+// });
