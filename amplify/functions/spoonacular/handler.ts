@@ -37,7 +37,7 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
     switch (route) {
       // Get recipe by complex search 
       // DOCS: https://spoonacular.com/food-api/docs#Search-Recipes-Complex 
-      case 'GET /recipes/search': {
+      case 'GET /recipes/complexSearch': {
         try {
           const response = await spoonacularClient.get('/recipes/complexSearch', {
             params: {
