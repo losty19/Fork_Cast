@@ -15,22 +15,22 @@ interface OptionType {
 }
 
 const Profile: React.FC = () => {
-  const [selectedPrefCuisines, setSelectedPrefCuisines] = useState<OptionType[]>([]);
-  const [selectedExcludeCuisines, setSelectedExcludeCuisines] = useState<OptionType[]>([]);
-  const handlePrefCuisinesChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setSelectedPrefCuisines((prev) => [...prev, ...newValue]);
-    } else {
-      setSelectedPrefCuisines(newValue);
-    }
-  };
-  const handleExcludeCuisinesChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setSelectedExcludeCuisines((prev) => [...prev, ...newValue]);
-    } else {
-      setSelectedExcludeCuisines(newValue);
-    }
-  };
+  // const [selectedPrefCuisines, setSelectedPrefCuisines] = useState<OptionType[]>([]);
+  // const [selectedExcludeCuisines, setSelectedExcludeCuisines] = useState<OptionType[]>([]);
+  // const handlePrefCuisinesChange = (newValue: any, actionMeta: any) => {
+  //   if (actionMeta.action === 'create-option') {
+  //     setSelectedPrefCuisines((prev) => [...prev, ...newValue]);
+  //   } else {
+  //     setSelectedPrefCuisines(newValue);
+  //   }
+  // };
+  // const handleExcludeCuisinesChange = (newValue: any, actionMeta: any) => {
+  //   if (actionMeta.action === 'create-option') {
+  //     setSelectedExcludeCuisines((prev) => [...prev, ...newValue]);
+  //   } else {
+  //     setSelectedExcludeCuisines(newValue);
+  //   }
+  // };
   const [selectedIntolerances, setSelectedIntolerances] = useState<OptionType[]>([]);
   const handleIntolerancesChange = (newValue: any, actionMeta: any) => {
     if (actionMeta.action === 'create-option') {
@@ -131,13 +131,13 @@ const Profile: React.FC = () => {
     label: ingredient,
   }));
 
-  const exportPrefCuisines = (): string => {
-    return selectedPrefCuisines.map(option => option.label).join(',');
-  };
+  // const exportPrefCuisines = (): string => {
+  //   return selectedPrefCuisines.map(option => option.label).join(',');
+  // };
 
-  const exportExcludeCuisines = (): string => {
-    return selectedExcludeCuisines.map(option => option.label).join(',');
-  };
+  // const exportExcludeCuisines = (): string => {
+  //   return selectedExcludeCuisines.map(option => option.label).join(',');
+  // };
   const exportIntolerances = (): string => {
     return selectedIntolerances.map(option => option.label).join(',');
   };
@@ -151,14 +151,14 @@ const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-    const savedPrefCuisines = localStorage.getItem('selectedPrefCuisines');
-    const savedExcludeCuisines = localStorage.getItem('selectedExcludeCuisines');
+    // const savedPrefCuisines = localStorage.getItem('selectedPrefCuisines');
+    // const savedExcludeCuisines = localStorage.getItem('selectedExcludeCuisines');
     const savedIntolerances = localStorage.getItem('selectedIntolerances');
     const savedLikedFoods = localStorage.getItem('likedFoods');
     const savedDislikedFoods = localStorage.getItem('dislikedFoods');
     const savedDiet = localStorage.getItem('selectedDiet');
-    if (savedPrefCuisines) setSelectedPrefCuisines(JSON.parse(savedPrefCuisines));
-    if (savedExcludeCuisines) setSelectedExcludeCuisines(JSON.parse(savedExcludeCuisines));
+    // if (savedPrefCuisines) setSelectedPrefCuisines(JSON.parse(savedPrefCuisines));
+    // if (savedExcludeCuisines) setSelectedExcludeCuisines(JSON.parse(savedExcludeCuisines));
     if (savedIntolerances) setSelectedIntolerances(JSON.parse(savedIntolerances));
     if (savedLikedFoods) setLikedFoods(JSON.parse(savedLikedFoods));
     if (savedDislikedFoods) setDislikedFoods(JSON.parse(savedDislikedFoods));
@@ -166,19 +166,20 @@ const Profile: React.FC = () => {
   }, []);
 
   const handleSubmit = () => {
-    localStorage.setItem('selectedPrefCuisines', JSON.stringify(selectedPrefCuisines));
-    localStorage.setItem('selectedExcludeCuisines', JSON.stringify(selectedExcludeCuisines));
+    // localStorage.setItem('selectedPrefCuisines', JSON.stringify(selectedPrefCuisines));
+    // localStorage.setItem('selectedExcludeCuisines', JSON.stringify(selectedExcludeCuisines));
     localStorage.setItem('selectedIntolerances', JSON.stringify(selectedIntolerances));
     localStorage.setItem('likedFoods', JSON.stringify(likedFoods));
     localStorage.setItem('dislikedFoods', JSON.stringify(dislikedFoods));
     localStorage.setItem('selectedDiet', JSON.stringify(selectedDiet));
     console.log(`&likedfoods=${exportLikedFoods().toLowerCase()}`);
     console.log(`&dislikedfoods=${exportDislikedFoods().toLowerCase()}`);
-    console.log(`&preferredcuisines=${exportPrefCuisines().toLowerCase()}`);
-    console.log(`&excludedcuisines=${exportExcludeCuisines().toLowerCase()}`);
+    // console.log(`&preferredcuisines=${exportPrefCuisines().toLowerCase()}`);
+    // console.log(`&excludedcuisines=${exportExcludeCuisines().toLowerCase()}`);
     console.log(`&intolerances=${exportIntolerances().toLowerCase()}`);
     console.log(`&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`);
-    const submitVar = `&likedfoods=${exportLikedFoods().toLowerCase()}&dislikedfoods=${exportDislikedFoods().toLowerCase()}&preferredcuisines=${exportPrefCuisines().toLowerCase()}&excludedcuisines=${exportExcludeCuisines().toLowerCase()}&intolerances=${exportIntolerances().toLowerCase()}&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`;
+    const submitVar = `&likedfoods=${exportLikedFoods().toLowerCase()}&dislikedfoods=${exportDislikedFoods().toLowerCase()}&intolerances=${exportIntolerances().toLowerCase()}&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`;
+    // &preferredcuisines=${exportPrefCuisines().toLowerCase()}&excludedcuisines=${exportExcludeCuisines().toLowerCase()}
     console.log(submitVar);
   }
 
@@ -208,7 +209,7 @@ const Profile: React.FC = () => {
               value={dislikedFoods}
               onChange={handleDislikedFoodsChange}
             />
-            <div slot="label">Preferred Cuisines</div>
+            {/* <div slot="label">Preferred Cuisines</div>
             <Select
               options={cuisineOptions}
               isMulti
@@ -216,13 +217,12 @@ const Profile: React.FC = () => {
               onChange={handlePrefCuisinesChange}
             />
             <div slot="label">Cuisines to Exclude</div>
-
             <Select
               options={cuisineOptions}
               isMulti
               value={selectedExcludeCuisines}
               onChange={handleExcludeCuisinesChange}
-            />
+            /> */}
             <div slot="label">Diet</div>
             <Select
               options={dietOptions}

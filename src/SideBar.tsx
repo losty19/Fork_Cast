@@ -6,7 +6,13 @@ import { RuxIcon, RuxDialog, RuxInput, } from "@astrouxds/react";
 import { RuxTabs, RuxTab, RuxTabPanels, RuxTabPanel } from '@astrouxds/react';
 import { useNavigate } from "react-router-dom";
 import { generateClient } from 'aws-amplify/api';
+import Select from 'react-select';
 import type { Schema } from '../amplify/data/resource';
+
+interface OptionType {
+  value: string;
+  label: string;
+}
 
 const client = generateClient<Schema>()
 
@@ -113,6 +119,54 @@ const SideBar = () => {
     const instructionsRef = useRef<HTMLTextAreaElement | null>(null);
     const [newItemName, setNewItemName] = useState('');
     const [newItemMeasurement, setNewItemMeasurement] = useState('');
+
+    const cuisineOptions = [
+      { value: 'african', label: 'African' },
+      { value: 'asian', label: 'Asian' },
+      { value: 'american', label: 'American' },
+      { value: 'british', label: 'British' },
+      { value: 'cajun', label: 'Cajun' },
+      { value: 'caribbean', label: 'Caribbean' },
+      { value: 'chinese', label: 'Chinese' },
+      { value: 'easternEuropean', label: 'Eastern European' },
+      { value: 'european', label: 'European' },
+      { value: 'french', label: 'French' },
+      { value: 'german', label: 'German' },
+      { value: 'greek', label: 'Greek' },
+      { value: 'indian', label: 'Indian' },
+      { value: 'irish', label: 'Irish' },
+      { value: 'italian', label: 'Italian' },
+      { value: 'japanese', label: 'Japanese' },
+      { value: 'jewish', label: 'Jewish' },
+      { value: 'korean', label: 'Korean' },
+      { value: 'latinAmerican', label: 'Latin American' },
+      { value: 'mediterranean', label: 'Mediterranean' },
+      { value: 'mexican', label: 'Mexican' },
+      { value: 'middleEastern', label: 'Middle Eastern' },
+      { value: 'nordic', label: 'Nordic' },
+      { value: 'southern', label: 'Southern' },
+      { value: 'spanish', label: 'Spanish' },
+      { value: 'thai', label: 'Thai' },
+      { value: 'vietnamese', label: 'Vietnamese' }
+    ];
+
+    const [selectedPrefCuisines, setSelectedPrefCuisines] = useState<OptionType[]>([]);
+    const [selectedExcludeCuisines, setSelectedExcludeCuisines] = useState<OptionType[]>([]);
+
+    const handlePrefCuisinesChange = (newValue: any, actionMeta: any) => {
+      if (actionMeta.action === 'create-option') {
+        setSelectedPrefCuisines((prev) => [...prev, ...newValue]);
+      } else {
+        setSelectedPrefCuisines(newValue);
+      }
+    };
+    const handleExcludeCuisinesChange = (newValue: any, actionMeta: any) => {
+      if (actionMeta.action === 'create-option') {
+        setSelectedExcludeCuisines((prev) => [...prev, ...newValue]);
+      } else {
+        setSelectedExcludeCuisines(newValue);
+      }
+    };
     
     const [items, setItems] = useState<GroceryItem[]>([
           ]);
@@ -235,8 +289,23 @@ const SideBar = () => {
                     <RuxTab id="tab-id-2">Add Custom Meal</RuxTab>
                   </RuxTabs>
                   <RuxTabPanels aria-labelledby="tab-set-id-1">
-                    <RuxTabPanel aria-labelledby="tab-id-1">Request
-                    <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e) => handleInputChange(e as unknown as RuxInputEvent)}/>
+                    <RuxTabPanel aria-labelledby="tab-id-1">
+                      <div>Preferred Cuisines</div>
+                      <Select
+                        options={cuisineOptions}
+                        isMulti
+                        value={selectedPrefCuisines}
+                        onChange={handlePrefCuisinesChange}
+                      />
+                      <div>Cuisines to Exclude</div>
+                      <Select
+                        options={cuisineOptions}
+                        isMulti
+                        value={selectedExcludeCuisines}
+                        onChange={handleExcludeCuisinesChange}
+                      />
+                      Request
+                      <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e) => handleInputChange(e as unknown as RuxInputEvent)}/>
                       <div className="dialog-buttons">
                         <button className="mrCancel" onClick={handleDialogClose}> Cancel</button>
                         <button className="mrSubmit" onClick={handleSubmit}> Submit</button>
@@ -331,4 +400,4 @@ const SideBar = () => {
               </>
     );
   }
-export default SideBar;  
+export default SideBar;
