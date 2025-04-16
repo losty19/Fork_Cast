@@ -1,22 +1,61 @@
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import './Left_SideBar.css';
-import { useState } from "react";
-import { RuxIcon, RuxDialog } from "@astrouxds/react";
+import { useState, useRef, useEffect } from "react";
+import { RuxIcon, RuxDialog} from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
-import EditRecipe from './EditRecipe';
 
-const LSideBar = () => {
+interface SpoonacularRecipe {
+  id: number;
+  title: string;
+  image: string;
+  imageType: string;
+  servings: number;
+  readyInMinutes: number;
+  sourceUrl: string;
+  summary: string
+  instructions: string;
+  ingredients: Array<{
+    id: number;
+    name: string;
+    amount: number;
+    unit: string;
+    original: string;
+  }>;
+  nutrition: {
+    calories: string;
+    protein: string;
+    carbs: string;
+    fat: string;
+  };
+}
+
+const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   const [EditOpen, setEditOpen] = useState(false);
   const navigate = useNavigate();
   const [icon, setIcon] = useState("start");
-
-  // Function to toggle EditOpen state (only for the "edit" button)
+  const [message, setMessage] = useState(recipe.summary);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const buttonPressed = () => {
       setEditOpen(!EditOpen);
   };
 
+  const handleSubmit = async () => {
+
+  };
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+    }
+  }, [message]);
+
+  const handleDialogClose = () => {
+    setEditOpen(false);
+  }
   return (
-      <div className="main-container">
+    <>
+      
           <div className="side_container">
               {/* Back Button */}
               <button className="side-button" onClick={() => navigate("/main")}>
@@ -48,9 +87,38 @@ const LSideBar = () => {
               </button>
           </div>
 
-          <EditRecipe />
-          <RuxDialog open={EditOpen} header="Header" message="Content goes here" confirm-text="Confirm" deny-text="Cancel" />
-      </div>
+         
+          {/* Edit Recipe Dialog */}
+      <RuxDialog
+        className="edit-recipe-container light-theme" 
+        open={EditOpen}
+        header="Edit Recipe"
+        confirmText=""
+        denyText=""
+
+        style={{ width: "80vw", maxWidth: "900px" }} 
+      >
+        <textarea
+          ref={textareaRef}
+          className="MRInput"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          style={{
+            width: "100%",
+            minHeight: "50vh",
+            maxHeight: "70vh",
+            overflow: "auto",
+            resize: "none",
+            padding: "10px",
+            fontSize: "1rem",
+          }}
+        />
+        <div className="dialog-buttons">
+          <button className="mrCancel" onClick={handleDialogClose}>Cancel</button>
+          <button className="mrSubmit" onClick={handleSubmit}>Submit</button>
+        </div>
+      </RuxDialog>
+    </>
   );
 };
 

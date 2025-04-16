@@ -1,12 +1,11 @@
-body {
-  margin: 0;
+html, body{
   background: radial-gradient(#ffffff, hsl(28, 91%, 66%));
   display: flex;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   position:fixed;
 }
 
@@ -19,14 +18,10 @@ main {
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
   background-color:transparent;
   cursor: pointer;
-  transition: border-color 0.25s;
-  color: white;
 }
 
 
@@ -34,6 +29,7 @@ button:focus,
 button:focus-visible {
   outline: none;
 }
+
 
 ul {
   padding-inline-start: 0;
@@ -52,6 +48,22 @@ ul {
 
 li {
   background-color: transparent;
-  padding: 0px;
+  font-family:monospace;
+
 }
+h3{
+  color: #000000;
+  font-size: 1.5em;
+  font-family:monospace;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+p{
+  color: #ffffff;
+  font-family:monospace;
+  padding: -1rem;
+  
+}
+
 
