@@ -1,15 +1,21 @@
 // amplify/functions/spoonacular/handler.ts
 // import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'; // Not using anymore since I am using the Schema way instead
-// import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import type { Schema } from '../../data/resource';
-import { secret } from '@aws-amplify/backend';
-import fetch from 'node-fetch';
+// import { env } from '$amplify/env/spoonacular';
+import { env } from '$amplify/env/searchHandler'
 
 // Axios instance in my Lambda function making requests to the Spoonacular API
-// const spoonacularClient: AxiosInstance = axios.create({
-//   baseURL: 'https://api.spoonacular.com',
-//   headers: { 'Content-Type': 'application/json' }
-// });
+const spoonacularClient: AxiosInstance = axios.create({
+  baseURL: 'https://api.spoonacular.com',
+  headers: { 'Content-Type': 'application/json' }
+});
+
+const headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS'
+};
 /*
 Our API limits: 
     - 150 points per day
@@ -21,129 +27,59 @@ Here is a link to the documentation page for Spoonacluar API:
     https://spoonacular.com/food-api/docs
 */
 
-const BASE_URL = 'https://api.spoonacular.com';
-console.log("I am in the handler file at the top.");
-
-async function getComplexSearch(queryStringParameters: Record<string, any>) {
-  const url = new URL(`${BASE_URL}/recipes/complexSearch`);
-  // const apiKey = process.env.SPOONACULAR_API_KEY || ''; // Need this line to fix the possible undefined error
-  const apiKey = String(secret('SPOONACULAR_API_KEY')); // Convert BackendSecret to string
-  if (!apiKey) {
-    throw new Error('SPOONACULAR_API_KEY is not defined');
-  }
-  const params = new URLSearchParams({
-     ...queryStringParameters,
-     apiKey,
-  });
-
-  try {
-    console.log('URL:', url.toString());
-    console.log('Params:', params.toString());
-    console.log("The URL will look like: ", url.toString() + '?' + params.toString());
-
-    const startTime = Date.now();
-    const response = await fetch(url.toString() + '?' + params.toString(), {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const endTime = Date.now();
-    console.log('Time taken:', endTime - startTime, 'ms');
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('Data complex search response:', data);
-    return data;
-  } catch (error) {
-    console.error('Error fetching complex recipe:', error);
-    throw error;
-  }
-}
-
-// Main handler
-export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
-  console.log("HELLO I AM HERE IN THE HANDLER");
-  const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
-  console.log('Event is :', event);
-  try {
-    console.log('Event:', event);
-    const route = `${httpMethod} ${path}`;
-    console.log('Route:', route);
-    console.log('Query Parameters:', queryStringParameters);
-    console.log('Path Parameters:', pathParameters);
-
-    const searchData = await getComplexSearch(queryStringParameters || {});
-    console.log('Search Data in handler: ', searchData);
-    if (searchData) {
-      return searchData;
-    }
-    return {}; // Amplify wraps this in { statusCode: 200, body: ... }
-    
-  } catch (error) {
-    console.error('Handler Error:', error);
-    return {
-      statusCode: 501,
-      body: JSON.stringify({
-        message: 'Internal Server Error',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }),
-    };
-  }
-};
-
-/*
 export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async (event) => {
   // Frontend makes request, this function handles it
-
+  console.log("Inside the handler.");
   try {
     const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
-
     const route = `${httpMethod} ${path}`;
-    console.log('Route:', route);
-    console.log('Query String Parameters:', queryStringParameters);
-    console.log('Path Parameters:', pathParameters);
-    // console.log('API Key:', process.env.SPOONACULAR_API_KEY);
-    
+    console.log("route: ", route);
     switch (route) {
       // Get recipe by complex search 
       // DOCS: https://spoonacular.com/food-api/docs#Search-Recipes-Complex 
-      case 'GET /recipes/search': {
+      case 'GET /recipes/complexSearch': {
         try {
           const response = await spoonacularClient.get('/recipes/complexSearch', {
             params: {
               ...queryStringParameters,
-              apiKey: process.env.SPOONACULAR_API_KEY,
-              instructionsRequired: true,
-              addRecipeInformation: true,
-            },
+              apiKey: env.SPOONACULAR_API_KEY
+            }
           });
-          console.log('Response:', response.data);
           return response.data; // Amplify adds statusCode, headers I think
+          /*  Format of response.data
+          {
+              "offset": 0,
+              "number": 2,
+              "results": [
+                  {
+                      "id": 716429,
+                      "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
+                      "image": "https://img.spoonacular.com/recipes/716429-312x231.jpg",
+                      "imageType": "jpg",
+                  },
+                  {
+                      "id": 715538,
+                      "title": "What to make for dinner tonight?? Bruschetta Style Pork & Pasta",
+                      "image": "https://img.spoonacular.com/recipes/715538-312x231.jpg",
+                      "imageType": "jpg",
+                  }
+              ],
+              "totalResults": 86
+          }
+          */
         } catch (error) {
           console.error('Error searching recipes:', error);
-          if (axios.isAxiosError(error)) {
-            console.error('Axios Error Details:', {
-              message: error.message,
-              response: error.response?.data,
-              status: error.response?.status,
-            });
-          }
           throw new Error('Error searching recipes');
         }
       }
-
       default:
         throw new Error('Route Not Found');
     }
   } catch (error) {
     console.error('Error:', error);
-    console.log("Error Message: ", error);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ 
         message: 'Internal Server Error',
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -151,4 +87,3 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
     };
   }
 };
-*/

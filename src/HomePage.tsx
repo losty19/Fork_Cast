@@ -27,6 +27,7 @@ const HomePage: React.FC = () => {
             {user ? (
               <>
                 <p>Welcome, {user.username}!</p>
+                <p>Your userId is: {user.userId}</p>
                 <RuxButton className="astro-button" onClick={() => navigate("/main")}>
                   Go to Main Page
                 </RuxButton>
