@@ -208,7 +208,7 @@ const Profile: React.FC = () => {
               value={dislikedFoods}
               onChange={handleDislikedFoodsChange}
             />
-            <div slot="label">Preferred Cuisines</div>
+            {/* <div slot="label">Preferred Cuisines</div>
             <Select
               options={cuisineOptions}
               isMulti
@@ -216,13 +216,12 @@ const Profile: React.FC = () => {
               onChange={handlePrefCuisinesChange}
             />
             <div slot="label">Cuisines to Exclude</div>
-
             <Select
               options={cuisineOptions}
               isMulti
               value={selectedExcludeCuisines}
               onChange={handleExcludeCuisinesChange}
-            />
+            /> */}
             <div slot="label">Diet</div>
             <Select
               options={dietOptions}

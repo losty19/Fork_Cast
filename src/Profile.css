@@ -1,6 +1,7 @@
 .profile-container {
     color: #a5561e;
     background-color: #ffa500; /* Added background color */
+    width: 300px;
 }
 
 .light-theme::part(dialog) {
