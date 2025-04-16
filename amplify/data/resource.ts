@@ -1,4 +1,4 @@
-import { type ClientSchema, a, defineData, defineFunction } from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData, defineFunction, secret } from "@aws-amplify/backend";
 // import { QueryString } from "aws-cdk-lib/aws-logs";
 // import { spoonacularFunction } from "../functions/spoonacular/resource";
 
@@ -12,10 +12,17 @@ specifies that any user authenticated via an API key can "create", "read",
 const spoonacularHandler = defineFunction({
   name: "spoonacularHandler",
   entry: "../functions/spoonacular/handler.ts",
+  environment: {
+    SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+  },
+  timeoutSeconds: 30,
 });
 const saveFavoriteHandler = defineFunction({
   name: "saveFavoriteHandler",
   entry: "../functions/saveFavoriteRecipe/handler.ts",
+  environment: {
+    SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+  },
 });
 
 const schema = a.schema({
@@ -39,12 +46,28 @@ const schema = a.schema({
   //     }),
   //   totalResults: a.integer(),
 
+  // getComplexRecipe: a
+  //   .query()
+  //   .arguments({
+  //     query: a.string().required(),
+  //     number: a.integer(),
+  //     instructionsRequired: a.boolean(),
+  //     addRecipeInformation: a.boolean(),
+  //   })
+  //   .returns(a.json())
+  //   .authorization((allow) => [allow.authenticated()])
+  //   .handler(
+  //     a.handler.custom({
+  //       dataSource: "spoon_httpDataSource",
+  //       entry: "./getComplexRecipe.js",
+  //     })
+  //   ),
+  
   SpoonacularGetRecipe: a
     .query()
     .arguments({
-      path:  a.string().required(),
+      path: a.string().required(),
       httpMethod: a.string().required(),
-      // There are more options in the Spoonacular API, but these are the ones I think we will use the most
       queryStringParameters: a.customType({
         query: a.string(),
         number: a.integer(),
@@ -73,21 +96,17 @@ const schema = a.schema({
         maxProtein: a.integer(),
         minCalories: a.integer(),
         maxCalories: a.integer(),
-      }), // <-- queryStringParameters
-      // queryStringParameters: a.enum(["query", "number", "offset", "diet", "intolerances", "equipment", 
-      //   "type", "cuisine", "includeIngredients", "excludeIngredients", "instructionsRequired", "fillIngredients", 
-      //   "addRecipeInformation", "addRecipeNutrition", "author", "tags", "recipeBoxId", "titleMatch", "maxReadyTime", 
-      //   "ignorePantry", "sort", "sortDirection", "minCarbs", "maxCarbs", "minProtein", "maxProtein", "minCalories", ]),
+      }),
       pathParameters: a.customType({
         path_id: a.integer(),
       }),
-    }) // <-- .arguments
+    })
     .returns(a.json())
-    // FCan include the return type:
-    // .returns(a.ref("GetRecipeResponse").required())
-    // .authorization((allow) => [allow.authenticated()])
     .authorization((allow) => [allow.authenticated()])
-    .handler(a.handler.function(spoonacularHandler)),
+    .handler(a.handler.custom({
+      dataSource: "spoon_httpDataSource",
+      entry: "./getComplexRecipe.js",
+    })),
 
   SaveFavoriteRecipe: a
     .mutation()
@@ -195,12 +214,12 @@ export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
-  authorizationModes: {
-    // This tells the data client in your app (generateClient())
-    // to sign API requests with the user authentication token.
+  // authorizationModes: {
+  //   // This tells the data client in your app (generateClient())
+  //   // to sign API requests with the user authentication token.
 
-    defaultAuthorizationMode: "userPool",
-  },
+  //   defaultAuthorizationMode: "userPool",
+  // },
 });
 
 /*== STEP 2 ===============================================================
