@@ -33,7 +33,7 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
   try {
     const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
     const route = `${httpMethod} ${path}`;
-    
+    console.log("route: ", route);
     switch (route) {
       // Get recipe by complex search 
       // DOCS: https://spoonacular.com/food-api/docs#Search-Recipes-Complex 
