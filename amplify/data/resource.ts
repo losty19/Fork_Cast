@@ -217,16 +217,16 @@ const schema = a.schema({
     .authorization((allow) => [allow.owner()]),
 
 
-    conversationAI: a.conversation({
-      aiModel: a.ai.model("Amazon Nova Micro"),
-      systemPrompt: 'You are a helpful assistant that helps users find recipes. \
-                      You will take their preferences and dietary restrictions into account.\
-                      You will focus your response to be availble to use with the Spoonacular API.',
-      inferenceConfiguration: { // Can also set temperature and topP
-        maxTokens: 1000,
-      }
-    })
-    .authorization((allow) => allow.owner()),
+  conversationAI: a.conversation({
+    aiModel: a.ai.model("Amazon Nova Micro"),
+    systemPrompt: 'You are a helpful assistant that helps users find recipes. \
+                    You will take their preferences and dietary restrictions into account.\
+                    You will focus your response to be availble to use with the Spoonacular API.',
+    inferenceConfiguration: { // Can also set temperature and topP
+      maxTokens: 1000,
+    }
+  })
+  .authorization((allow) => allow.owner()),
 
     // generateAI: a.generation({
     //   aiModel: a.ai.model("Amazon Nova Micro"),

@@ -2,7 +2,9 @@
 // import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'; // Not using anymore since I am using the Schema way instead
 import axios, { AxiosInstance } from 'axios';
 import type { Schema } from '../../data/resource';
-// import { env } from '$amplify/env/spoonacular';
+
+// Don't worry if this line is red, it is because the env variable is not set in your local environment. 
+// It will work when you deploy it to AWS.
 import { env } from '$amplify/env/searchHandler'
 
 // Axios instance in my Lambda function making requests to the Spoonacular API
