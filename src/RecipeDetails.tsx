@@ -40,7 +40,7 @@ interface SpoonacularRecipe {
   };
 }
 
-  
+
 
 const RecipeDetails: React.FC = () => {
   const location = useLocation();
