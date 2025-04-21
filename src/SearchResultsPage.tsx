@@ -9,32 +9,32 @@ import { Schema } from '../amplify/data/resource';
 import { getCurrentUser } from "aws-amplify/auth";
 
 // The response from Spoonacular API follows:
-interface SpoonacularRecipe {
-  id: number;
-  title: string;
-  image: string;
-  imageType: string;
-  readyInMinutes: number;
-  servings: number;
-  sourceUrl: string;
-  summary: string;
-  cuisines: string[];
-  dishTypes: string[];
-  diets: string[];
-  occasions: string[];
-  analyzedInstructions: Array<{
-    name: string;
-    steps: Array<{
-      number: number;
-      step: string;
-      ingredients: Array<{ id: number; name: string; localizedName: string; image: string }>;
-      equipment: Array<{ id: number; name: string; localizedName: string; image: string }>;
-      length?: { number: number; unit: string };
-    }>;
-  }>;
-  spoonacularScore: number;
-  spoonacularSourceUrl: string;
-}
+// interface SpoonacularRecipe {
+//   id: number;
+//   title: string;
+//   image: string;
+//   imageType: string;
+//   readyInMinutes: number;
+//   servings: number;
+//   sourceUrl: string;
+//   summary: string;
+//   cuisines: string[];
+//   dishTypes: string[];
+//   diets: string[];
+//   occasions: string[];
+//   analyzedInstructions: Array<{
+//     name: string;
+//     steps: Array<{
+//       number: number;
+//       step: string;
+//       ingredients: Array<{ id: number; name: string; localizedName: string; image: string }>;
+//       equipment: Array<{ id: number; name: string; localizedName: string; image: string }>;
+//       length?: { number: number; unit: string };
+//     }>;
+//   }>;
+//   spoonacularScore: number;
+//   spoonacularSourceUrl: string;
+// }
 
 const MyRecipes = styled.div`
   display: flex;
