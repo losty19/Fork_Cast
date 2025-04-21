@@ -8,6 +8,9 @@ import MyRecipes from "./RecipeCard";
 
 import { AIConversation } from "@aws-amplify/ui-react-ai";
 import { useAIConversation } from "./client";
+// import { Authenticator } from '@aws-amplify/ui-react';
+
+
 
 const MainPage: React.FC = () => {
 
@@ -26,13 +29,16 @@ const MainPage: React.FC = () => {
       <div className="my-recipes-text">
           My Recipes
         </div>
+        <br>
+        </br>
+      {/* <Authenticator> */}
         <AIConversation
           messages={messages}
           isLoading={isLoading}
           handleSendMessage={handleSendMessage}
-        />
-        <br>
-        </br>
+          welcomeMessage="Hello! I'm your AI assistant. How can I help you today?"
+          />
+      {/* </Authenticator> */}
         <MyRecipes />
     </>
   );
