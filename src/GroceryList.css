@@ -47,7 +47,6 @@ h3 {
   border-radius: 10px;
 }
 
-/* Force select text to be black */
 .input-field-select * {
   color: black !important;
 }
@@ -103,7 +102,7 @@ h3 {
   margin: 5px 0;
   display: flex;
   align-items: center;
-  justify-content: flex-start;  /* changed from space-between */
+  justify-content: flex-start;
   position: relative;
 }
 
@@ -125,7 +124,7 @@ h3 {
 .display-mode {
   display: flex;
   align-items: center;
-  gap: 5px; /* Adjust spacing between item name and info */
+  gap: 5px;
 }
 
 .item-name {
@@ -133,7 +132,6 @@ h3 {
   color: #855353;
 }
 
-/* Added rule to restore text color and style of quantity and measurement */
 .item-info {
   font-style: italic;
   color: #855353;
@@ -142,7 +140,7 @@ h3 {
 .input-row {
   display: flex;
   align-items: center;
-  gap: 10px; /* space between inputs */
+  gap: 10px;
 }
 
 .input-row > * {
@@ -171,7 +169,7 @@ h3 {
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  margin-left: auto; /* push edit button to the right */
+  margin-left: auto;
   margin-bottom: 5px;
 }
 
@@ -188,7 +186,6 @@ h3 {
   margin-left: 20px;
   border-radius: 8px;
   cursor: pointer;
-  /* margin-top: 5px; */
   margin-bottom: 5px;
 }
 

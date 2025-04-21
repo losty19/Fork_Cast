@@ -6,7 +6,7 @@ import { RuxButton, RuxContainer } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import './Profile.css';
 import CreatableSelect from 'react-select/creatable';
-import { commonIngredients } from './data/ingredients'; // Import commonIngredients
+import { commonIngredients } from './data/ingredients';
 
 
 interface OptionType {
@@ -66,36 +66,6 @@ const Profile: React.FC = () => {
     { value: 'wheat', label: 'Wheat' }
   ];
 
-  // const cuisineOptions = [
-  //   { value: 'african', label: 'African' },
-  //   { value: 'asian', label: 'Asian' },
-  //   { value: 'american', label: 'American' },
-  //   { value: 'british', label: 'British' },
-  //   { value: 'cajun', label: 'Cajun' },
-  //   { value: 'caribbean', label: 'Caribbean' },
-  //   { value: 'chinese', label: 'Chinese' },
-  //   { value: 'easternEuropean', label: 'Eastern European' },
-  //   { value: 'european', label: 'European' },
-  //   { value: 'french', label: 'French' },
-  //   { value: 'german', label: 'German' },
-  //   { value: 'greek', label: 'Greek' },
-  //   { value: 'indian', label: 'Indian' },
-  //   { value: 'irish', label: 'Irish' },
-  //   { value: 'italian', label: 'Italian' },
-  //   { value: 'japanese', label: 'Japanese' },
-  //   { value: 'jewish', label: 'Jewish' },
-  //   { value: 'korean', label: 'Korean' },
-  //   { value: 'latinAmerican', label: 'Latin American' },
-  //   { value: 'mediterranean', label: 'Mediterranean' },
-  //   { value: 'mexican', label: 'Mexican' },
-  //   { value: 'middleEastern', label: 'Middle Eastern' },
-  //   { value: 'nordic', label: 'Nordic' },
-  //   { value: 'southern', label: 'Southern' },
-  //   { value: 'spanish', label: 'Spanish' },
-  //   { value: 'thai', label: 'Thai' },
-  //   { value: 'vietnamese', label: 'Vietnamese' }
-  // ];
-
   const dietOptions = [
     { value: 'glutenFree', label: 'Gluten Free' },
     { value: 'ketogenic', label: 'Ketogenic' },
@@ -148,7 +118,6 @@ const Profile: React.FC = () => {
     console.log(`&intolerances=${exportIntolerances().toLowerCase()}`);
     console.log(`&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`);
     const submitVar = `&likedfoods=${exportLikedFoods().toLowerCase()}&dislikedfoods=${exportDislikedFoods().toLowerCase()}&intolerances=${exportIntolerances().toLowerCase()}&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`;
-    // &preferredcuisines=${exportPrefCuisines().toLowerCase()}&excludedcuisines=${exportExcludeCuisines().toLowerCase()}
     console.log(submitVar);
   }
 
@@ -166,7 +135,7 @@ const Profile: React.FC = () => {
             <CreatableSelect
             isClearable
             isMulti
-            options={ingredientOptions} // Use ingredientOptions for likedFoods
+            options={ingredientOptions}
             value={likedFoods}
             onChange={handleLikedFoodsChange}
              />
@@ -174,7 +143,7 @@ const Profile: React.FC = () => {
             <CreatableSelect
               isClearable
               isMulti
-              options={ingredientOptions} // Use ingredientOptions for dislikedFoods
+              options={ingredientOptions}
               value={dislikedFoods}
               onChange={handleDislikedFoodsChange}
             />

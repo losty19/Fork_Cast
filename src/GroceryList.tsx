@@ -7,7 +7,7 @@ import Select from 'react-select';
 interface GroceryItem {
   id: number;
   name: string;
-  quantity: number; // added new field
+  quantity: number;
   measurement: string;
   checked: boolean;
 }
@@ -21,9 +21,8 @@ const GroceryList: React.FC = () => {
     });
     const [newItemName, setNewItemName] = useState('');
     const [newItemMeasurement, setNewItemMeasurement] = useState('');
-    const [newItemQuantity, setNewItemQuantity] = useState(''); // new state for quantity
+    const [newItemQuantity, setNewItemQuantity] = useState('');
 
-    // Measurement options for react-select
     const measurementOptions = [
       { value: 'cup', label: 'Cup' },
       { value: 'tablespoon', label: 'Tablespoon' },
@@ -39,7 +38,6 @@ const GroceryList: React.FC = () => {
       { value: 'piece', label: 'Piece' },
     ];
 
-    // Update localStorage whenever items change
     useEffect(() => {
         localStorage.setItem('groceryItems', JSON.stringify(items));
     }, [items]);
@@ -64,7 +62,7 @@ const GroceryList: React.FC = () => {
         const newItem: GroceryItem = {
             id: items.length + 1,
             name: newItemName,
-            quantity: quantity, // include quantity
+            quantity: quantity,
             measurement: newItemMeasurement,
             checked: false,
         };
@@ -74,7 +72,6 @@ const GroceryList: React.FC = () => {
         setNewItemQuantity('');
     };
 
-    // New function: Clear entire list
     const handleClear = () => {
         setItems([]);
     };
@@ -97,7 +94,7 @@ const GroceryList: React.FC = () => {
                     item={item}
                     onEdit={handleEdit}
                     onToggle={handleToggle}
-                    onDelete={handleDelete}  // pass delete handler
+                    onDelete={handleDelete}
                   />
                 ))}
               </ul>
@@ -111,7 +108,6 @@ const GroceryList: React.FC = () => {
                 onChange={(e) => setNewItemName(e.target.value)}
                 className="input-field"
               />
-              {/* Group quantity and measurement inputs on the same line */}
               <div className="input-row">
                 <input
                   type="text"
@@ -146,7 +142,7 @@ interface GroceryListItemProps {
     item: GroceryItem;
     onEdit: (id: number, name: string, quantity: number, measurement: string) => void;
     onToggle: (id: number) => void;
-    onDelete: (id: number) => void;  // added delete prop
+    onDelete: (id: number) => void;
 }
 
 const GroceryListItem: React.FC<GroceryListItemProps> = ({ item, onEdit, onToggle, onDelete }) => {

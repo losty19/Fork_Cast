@@ -36,14 +36,10 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   const [message, setMessage] = useState(recipe.summary);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   
-  // NEW: Function to export recipe ingredients to the grocery list
   const handleAddToGroceryList = () => {
-    // Retrieve existing items from localStorage
     const stored = localStorage.getItem('groceryItems');
     let existingItems = stored ? JSON.parse(stored) : [];
-    // Compute max id among existing items
     let maxId = existingItems.reduce((max: number, item: any) => Math.max(max, item.id), 0);
-    // Append each ingredient from the recipe as a grocery item
     recipe.ingredients.forEach(ingredient => {
       maxId++;
       existingItems.push({
