@@ -6,7 +6,7 @@ import { RuxButton, RuxContainer } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import './Profile.css';
 import CreatableSelect from 'react-select/creatable';
-import { commonIngredients } from './data/ingredients'; // Import commonIngredients
+import { commonIngredients } from './data/ingredients';
 
 
 interface OptionType {
@@ -15,22 +15,6 @@ interface OptionType {
 }
 
 const Profile: React.FC = () => {
-  // const [selectedPrefCuisines, setSelectedPrefCuisines] = useState<OptionType[]>([]);
-  // const [selectedExcludeCuisines, setSelectedExcludeCuisines] = useState<OptionType[]>([]);
-  // const handlePrefCuisinesChange = (newValue: any, actionMeta: any) => {
-  //   if (actionMeta.action === 'create-option') {
-  //     setSelectedPrefCuisines((prev) => [...prev, ...newValue]);
-  //   } else {
-  //     setSelectedPrefCuisines(newValue);
-  //   }
-  // };
-  // const handleExcludeCuisinesChange = (newValue: any, actionMeta: any) => {
-  //   if (actionMeta.action === 'create-option') {
-  //     setSelectedExcludeCuisines((prev) => [...prev, ...newValue]);
-  //   } else {
-  //     setSelectedExcludeCuisines(newValue);
-  //   }
-  // };
   const [selectedIntolerances, setSelectedIntolerances] = useState<OptionType[]>([]);
   const handleIntolerancesChange = (newValue: any, actionMeta: any) => {
     if (actionMeta.action === 'create-option') {
@@ -82,36 +66,6 @@ const Profile: React.FC = () => {
     { value: 'wheat', label: 'Wheat' }
   ];
 
-  const cuisineOptions = [
-    { value: 'african', label: 'African' },
-    { value: 'asian', label: 'Asian' },
-    { value: 'american', label: 'American' },
-    { value: 'british', label: 'British' },
-    { value: 'cajun', label: 'Cajun' },
-    { value: 'caribbean', label: 'Caribbean' },
-    { value: 'chinese', label: 'Chinese' },
-    { value: 'easternEuropean', label: 'Eastern European' },
-    { value: 'european', label: 'European' },
-    { value: 'french', label: 'French' },
-    { value: 'german', label: 'German' },
-    { value: 'greek', label: 'Greek' },
-    { value: 'indian', label: 'Indian' },
-    { value: 'irish', label: 'Irish' },
-    { value: 'italian', label: 'Italian' },
-    { value: 'japanese', label: 'Japanese' },
-    { value: 'jewish', label: 'Jewish' },
-    { value: 'korean', label: 'Korean' },
-    { value: 'latinAmerican', label: 'Latin American' },
-    { value: 'mediterranean', label: 'Mediterranean' },
-    { value: 'mexican', label: 'Mexican' },
-    { value: 'middleEastern', label: 'Middle Eastern' },
-    { value: 'nordic', label: 'Nordic' },
-    { value: 'southern', label: 'Southern' },
-    { value: 'spanish', label: 'Spanish' },
-    { value: 'thai', label: 'Thai' },
-    { value: 'vietnamese', label: 'Vietnamese' }
-  ];
-
   const dietOptions = [
     { value: 'glutenFree', label: 'Gluten Free' },
     { value: 'ketogenic', label: 'Ketogenic' },
@@ -131,13 +85,6 @@ const Profile: React.FC = () => {
     label: ingredient,
   }));
 
-  // const exportPrefCuisines = (): string => {
-  //   return selectedPrefCuisines.map(option => option.label).join(',');
-  // };
-
-  // const exportExcludeCuisines = (): string => {
-  //   return selectedExcludeCuisines.map(option => option.label).join(',');
-  // };
   const exportIntolerances = (): string => {
     return selectedIntolerances.map(option => option.label).join(',');
   };
@@ -151,14 +98,10 @@ const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-    // const savedPrefCuisines = localStorage.getItem('selectedPrefCuisines');
-    // const savedExcludeCuisines = localStorage.getItem('selectedExcludeCuisines');
     const savedIntolerances = localStorage.getItem('selectedIntolerances');
     const savedLikedFoods = localStorage.getItem('likedFoods');
     const savedDislikedFoods = localStorage.getItem('dislikedFoods');
     const savedDiet = localStorage.getItem('selectedDiet');
-    // if (savedPrefCuisines) setSelectedPrefCuisines(JSON.parse(savedPrefCuisines));
-    // if (savedExcludeCuisines) setSelectedExcludeCuisines(JSON.parse(savedExcludeCuisines));
     if (savedIntolerances) setSelectedIntolerances(JSON.parse(savedIntolerances));
     if (savedLikedFoods) setLikedFoods(JSON.parse(savedLikedFoods));
     if (savedDislikedFoods) setDislikedFoods(JSON.parse(savedDislikedFoods));
@@ -166,20 +109,15 @@ const Profile: React.FC = () => {
   }, []);
 
   const handleSubmit = () => {
-    // localStorage.setItem('selectedPrefCuisines', JSON.stringify(selectedPrefCuisines));
-    // localStorage.setItem('selectedExcludeCuisines', JSON.stringify(selectedExcludeCuisines));
     localStorage.setItem('selectedIntolerances', JSON.stringify(selectedIntolerances));
     localStorage.setItem('likedFoods', JSON.stringify(likedFoods));
     localStorage.setItem('dislikedFoods', JSON.stringify(dislikedFoods));
     localStorage.setItem('selectedDiet', JSON.stringify(selectedDiet));
     console.log(`&likedfoods=${exportLikedFoods().toLowerCase()}`);
     console.log(`&dislikedfoods=${exportDislikedFoods().toLowerCase()}`);
-    // console.log(`&preferredcuisines=${exportPrefCuisines().toLowerCase()}`);
-    // console.log(`&excludedcuisines=${exportExcludeCuisines().toLowerCase()}`);
     console.log(`&intolerances=${exportIntolerances().toLowerCase()}`);
     console.log(`&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`);
     const submitVar = `&likedfoods=${exportLikedFoods().toLowerCase()}&dislikedfoods=${exportDislikedFoods().toLowerCase()}&intolerances=${exportIntolerances().toLowerCase()}&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`;
-    // &preferredcuisines=${exportPrefCuisines().toLowerCase()}&excludedcuisines=${exportExcludeCuisines().toLowerCase()}
     console.log(submitVar);
   }
 
@@ -197,7 +135,7 @@ const Profile: React.FC = () => {
             <CreatableSelect
             isClearable
             isMulti
-            options={ingredientOptions} // Use ingredientOptions for likedFoods
+            options={ingredientOptions}
             value={likedFoods}
             onChange={handleLikedFoodsChange}
              />
@@ -205,24 +143,10 @@ const Profile: React.FC = () => {
             <CreatableSelect
               isClearable
               isMulti
-              options={ingredientOptions} // Use ingredientOptions for dislikedFoods
+              options={ingredientOptions}
               value={dislikedFoods}
               onChange={handleDislikedFoodsChange}
             />
-            {/* <div slot="label">Preferred Cuisines</div>
-            <Select
-              options={cuisineOptions}
-              isMulti
-              value={selectedPrefCuisines}
-              onChange={handlePrefCuisinesChange}
-            />
-            <div slot="label">Cuisines to Exclude</div>
-            <Select
-              options={cuisineOptions}
-              isMulti
-              value={selectedExcludeCuisines}
-              onChange={handleExcludeCuisinesChange}
-            /> */}
             <div slot="label">Diet</div>
             <Select
               options={dietOptions}

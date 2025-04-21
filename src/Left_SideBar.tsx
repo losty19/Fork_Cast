@@ -35,14 +35,31 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   const [icon, setIcon] = useState("start");
   const [message, setMessage] = useState(recipe.summary);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  
+  const handleAddToGroceryList = () => {
+    const stored = localStorage.getItem('groceryItems');
+    let existingItems = stored ? JSON.parse(stored) : [];
+    let maxId = existingItems.reduce((max: number, item: any) => Math.max(max, item.id), 0);
+    recipe.ingredients.forEach(ingredient => {
+      maxId++;
+      existingItems.push({
+        id: maxId,
+        name: ingredient.name,
+        quantity: ingredient.amount,
+        measurement: ingredient.unit,
+        checked: false
+      });
+    });
+    localStorage.setItem('groceryItems', JSON.stringify(existingItems));
+    navigate("/grocery-list");
+  };
+  
   const buttonPressed = () => {
       setEditOpen(!EditOpen);
   };
 
-  const handleSubmit = async () => {
-
-  };
-
+  const handleSubmit = async () => {};
+  
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -64,7 +81,7 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
               </button>
 
               {/* Grocery List Button */}
-              <button className="side-button" onClick={() => navigate("/grocery-list")}>
+              <button className="side-button" onClick={handleAddToGroceryList}>
                   <RuxIcon className="side-image" icon="add-shopping-cart" size="3.3rem" />
                   <h2 style={{marginTop:'-5%',marginBottom:'-4%'}}>ADD TO GROCERY LIST</h2>
               </button>
@@ -88,7 +105,6 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
           </div>
 
          
-          {/* Edit Recipe Dialog */}
       <RuxDialog
         className="edit-recipe-container light-theme" 
         open={EditOpen}
@@ -122,4 +138,4 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   );
 };
 
-export default LSideBar; 
+export default LSideBar;
