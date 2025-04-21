@@ -188,7 +188,14 @@ const schema = a.schema({
                     You will focus your response to be availble to use with the Spoonacular API.',
     inferenceConfiguration: { // Can also set temperature and topP
       maxTokens: 1000,
-    }
+    },
+    tools: [
+      a.ai.dataTool({
+        name: "AIsearchRecipe",
+        description: "Search for a recipe based on the user's preferences and requests",
+        query: a.ref('SpoonacularGetRecipe'),
+      }),
+    ],
   })
   .authorization((allow) => allow.owner()),
 
