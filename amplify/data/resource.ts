@@ -34,42 +34,6 @@ export const saveFavoriteHandler = defineFunction({
 });
 
 const schema = a.schema({
-  // GetRecipeResponse: a.customType({
-  //   statusCode: a.integer().required(),
-  //   headers: a.customType({ // Not totally sure about this
-  //     "Access-Control-Allow-Origin": a.string(),
-  //     "Access-Control-Allow-Methods": a.string(),
-  //   }),
-  //   body: a.json().required(),
-  // }),  USING .returns(a.json()) INSTEAD FOR NOW
-
-  // THIS IS THE BODY JSON OBJECT THAT IS RETURNED FROM THE SPOONACULAR API
-  //   offset: a.integer(),
-  //   number: a.integer(),
-  //   results: a.customType({
-  //       id: a.integer(),
-  //       title: a.string(),
-  //       image: a.string(),
-  //       imageType: a.string(),
-  //     }),
-  //   totalResults: a.integer(),
-
-  // getComplexRecipe: a
-  //   .query()
-  //   .arguments({
-  //     query: a.string().required(),
-  //     number: a.integer(),
-  //     instructionsRequired: a.boolean(),
-  //     addRecipeInformation: a.boolean(),
-  //   })
-  //   .returns(a.json())
-  //   .authorization((allow) => [allow.authenticated()])
-  //   .handler(
-  //     a.handler.custom({
-  //       dataSource: "spoon_httpDataSource",
-  //       entry: "./getComplexRecipe.js",
-  //     })
-  //   ),
   
   SpoonacularGetRecipe: a
     .query()
@@ -217,16 +181,23 @@ const schema = a.schema({
     .authorization((allow) => [allow.owner()]),
 
 
-    conversationAI: a.conversation({
-      aiModel: a.ai.model("Amazon Nova Micro"),
-      systemPrompt: 'You are a helpful assistant that helps users find recipes. \
-                      You will take their preferences and dietary restrictions into account.\
-                      You will focus your response to be availble to use with the Spoonacular API.',
-      inferenceConfiguration: { // Can also set temperature and topP
-        maxTokens: 1000,
-      }
-    })
-    .authorization((allow) => allow.owner()),
+  conversationAI: a.conversation({
+    aiModel: a.ai.model("Amazon Nova Micro"),
+    systemPrompt: 'You are a helpful assistant that helps users find recipes. \
+                    You will take their preferences and dietary restrictions into account.\
+                    You will focus your response to be availble to use with the Spoonacular API.',
+    inferenceConfiguration: { // Can also set temperature and topP
+      maxTokens: 1000,
+    },
+    tools: [
+      a.ai.dataTool({
+        name: "AIsearchRecipe",
+        description: "Search for a recipe based on the user's preferences and requests",
+        query: a.ref('SpoonacularGetRecipe'),
+      }),
+    ],
+  })
+  .authorization((allow) => allow.owner()),
 
     // generateAI: a.generation({
     //   aiModel: a.ai.model("Amazon Nova Micro"),

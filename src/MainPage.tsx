@@ -6,11 +6,27 @@ import SideBar from "./SideBar";
 import MyRecipes from "./RecipeCard";
 // import { Authenticator } from '@aws-amplify/ui-react';
 
-import { AIConversation } from "@aws-amplify/ui-react-ai";
-import { useAIConversation } from "./client";
+// AI imports // 
+import { AIConversation, createAIHooks } from "@aws-amplify/ui-react-ai";
+// import { useAIConversation } from "./client";
+// import { Authenticator } from '@aws-amplify/ui-react';
+import { generateClient } from 'aws-amplify/api';
+import outputs from "../amplify_outputs.json";
+import { Schema } from "../amplify/data/resource";
+import { Amplify } from "aws-amplify";
 
-const MainPage: React.FC = () => {
+Amplify.configure(outputs);
+const client = generateClient<Schema>();
+const { useAIConversation } = createAIHooks(client);
 
+
+const DataContext = React.createContext<{
+  data: any;
+  setData: (value: React.SetStateAction<any>) => void;
+}>({ data: {}, setData: () => {} });
+
+function AIchatbot() {
+  const { data } = React.useContext(DataContext);
   const [
     {
       data: { messages },
@@ -19,21 +35,42 @@ const MainPage: React.FC = () => {
     handleSendMessage,
   ] = useAIConversation('conversationAI');
 
+  return (
+    <AIConversation
+      messages={messages}
+      isLoading={isLoading}
+      handleSendMessage={handleSendMessage}
+      welcomeMessage="Hello! I'm your AI assistant. How can I help you today?"
+      displayText={{
+        getMessageTimestampText: (date) => new Intl.DateTimeFormat('en-US', {
+          timeStyle: 'short',
+          hour12: true,
+          timeZone: 'EST',
+        }).format(date)
+      }}
+      aiContext={() => {
+        return {
+          ...data,
+        };
+      }}
+      FallbackResponseComponent={(props) => {
+        return <>{JSON.stringify(props)}</>
+      }}
+    />
+  );
+}
 
+const MainPage: React.FC = () => {
   return (
     <>
       <SideBar />
       <div className="my-recipes-text">
           My Recipes
-        </div>
-        <AIConversation
-          messages={messages}
-          isLoading={isLoading}
-          handleSendMessage={handleSendMessage}
-        />
-        <br>
-        </br>
-        <MyRecipes />
+      </div>
+      <br>
+      </br>
+      <AIchatbot />
+      <MyRecipes />
     </>
   );
 }

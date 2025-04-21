@@ -11,39 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { generateClient } from 'aws-amplify/api';
 import type { Schema } from '../amplify/data/resource';
 
-const client = generateClient<Schema>()
+const client = generateClient<Schema>();
 
-interface SpoonacularRecipe {
-  id: number;
-  title: string;
-  image: string;
-  imageType: string;
-  servings: number;
-  readyInMinutes: number;
-  sourceUrl: string;
-  summary: string;
-  instructions: string;
-  ingredients: Array<{
-    id: number;
-    name: string;
-    amount: number;
-    unit: string;
-    original: string;
-  }>;
-  nutrition: {
-    calories: string;
-    protein: string;
-    carbs: string;
-    fat: string;
-  };
-}
-
-interface SpoonacularResponse {
-  results: SpoonacularRecipe[];
-  offset: number;
-  number: number;
-  totalResults: number;
-}
 
 interface RuxInputEvent extends Event {
   target: HTMLInputElement;
@@ -80,24 +49,19 @@ const SideBar = () => {
             number: 5,
             instructionsRequired: true,
             addRecipeInformation: true,
-            fillIngredients: true,
-            addRecipeNutrition: true,
+            // fillIngredients: true, // Don't need this - Adds too much fluff
+            // addRecipeNutrition: true, // Don't need this - Adds too much fluff
           },
           pathParameters: {},
         });
         console.log("Raw API Response:", response);
-  
+
         if (response.data) {
-          const recipes = response.data as SpoonacularResponse;
-          console.log("Parsed Recipes Data:", recipes);
-          
-          if (recipes.results && Array.isArray(recipes.results)) {
-            console.log("Found recipes:", recipes.results.length);
-            navigate('/searchResults', { state: { recipes: recipes.results } });
-          } else {
-            console.error("Invalid recipe data format:", recipes);
-            setError('Invalid recipe data format received');
-          }
+          // Check if response.data is a string and parse it if necessary
+          const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+          const recipes = data.results || [];
+          navigate('/searchResults', { state: { recipes } });
+
         } else {
           console.error("No data in response:", response);
           setError('No data returned from Spoonacular');
@@ -110,40 +74,6 @@ const SideBar = () => {
         setIsMealRequestOpen(false);
       }
     };
-    /*
-    const handleSubmit = async () => {
-      setIsLoading(true);
-      setError(null);
-      console.log("Input Value: ", inputValue);
-
-      try {
-        const spoonacular_response = await client.queries.SpoonacularGetRecipe({
-          path: '/recipes/search', 
-          httpMethod: 'GET', 
-          queryStringParameters: {query: inputValue},
-          pathParameters: {}
-        });
-        console.log("spoonacular_response is: ", spoonacular_response);
-
-        if (spoonacular_response.data) {
-          const data = typeof spoonacular_response.data === 'string'
-            ? JSON.parse(spoonacular_response.data)
-            : spoonacular_response.data;
-          console.log("Parsed Data:", data);
-
-          navigate('/searchResults', { state: { recipes:  spoonacular_response.data } });
-        } else {
-          console.error('Error searching recipes: Invalid response format. This is spoonacular_response: ', spoonacular_response);
-        }
-      } catch (error) {
-        setError('Failed to fetch recipe');
-        console.error('Error searching recipes:', error);
-      } finally {
-        setIsLoading(false);
-        setIsMealRequestOpen(false);
-      }
-    }*/
-
 
     const handleDialogClose = () => {
       setIsMealRequestOpen(false);
@@ -151,49 +81,52 @@ const SideBar = () => {
 
     return (
       <>
-        
-    <div className="main-container">
-      <button onClick={() => navigate("/main")}>
-            <div className="logo-text">ForkCast</div>
-              </button>
-          <div className="sidebar">
-            <button className="icon-button" onClick={buttonPressed}>
-              <RuxIcon className="icon-image" size="35px" icon="add-circle-outline"></RuxIcon>
-            </button>
-            <button className="icon-button" onClick={() => navigate("/grocery-list")}>
-              <RuxIcon className="icon-image" size="small" icon="local-grocery-store"></RuxIcon>
-            </button>
-            <button className="icon-button" onClick={() => navigate("/profile")}>
-              <RuxIcon className="icon-image" size="small" icon="account-circle"></RuxIcon>
-            </button>
-            <button className="icon-button" onClick={() => navigate("/")}>
-              <RuxIcon className="icon-image"size="small" icon="settings"></RuxIcon>
-            </button>
-          </div>
-          <div className="content">
-          </div>
-        </div>
-        {isMealRequestOpen && (
-                <RuxDialog 
-                  className="meal-request-container" 
-                  open={isMealRequestOpen} 
-                  header="Meal Request" 
-                  message="Content goes here" 
-                  confirmText=""
-                  denyText=""
-                  onRuxdialogclosed={handleDialogClose}
-                >
-                  <RuxInput class="MRInput" type="text" value={inputValue} onRuxchange={(e) => handleInputChange(e as unknown as RuxInputEvent)}/>
-                  <div className="dialog-buttons">
-                    <RuxButton className="mrCancel" onClick={handleDialogClose}>Cancel</RuxButton>
-                    <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
-                  </div>
-                </RuxDialog>
-              )}
-              {isLoading && <div className="loading">Loading...</div>}
-          {error && <div className="error">{error}</div>}
-
-              </>
+        <div className="main-container">
+          <button onClick={() => navigate("/main")}>
+                <div className="logo-text">ForkCast</div>
+                  </button>
+              <div className="sidebar">
+                <button className="icon-button" onClick={buttonPressed}>
+                  <RuxIcon className="icon-image" size="35px" icon="add-circle-outline"></RuxIcon>
+                </button>
+                <button className="icon-button" onClick={() => navigate("/grocery-list")}>
+                  <RuxIcon className="icon-image" size="small" icon="local-grocery-store"></RuxIcon>
+                </button>
+                <button className="icon-button" onClick={() => navigate("/profile")}>
+                  <RuxIcon className="icon-image" size="small" icon="account-circle"></RuxIcon>
+                </button>
+                <button className="icon-button" onClick={() => navigate("/")}>
+                  <RuxIcon className="icon-image"size="small" icon="settings"></RuxIcon>
+                </button>
+              </div>
+              <div className="content">
+              </div>
+            </div>
+            {isMealRequestOpen && (
+              <RuxDialog 
+                className="meal-request-container" 
+                open={isMealRequestOpen} 
+                header="Meal Request" 
+                message="Content goes here" 
+                confirmText=""
+                denyText=""
+                onRuxdialogclosed={handleDialogClose}
+              >
+              <RuxInput 
+                class="MRInput" 
+                type="text" 
+                value={inputValue} 
+                onRuxchange={(e) => handleInputChange(e as unknown as RuxInputEvent)}
+              />
+              <div className="dialog-buttons">
+                <RuxButton className="mrCancel" onClick={handleDialogClose}>Cancel</RuxButton>
+                <RuxButton className="mrSubmit" onClick={handleSubmit}>Submit</RuxButton>
+                </div>
+              </RuxDialog>
+            )}
+            {isLoading && <div className="loading">Loading...</div>}
+            {error && <div className="error">{error}</div>}
+      </>
     );
   }
 export default SideBar;  
