@@ -10,7 +10,7 @@
     "test": "jest --config jest.config.js"
   },
   "dependencies": {
-    "@astrouxds/react": "^7.24.1",
+    "@astrouxds/react": "^7.25.1",
     "@aws-amplify/ui-react": "^6.9.3",
     "@aws-amplify/ui-react-ai": "^1.4.0",
     "@aws-sdk/client-dynamodb": "^3.758.0",

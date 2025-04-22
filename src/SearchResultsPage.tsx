@@ -39,39 +39,52 @@ import { getCurrentUser } from "aws-amplify/auth";
 const MyRecipes = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
   max-height: 100vh;
   overflow: auto;
-  padding: 50px;
-  scrollbar-width: none;
-  top:30%;
+  padding-top:18vh;
+  scrollbar-width:none;
+  padding-bottom:1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  width: 250px;
-  border-radius: 20px;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.76);
-  background-color: rgba(140, 124, 194);
+  width: 11rem;
+  border-radius: 15px;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.61);
+  background-color:rgb(255, 255, 255);
   padding: 10px;
-  margin: 0px;
+  margin-top: 20px;
+  margin-left:0.25rem;
+  margin-right:0.25rem;
+
   position: relative;
+  max-height:20rem;
+  min-height: 18rem;
+  transition: transform 0.5s ease;
+  &:hover {
+    transform:scale(1.1);
+    z-index:2;
+  }
 `;
 
 const StyledImage = styled.img`
   width: 100%;
   min-height:100%;
+  object-fit: cover;
 `;
 
 const ImageContainer = styled.div`
+  min-height: 7rem;
   position: relative;
-  width: 100%;
-  border-radius: 20px;
+  border-radius: 15px;
   overflow: hidden;
   margin-bottom: -15px;
   `;
+
 
 const VignetteOverlay = styled.div`
   content: '';
@@ -86,16 +99,20 @@ const VignetteOverlay = styled.div`
 `;
 
 const FavoriteButton = styled.button`
-  background-color: #ff6347;
-  color: white;
+  background: none;
   border: none;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  margin-top: 10px;
-  &:hover {
-    background-color: #ff4500;
+  cursor: pointe;
+  margin-top:-0.2rem;
+  margin-left: -0.5rem;
+  position: absolute;
+    z-index: 3;
+  &:focus {
+    outline: none;
   }
+    &:active {
+    transform: scale(0.9);
+  }
+
 `;
 
 const BackButton = styled.button`

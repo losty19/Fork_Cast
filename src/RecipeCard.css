@@ -6,6 +6,69 @@
   }
   .description {
     flex-grow: 1;
+    .recipe-title {
+      font-size: 18px;
+      font-family:Cambria, Cochin;
+      color: #000000;
+    }
+    .description {
+      flex-grow: 1;
+      margin-top: -20px;
+      margin-left: 10;
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+      font-size: 14px;
+      font-family:Cambria, Cochin;
+      max-height: 180px;
+      color: #1f1e1e;
+      overflow: scroll;
+      scrollbar-width: none;;
+      
+    }
+  
+    .view-recipe {
+      cursor: pointer;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      margin-bottom: 0.2rem;
+      background-color: #000000;
+      color: white;
+      border: none;
+    }
+    
+    .view-recipe:hover {
+      background-color:#333;
+    }
+    .favorbutton{
+      background:none;
+      position: relative;
+      transition: transform 0.2s ease;
+      padding:0;
+      border: none;
+      margin: 10px;
+      display: inline-flex;
+    }
+    .favorbutton_icon{
+      color: rgb(255, 225, 0);
+      margin: -1;
+      transform-origin: center;
+      transition:0.3s ease;
+  
+  ;
+    }
+    .favorbutton_icon:hover{
+        transform: scale(1.2);
+    }
+    .favorbutton:focus {
+      outline: none;
+    }
+    .favorbutton:active {
+      transform: scale(0.9);
+    }
+  
+    .My-recipes-text{
+      margin-top: 0.7rem;
+    } 
     margin-top: -20px;
     margin-left: 10;
     margin-bottom: 0px;

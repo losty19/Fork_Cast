@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Router>
       <Routes>
         {/* Public Route */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<MainPage />} />
 
         {/* Protected Routes */}
         <Route 
@@ -47,9 +47,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route 
           path="/profile" 
           element={
-            <ProtectedRoute>
+           <ProtectedRoute>
             <Profile />
-            </ProtectedRoute>
+           </ProtectedRoute>
           } 
         />
 
@@ -57,7 +57,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           path="/recipeDetails" 
           element={
             <ProtectedRoute>
-            <RecipeDetails />
+             <RecipeDetails />
             </ProtectedRoute>
           } 
         />
@@ -66,7 +66,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           path="/searchResults" 
           element={
             <ProtectedRoute>
-            <SearchResultsPage />
+             <SearchResultsPage />
             </ProtectedRoute>
           } 
         />
@@ -75,12 +75,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           path="/grocery-list" 
           element={
             <ProtectedRoute>
-            <GroceryList />
+             <GroceryList />
             </ProtectedRoute>
           } 
         />
 
       </Routes>
     </Router>
-  </Authenticator.Provider>
+  //</Authenticator.Provider>
 );
