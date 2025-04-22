@@ -8,12 +8,12 @@ import SearchResultsPage from "./SearchResultsPage";
 import GroceryList from "./GroceryList";
 import "./index.css";
 import { Amplify } from "aws-amplify";
-//import outputs from "../amplify_outputs.json";
+import outputs from "../amplify_outputs.json";
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
-//Amplify.configure(outputs);
+Amplify.configure(outputs);
 
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const { user } = useAuthenticator((context) => [context.user]);
@@ -28,7 +28,7 @@ const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 };
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  //<Authenticator.Provider>
+  <Authenticator.Provider>
     <Router>
       <Routes>
         {/* Public Route */}
@@ -38,45 +38,45 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route 
           path="/main" 
           element={ 
-            //<ProtectedRoute> 
+            <ProtectedRoute> 
               <MainPage /> 
-            //</ProtectedRoute>
+            </ProtectedRoute>
           }
         />
         
         <Route 
           path="/profile" 
           element={
-           // <ProtectedRoute>
+           <ProtectedRoute>
             <Profile />
-           // </ProtectedRoute>
+           </ProtectedRoute>
           } 
         />
 
         <Route 
           path="/recipeDetails" 
           element={
-            //<ProtectedRoute>
-            <RecipeDetails />
-            //</ProtectedRoute>
+            <ProtectedRoute>
+             <RecipeDetails />
+            </ProtectedRoute>
           } 
         />
 
         <Route 
           path="/searchResults" 
           element={
-           // <ProtectedRoute>
-            <SearchResultsPage />
-            //</ProtectedRoute>
+            <ProtectedRoute>
+             <SearchResultsPage />
+            </ProtectedRoute>
           } 
         />
 
         <Route 
           path="/grocery-list" 
           element={
-           // <ProtectedRoute>
-            <GroceryList />
-            //</ProtectedRoute>
+            <ProtectedRoute>
+             <GroceryList />
+            </ProtectedRoute>
           } 
         />
 
