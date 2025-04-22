@@ -82,5 +82,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
       </Routes>
     </Router>
-  //</Authenticator.Provider>
+  </Authenticator.Provider>
 );
