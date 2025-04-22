@@ -1,0 +1,194 @@
+/* GroceryList.css */
+.grocery-list-container {
+  display: flex;
+  margin-top: 4rem;
+  justify-content: space-between;
+  align-self: start;
+  justify-self: center;
+  padding: 1.5rem;
+  background-color: #f4f4f4;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  height: 85vh;
+  width: 80%;
+}
+
+.list-container {
+  width: 55%
+}
+
+.add-item-container {
+  width: 34%;
+}
+h3 {
+  color: #855353;
+}
+
+.add-item-container {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.input-field {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.input-field-select
+{
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.input-field-select * {
+  color: black !important;
+}
+
+.add-item-btn {
+  background-color: #b34848;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.clear-list-btn {
+  background-color: #b34848;
+  color: rgb(255, 255, 255);
+  border: none;
+  position: relative;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.add-item-btn:hover {
+  background-color:#8e3737 ;
+  
+}
+
+.list-container {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.grocery-list {
+  list-style-type: none;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.grocery-item {
+  background-color: transparent;
+  padding: 5px;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.grocery-item.checked {
+  background-color: #f9e2bc;
+  text-decoration: line-through;
+  text-decoration-color: #855353;
+  text-decoration-thickness: 3px;
+}
+
+.checkbox {
+  margin-right: 10px;
+  width: 20px; 
+  height: 20px;
+  transform: scale(1.2);
+
+}
+
+.display-mode {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.item-name {
+  font-weight: bold;
+  color: #855353;
+}
+
+.item-info {
+  font-style: italic;
+  color: #855353;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-row > * {
+  flex: 1;
+}
+
+.edit-mode {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-input {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 100%;
+  margin-left: 0%;
+}
+
+.edit-btn {
+  display: block;
+  background-color: #eab992;
+  color: #855353;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-bottom: 5px;
+}
+
+.edit-btn:hover {
+  background-color: #d5a37a;
+}
+
+.delete-btn {
+  display: block;
+  background-color: #b34848;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  margin-left: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.delete-btn:hover {
+  background-color: #8e3737;
+}

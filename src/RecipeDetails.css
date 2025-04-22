@@ -1,0 +1,119 @@
+.Title_recipe{
+  font-size: 90%;
+  margin-left: 0%;
+  margin-top: -1%;
+  font-family:monospace;
+  color: #ffffff;
+}
+
+.recipe_image {
+width: 35vw;
+max-width: 50%;
+height: auto;
+max-height: 40vh;
+margin-right: 1rem;
+margin-bottom: 2rem;
+border-radius: 15px;
+object-fit: cover;
+}
+
+.description-container {
+  flex: 1;
+  color: white;
+  font-size: 70%;
+  width: 40rem;
+  overflow: hidden;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  background-color: rgb(241, 136, 61);
+  border-radius: 10px;
+  margin-bottom: 2%;
+  text-align: left; /* Align text to the left */
+}
+
+.expandable-content {
+  margin-top: -5vh;
+  padding-bottom: 3%;
+  color: white;
+  font-size: 18px;
+  display: none;
+  
+}
+
+.expandable-content.expanded {
+  display: block;
+}
+
+.button-container {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  margin-top: -1%;
+  margin-bottom: -3%;
+}
+
+.button-container.expanded {
+  margin-top: -3%;
+  margin-bottom: -1%;
+  position: absolute;
+  bottom: 0;
+  
+}
+
+.outer-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-bottom: 0%;
+  padding-left: 0%;
+  background-color: rgb(50, 41, 35);
+  border-radius: 15px;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.64);
+  margin-bottom: 2%;
+  font-size: 200%;
+  overflow-y: hidden;
+  padding-right: 4.8rem;
+}
+
+.title-and-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-self: flex-start;
+
+}
+
+.main-con {
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  max-height: 100vh;
+  overflow: auto;
+  scrollbar-width: none;
+  position: relative;
+  margin-left: 4rem;
+  margin-right: 4rem;
+  z-index: 1;
+  padding-top: 18vh;
+}
+
+.text-wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  max-height: 52.3vh;
+  gap: 20px;
+}
+li {
+  background-color: transparent;
+  font-family:monospace;
+
+}

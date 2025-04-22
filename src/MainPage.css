@@ -1,69 +1,147 @@
 html, body {
   height: 100%;
   margin: 0;
-  padding: 0;
-  background-color: black; /* Set background color to black */
+  padding: 0;  
 }
 
 .main-container {
   display: flex;
-  height: 100vh;
-  width: 100vw; 
-  align-items: flex-start;
-  justify-content: flex-start;
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* background-color: black; */
+  width: 100%;
+  min-width: 100vw;
+  align-items: start;
+  justify-content: center;
+  position: relative;
+  z-index: 4;
+  
 }
 
 .sidebar {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 80px;
-  background-color: #333;
-  padding-top: 20px;
+  flex-direction: row;
+  justify-content: right;
+  top:-1.5rem;
+  right: 1rem;
+  background-color: none;
+  padding-top: 1.3rem;
+  position:absolute;
+  z-index: 5;
+}
+.icon-button {
+  min-height: 40px;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  margin: 0.6rem;
+  cursor: pointer;
+  background-color: transparent;
+  transition: 0.3s ease;
+  padding: 0%;
+}
+.icon-button:hover {
+  background-color: #a5561e; 
+}
+.icon-button:focus {
+  outline: none;
 }
 
-.icon-button {
-  background: none;
-  border: none;
-  margin: 10px 0;
-  cursor: pointer;
+.icon-button:active {
+  transform: scale(0.9);
 }
 
 .icon-image {
-  width: 40px;
-  height: 40px;
+  color: #333;
 }
 
-.content {
-  flex-grow: 1;
-  background-color: #f1f1f1;
-  padding: 20px;
-}
-
-.meal-request {
+.header {
+  justify-content: start;
+  background-color: #e27e36;
   position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 20px;
+  z-index: 4;
+  padding: 0rem;
+  width: 100%;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.418);
 }
-
-.meal-request-container {
-  color: white;
-  background-color: white;
-  border-color: white;
-}
-
-
 
 .dialog-buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-top: 20px;
+}
+.logo-text {
+  font-size: 2rem;
+  position: relative;
+  font-family:monospace;
+  color: #ffffff;
+  z-index: 5;
+  left:1rem;
+}
+.My-recipes-text{
+  top:10%;
+  left:8%;
+  font-size:30px;
+  font-family:fantasy;
+  position: absolute;
+  color: #000000;
+}
+
+.mrCancel {
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.mrCancel:hover {
+  background-color: #c97516;
+
+}
+.mrSubmit {
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.mrSubmit:hover {
+  background-color: #c97516;
+
   
+}
+
+.add-item-butn {
+  background-color: #513a18;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width:10vw;
+  height:5vh;
+}
+
+
+.add-item-butn:hover {
+  background-color:#442d17 ;
+  
+}
+
+.edit-butn {
+  background-color: #513a18;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 10px;
+  margin: 0px;
+  cursor: pointer;
+  position: absolute;
+  width:10vw;
+  height:5vh;
+  right: 0px;
+}
+
+.edit-butn:hover {
+  background-color: #442d17;
+}
+.profile-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }

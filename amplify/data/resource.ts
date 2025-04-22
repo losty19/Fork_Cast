@@ -1,4 +1,8 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData, defineFunction, secret } from "@aws-amplify/backend";
+// import { saveFavoriteRecipe } from "../functions/saveFavoriteRecipe/resource";
+//import { type ClientSchema, a, defineData, defineFunction, secret } from "@aws-amplify/backend";
+
+// import { QueryString } from "aws-cdk-lib/aws-logs";
 // import { spoonacularFunction } from "../functions/spoonacular/resource";
 
 /*== STEP 1 ===============================================================
@@ -8,7 +12,87 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 
+// WAS DEFINING THESE FUNCTION TWICE
+// THE DEFINITIONS ARE NOW ONLY HERE
+// ********************************************************************
+
+export const searchHandler = defineFunction({
+  name: "searchHandler",
+  entry: "../functions/spoonacular/handler.ts",
+  environment: {
+    SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+    // SPOONACULAR_API_KEY_ENV: process.env.SPOONACULAR_API_KEY,
+  },
+  timeoutSeconds: 10,
+});
+export const saveFavoriteHandler = defineFunction({
+  name: "saveFavoriteHandler",
+  entry: "../functions/saveFavoriteRecipe/handler.ts",
+  environment: {
+    SPOONACULAR_API_KEY: secret('SPOONACULAR_API_KEY'),
+  },
+});
+
 const schema = a.schema({
+  
+  SpoonacularGetRecipe: a
+    .query()
+    .arguments({
+      path: a.string().required(),
+      httpMethod: a.string().required(),
+      queryStringParameters: a.customType({
+        query: a.string(),
+        number: a.integer(),
+        offset: a.integer(),
+        diet: a.enum(["Gluten_Free", "Ketogenic", "Vegetarian", "Lacto_Vegetarian", "Ovo_Vegetarian", "Vegan", "Pescetarian", "Paleo", "Primal", "Whole30"]),
+        intolerances: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish"]),
+        type: a.enum(["main_course", "side_dish", "dessert", "appetizer", "salad", "bread", "breakfast", 
+                      "soup", "beverage", "sauce", "marinade", "fingerfood", "snack", "drink"]),
+        includeIngredients: a.string(),
+        excludeIngredients: a.string(),
+        instructionsRequired: a.boolean(),
+        fillIngredients: a.boolean(),
+        addRecipeInformation: a.boolean(),
+        addRecipeNutrition: a.boolean(),
+        author: a.string(),
+        tags: a.string(),
+        recipeBoxId: a.integer(),
+        titleMatch: a.string(),
+        maxReadyTime: a.integer(),
+        ignorePantry: a.boolean(),
+        sort: a.enum(["popularity", "healthiness", "random", "time", "price", "sustainability"]),
+        sortDirection: a.enum(["asc", "desc"]),
+        minCarbs: a.integer(),
+        maxCarbs: a.integer(),
+        minProtein: a.integer(),
+        maxProtein: a.integer(),
+        minCalories: a.integer(),
+        maxCalories: a.integer(),
+      }),
+      pathParameters: a.customType({
+        path_id: a.integer(),
+      }),
+    })
+    .returns(a.json())
+    .authorization((allow) => [allow.authenticated()])
+    // .handler(a.handler.custom({
+    //   dataSource: "spoon_httpDataSource",
+    //   entry: "./getComplexRecipe.js",
+    // })),
+    .handler(a.handler.function(searchHandler)),
+
+  SaveFavoriteRecipe: a
+    .mutation()
+    .arguments({
+      userId: a.string().required(),
+      recipeId: a.string().required(),
+      image: a.string(),
+      title: a.string().required(),
+    })
+    .returns(a.ref("SavedRecipe"))
+    .authorization((allow) => [allow.authenticated()])
+    .handler(a.handler.function(saveFavoriteHandler)),
+
   Todo: a
     .model({
       content: a.string(),
@@ -32,7 +116,9 @@ const schema = a.schema({
   // Saved Recipes - Cache of Spoonacular recipes
   SavedRecipe: a
     .model({
+      id: a.id(),
       userProfile: a.belongsTo("UserProfile", "recipeId"), // Reference to UserProfile
+      userId: a.string(),
       recipeId: a.string(), // Spoonacular ID
       title: a.string(),
       image: a.string(),
@@ -42,7 +128,7 @@ const schema = a.schema({
       instructions: a.string(),
       sourceUrl: a.string(),
       ingredients: a.customType({
-        id: a.integer(),
+        ingredients_id: a.integer(),
         name: a.string(),
         amount: a.float(),
         unit: a.string(),
@@ -57,19 +143,10 @@ const schema = a.schema({
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
-    .authorization((allow) => [allow.authenticated()]), // Any authenticated user can CRUD
-
-  // User's Favorite Recipes
-  FavoriteRecipe: a
-    .model({
-      userId: a.string(),
-      recipeId: a.string(), // Reference to SavedRecipe
-      notes: a.string(),
-      rating: a.integer(), // 1-5 stars
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [allow.authenticated()]) // Any authenticated user can CRUD
+    .secondaryIndexes((index) => [
+      index('userId'),
+    ]),
 
   // Meal Plan
   MealPlan: a
@@ -103,19 +180,58 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.owner()]),
 
-})
-.authorization((allow) => [allow.publicApiKey()]);
+
+  conversationAI: a.conversation({
+    aiModel: a.ai.model("Amazon Nova Micro"),
+    systemPrompt: 'You are a helpful assistant that helps users find recipes. \
+                    You will take their preferences and dietary restrictions into account.\
+                    You will focus your response to be availble to use with the Spoonacular API.',
+    inferenceConfiguration: { // Can also set temperature and topP
+      maxTokens: 1000,
+    },
+    tools: [
+      a.ai.dataTool({
+        name: "AIsearchRecipe",
+        description: "Search for a recipe based on the user's preferences and requests",
+        query: a.ref('SpoonacularGetRecipe'),
+      }),
+    ],
+  })
+  .authorization((allow) => allow.owner()),
+
+    // generateAI: a.generation({
+    //   aiModel: a.ai.model("Amazon Nova Micro"),
+    //   systemPrompt: 'You are a helpful assistant that helps users find recipes. \
+    //                   You will take their preferences and dietary restrictions into account.\
+    //                   You will focus your response to be availble to use with the Spoonacular API.',
+    //   inferenceConfiguration: { // Can also set temperature and topP
+    //     maxTokens: 1000,
+    //   }
+    // })
+    // .arguments({
+    //   prompt: a.string().required(),
+    // })
+    // // Maybe update this return type to be more specific for the Spoonacular API search endpoint
+    // .returns(
+    //   a.customType({
+    //     response: a.string().required(),
+    //   })
+    // )
+    // .authorization((allow) => allow.authenticated()),
+
+}) // <-- .schema
+.authorization((allow) => [allow.authenticated()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
-  authorizationModes: {
-    // This tells the data client in your app (generateClient())
-    // to sign API requests with the user authentication token.
+  // authorizationModes: {
+  //   // This tells the data client in your app (generateClient())
+  //   // to sign API requests with the user authentication token.
 
-    defaultAuthorizationMode: "userPool",
-  },
+  //   defaultAuthorizationMode: "userPool",
+  // },
 });
 
 /*== STEP 2 ===============================================================
