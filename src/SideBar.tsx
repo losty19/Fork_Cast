@@ -205,29 +205,44 @@ const SideBar = () => {
     const handleSubmit = async () => {
       setIsLoading(true);
       setError(null);
-      console.log("Input Value: ", inputValue);
+      console.log("Input Value:", inputValue);
+  
       try {
-        const spoonacular_response = await client.queries.SpoonacularGetRecipe({
-          path: '/recipes/search', 
-          httpMethod: 'GET', 
-          queryStringParameters: {query: inputValue},
-          pathParameters: {}
+        console.log("Making Spoonacular API request...");
+        const response = await client.queries.SpoonacularGetRecipe({
+          path: '/recipes/complexSearch',
+          httpMethod: 'GET',
+          queryStringParameters: { 
+            query: inputValue,
+            number: 5,
+            instructionsRequired: true,
+            addRecipeInformation: true,
+            // fillIngredients: true, // Don't need this - Adds too much fluff
+            // addRecipeNutrition: true, // Don't need this - Adds too much fluff
+          },
+          pathParameters: {},
         });
-        console.log("spoonacular_response is: ", spoonacular_response);
-        if (spoonacular_response.data) {
-          // const recipes = spoonacular_response.data.body as Schema["GetRecipeResponse"];
-          navigate('/searchResults', { state: { recipes:  spoonacular_response.data } });
+        console.log("Raw API Response:", response);
+
+        if (response.data) {
+          // Check if response.data is a string and parse it if necessary
+          const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
+          const recipes = data.results || [];
+          navigate('/searchResults', { state: { recipes } });
+
         } else {
-          console.error('Error searching recipes: Invalid response format. This is spoonacular_response: ', spoonacular_response);
+          console.error("No data in response:", response);
+          setError('No data returned from Spoonacular');
         }
       } catch (error) {
-        setError('Failed to fetch recipe');
-        console.error('Error searching recipes:', error);
+        console.error("Detailed error:", error);
+        setError('Failed to fetch recipes');
       } finally {
         setIsLoading(false);
         setIsMealRequestOpen(false);
       }
-    }
+    };
+
     const handleDialogClose = () => {
       setItems([]);
       setIsMealRequestOpen(false);
@@ -250,8 +265,7 @@ const SideBar = () => {
     
 
     return (
-      <>
-        
+      <>        
     <div className="main-container">
     <div className="header">
       <button onClick={() => navigate("/main")}>
