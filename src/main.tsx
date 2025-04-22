@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Router>
       <Routes>
         {/* Public Route */}
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<HomePage />} />
 
         {/* Protected Routes */}
         <Route 
