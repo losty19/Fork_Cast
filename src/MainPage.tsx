@@ -13,10 +13,11 @@ import { AIConversation, createAIHooks } from "@aws-amplify/ui-react-ai";
 import { generateClient } from 'aws-amplify/api';
 import outputs from "../amplify_outputs.json";
 import { Schema } from "../amplify/data/resource";
-import { Amplify } from "aws-amplify";
+import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
+// import { Amplify } from "aws-amplify";
 
-Amplify.configure(outputs);
-const client = generateClient<Schema>();
+// Amplify.configure(outputs);
+const client = generateClient<Schema>({ authMode: "userPool" });
 const { useAIConversation } = createAIHooks(client);
 
 
@@ -26,6 +27,11 @@ const DataContext = React.createContext<{
 }>({ data: {}, setData: () => {} });
 
 function AIchatbot() {
+  const { user } = useAuthenticator((context) => [context.user]);
+  if (!user) {
+    return <div>Please sign in to use AI chatbot.</div>;
+  }
+
   const { data } = React.useContext(DataContext);
   const [
     {
@@ -36,27 +42,29 @@ function AIchatbot() {
   ] = useAIConversation('conversationAI');
 
   return (
-    <AIConversation
-      messages={messages}
-      isLoading={isLoading}
-      handleSendMessage={handleSendMessage}
-      welcomeMessage="Hello! I'm your AI assistant. How can I help you today?"
-      displayText={{
-        getMessageTimestampText: (date) => new Intl.DateTimeFormat('en-US', {
-          timeStyle: 'short',
-          hour12: true,
-          timeZone: 'EST',
-        }).format(date)
-      }}
-      aiContext={() => {
-        return {
-          ...data,
-        };
-      }}
-      FallbackResponseComponent={(props) => {
-        return <>{JSON.stringify(props)}</>
-      }}
-    />
+    <Authenticator>
+      <AIConversation
+        messages={messages}
+        isLoading={isLoading}
+        handleSendMessage={handleSendMessage}
+        welcomeMessage="Hello! I'm your AI assistant. How can I help you today?"
+        displayText={{
+          getMessageTimestampText: (date) => new Intl.DateTimeFormat('en-US', {
+            timeStyle: 'short',
+            hour12: true,
+            timeZone: 'EST',
+          }).format(date)
+        }}
+        aiContext={() => {
+          return {
+            ...data,
+          };
+        }}
+        FallbackResponseComponent={(props) => {
+          return <>{JSON.stringify(props)}</>
+        }}
+      />
+    </Authenticator>
   );
 }
 
