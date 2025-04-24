@@ -18,9 +18,9 @@ const HomePage: React.FC = () => {
   const createUserProfile = async (user: any) => {
     try {
       // Extract user details from Cognito
-      const userId = user.attributes?.sub; // Cognito user ID
-      const email = user.attributes?.email || user.signInDetails?.loginId;
-      const username = user.attributes?.preferred_username || user.attributes?.name || email?.split('@')[0];
+      const userId = user.userId; // Cognito user ID
+      const email = user.signInDetails?.loginId;
+      const username = email?.split('@')[0];
 
       if (!userId) {
         console.error('No userId found for user:', user);
