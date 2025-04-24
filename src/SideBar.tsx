@@ -282,7 +282,7 @@ const SideBar = () => {
           <button className="icon-button" onClick={() => navigate("/profile")}>
             <RuxIcon className="icon-image" size="small" icon="account-circle"></RuxIcon>
           </button>
-          <button className="icon-button">
+          <button className="icon-button" onClick={() => navigate("/")}>
             <RuxIcon className="icon-image"size="small" icon="settings"></RuxIcon>
           </button>
         </div>
