@@ -8,6 +8,9 @@ import './Profile.css';
 import CreatableSelect from 'react-select/creatable';
 import { commonIngredients } from './data/ingredients';
 
+import { generateClient } from 'aws-amplify/api';
+import { Schema } from '../amplify/data/resource';
+const client = generateClient<Schema>();
 
 interface OptionType {
   value: string;
@@ -108,7 +111,7 @@ const Profile: React.FC = () => {
     if (savedDiet) setSelectedDiet(JSON.parse(savedDiet));
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     localStorage.setItem('selectedIntolerances', JSON.stringify(selectedIntolerances));
     localStorage.setItem('likedFoods', JSON.stringify(likedFoods));
     localStorage.setItem('dislikedFoods', JSON.stringify(dislikedFoods));
@@ -119,6 +122,49 @@ const Profile: React.FC = () => {
     console.log(`&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`);
     const submitVar = `&likedfoods=${exportLikedFoods().toLowerCase()}&dislikedfoods=${exportDislikedFoods().toLowerCase()}&intolerances=${exportIntolerances().toLowerCase()}&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`;
     console.log(submitVar);
+
+    // List all the user profiles in the userprofile table
+    // This is just for testing purposes, you can remove this part later
+    const { errors: listerrors, data: userProfiles } = await client.models.UserProfile.list({ limit: 10 });
+    if (listerrors) {
+      console.log('Error listing user profiles: ', listerrors);
+    } else {
+      console.log('User profiles: ', userProfiles);
+    }
+    // Check if the user already exists in the userprofile table
+    const { errors, data: user } = await client.models.UserProfile.get({ id: '1' });
+    // Update user preferences in the database
+    if (user) {
+      const { errors, data: updatedUser } = await client.models.UserProfile.update({
+        id: '1',
+        likedFoods: exportLikedFoods(),
+        dislikedFoods: exportDislikedFoods(),
+        intolerances: exportIntolerances(),
+        diet: selectedDiet.map(option => option.label.toLowerCase()).join(',')
+      });
+      if (errors) {
+        console.log('Error updating user profile: ', errors);
+      }
+      else {
+        console.log('User profile updated successfully: ', updatedUser);
+      }
+    } else {
+      // Create a new user profile if it doesn't exist
+      const { errors, data: newUser } = await client.models.UserProfile.create({
+        id: '1',
+        likedFoods: exportLikedFoods(),
+        dislikedFoods: exportDislikedFoods(),
+        intolerances: exportIntolerances(),
+        diet: selectedDiet.map(option => option.label.toLowerCase()).join(',')
+      });
+      if (errors) {
+        console.log('Error creating user profile: ', errors);
+      }
+      else {
+        console.log('User profile created successfully: ', newUser);
+      }
+    }
+
   }
 
   return (

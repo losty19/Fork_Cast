@@ -93,11 +93,11 @@ const schema = a.schema({
     .authorization((allow) => [allow.authenticated()])
     .handler(a.handler.function(saveFavoriteHandler)),
 
-  Todo: a
-    .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.owner()]),
+  // Todo: a
+  //   .model({
+  //     content: a.string(),
+  //   })
+  //   .authorization((allow) => [allow.owner()]),
 
   // User Profile - Extended user information
   UserProfile: a
@@ -105,80 +105,130 @@ const schema = a.schema({
       userId: a.string(),
       username: a.string(),
       email: a.string(),
-      dietaryPreferences: a.enum(["Vegetarian", "Gluten_Free"]),
-      allergies: a.enum(["Peanut", "Dairy", "Egg", "Soy", "Wheat", "Fish", "Shellfish", "Tree_Nut"]), 
-      savedRecipes: a.hasMany("SavedRecipe", "recipeId"), // Reference to SavedRecipe
+      dietaryPreferences: a.string(), // Comma se-separated string of dietary preferences
+      likedFoods: a.string(), // Comma se-separated string of liked foods
+      allergies: a.string(), // Comma se-separated string of allergies
+      dislikedFoods: a.string(), // Comma se-separated string of disliked foods
+      diet: a.string(), // Diet typed
+      intolerances: a.string(), // Comma se-separated string of intolerances
+
+      savedRecipes: a.hasMany("SavedRecipe", "userId"), // Reference to SavedRecipe
+      savedRecipesJSON: a.hasMany("SavedRecipeJSON", "userId"), // Reference to SavedRecipeJSON
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
     .authorization((allow) => [allow.owner()]),
+  
+  SavedRecipeJSON: a
+    .model({
+      id: a.id(),
+      userProfile: a.belongsTo("UserProfile", "userId"), // Reference to UserProfile
+      userId: a.id(),
+      json: a.json(),
+    })
+    .authorization((allow) => [allow.authenticated()]),
 
   // Saved Recipes - Cache of Spoonacular recipes
   SavedRecipe: a
     .model({
       id: a.id(),
-      userProfile: a.belongsTo("UserProfile", "recipeId"), // Reference to UserProfile
-      userId: a.string(),
+      userProfile: a.belongsTo("UserProfile", "userId"), // Reference to UserProfile
+      userId: a.id(),
+
       recipeId: a.string(), // Spoonacular ID
-      title: a.string(),
       image: a.string(),
-      servings: a.integer(),
+      // imageType: a.string(),
+      title: a.string(),
       readyInMinutes: a.integer(),
+      servings: a.integer(),
+      // sourceUrl: a.string(),
+      vegetarian: a.boolean(),
+      vegan: a.boolean(),
+      glutenFree: a.boolean(),
+      dairyFree: a.boolean(),
+      veryHealthy: a.boolean(),
+      cheap: a.boolean(),
+      veryPopular: a.boolean(),
+      sustainable: a.boolean(),
+      lowFodmap: a.boolean(),
+      weightWatcherSmartPoints: a.integer(),
+      gaps: a.string(),
+      preparationMinutes: a.integer(),
+      cookingMinutes: a.integer(),
+      aggregateLikes: a.integer(),
+      healthScore: a.float(),
+      creditsText: a.string(),
+      license: a.string(),
+      sourceName: a.string(),
+      pricePerServing: a.float(),
       summary: a.string(),
-      instructions: a.string(),
-      sourceUrl: a.string(),
-      ingredients: a.customType({
-        ingredients_id: a.integer(),
+      cuisines: a.string().array(),
+      dishTypes: a.string().array(),
+      diets: a.string().array(),
+      occasions: a.string().array(),
+      analyzedInstructions: a.customType({
         name: a.string(),
-        amount: a.float(),
-        unit: a.string(),
-        original: a.string(),
-      }),
-      nutrition: a.customType({
-        calories: a.string(),
-        protein: a.string(),
-        carbs: a.string(),
-        fat: a.string(),
-      }),
+        steps: a.customType({
+          number: a.integer(),
+          step: a.string(),
+          ingredients: a.customType({
+            id: a.integer(),
+            name: a.string(),
+            localizedName: a.string(),
+            image: a.string(),
+          }),
+          equipment: a.customType({
+            id: a.integer(),
+            name: a.string(),
+            localizedName: a.string(),
+            image: a.string(),
+          }),
+          length: a.customType({
+            number: a.integer(),
+            unit: a.string(),
+          }),
+        })//.array(), // Array of steps
+      }),//.array(), // Array of instructions
+      instructions: a.string(),
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
     .authorization((allow) => [allow.authenticated()]) // Any authenticated user can CRUD
     .secondaryIndexes((index) => [
-      index('userId'),
+      index('id'),
     ]),
 
   // Meal Plan
-  MealPlan: a
-    .model({
-      userId: a.string(),
-      date: a.datetime(),
-      meals: a.customType({
-        recipeId: a.string(),
-        mealType: a.string(), // breakfast, lunch, dinner, snack
-        servings: a.integer(),
-      }),
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.owner()]),
+  // MealPlan: a
+  //   .model({
+  //     userId: a.string(),
+  //     date: a.datetime(),
+  //     meals: a.customType({
+  //       recipeId: a.string(),
+  //       mealType: a.string(), // breakfast, lunch, dinner, snack
+  //       servings: a.integer(),
+  //     }),
+  //     createdAt: a.datetime(),
+  //     updatedAt: a.datetime(),
+  //   })
+  //   .authorization((allow) => [allow.owner()]),
 
   // Shopping List
-  ShoppingList: a
-    .model({
-      userId: a.string(),
-      items: a.customType({
-        ingredientId: a.string(),
-        name: a.string(),
-        amount: a.float(),
-        unit: a.string(),
-        checked: a.boolean(),
-        recipeId: a.string(), // Reference to recipe this came from
-      }),
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.owner()]),
+  // ShoppingList: a
+  //   .model({
+  //     userId: a.string(),
+  //     items: a.customType({
+  //       ingredientId: a.string(),
+  //       name: a.string(),
+  //       amount: a.float(),
+  //       unit: a.string(),
+  //       checked: a.boolean(),
+  //       recipeId: a.string(), // Reference to recipe this came from
+  //     }),
+  //     createdAt: a.datetime(),
+  //     updatedAt: a.datetime(),
+  //   })
+  //   .authorization((allow) => [allow.owner()]),
 
 
   conversationAI: a.conversation({

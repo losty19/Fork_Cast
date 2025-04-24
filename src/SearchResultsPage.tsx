@@ -137,15 +137,14 @@ const SearchResultsPage: React.FC = () => {
 
   const handleFavorite = async (recipe: any) => {
     try {
-      const { userId } = await getCurrentUser();
-      const response = await client.mutations.SaveFavoriteRecipe({
+      // This sends data to DynamoDB model
+      const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
         recipeId: recipe.id.toString(),
-        userId,
         title: recipe.title,
         image: recipe.image,
+        summary: recipe.summary,
       });
-      
-      console.log('Recipe saved successfully: ', response.data);
+      console.log('Recipe saved successfully: ', newRecipe);
     } catch (error) {
       console.error('Error saving favorite: ', error);
     }
