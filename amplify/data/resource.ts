@@ -195,7 +195,7 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.authenticated()]) // Any authenticated user can CRUD
     .secondaryIndexes((index) => [
-      index('id'),
+      index('userId').name('byUserId'),
     ]),
 
   // Meal Plan
