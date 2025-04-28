@@ -1,6 +1,10 @@
 .profile-container {
     color: #a5561e;
     background-color: #ffa500; /* Added background color */
+    position: fixed; /* Position the dialog relative to the viewport */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for the dialog's own dimensions */ 
 }
 
 .light-theme::part(dialog) {
@@ -8,4 +12,9 @@
     color: #000; 
     border-radius: 15px;
     overflow: hidden;
+    width:100%
+  }
+.light-theme::part(body) {
+    height: 300px;
+    width:500px
   }

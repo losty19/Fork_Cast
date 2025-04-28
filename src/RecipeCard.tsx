@@ -5,12 +5,6 @@ import './MainPage.css';
 import { RuxIcon } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
 
-interface Recipe {
-  image: string;
-  title: string;
-  description: string;
-
-}
 interface SpoonacularRecipe {
   id: number;
   title: string;
@@ -98,7 +92,7 @@ const testing: SpoonacularRecipe[] = [
       ,{ id: 4, name: "Test Ingredient 4", amount: 1, unit: "cup", original: "1 cup of test ingredient 4" }
     ],
     nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
-    summary: "Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!"
+    summary: "Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!Ground Orange Chicken is made in one pan and only takes 20 minutes using a Panda Express copycat sauce. So much healthier than the original!"
   }
   ,{
     id: 5,
@@ -157,26 +151,191 @@ const testing: SpoonacularRecipe[] = [
     ],
     nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
     summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 9,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  }
+  ,{
+    id: 10,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 11,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 12,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 13,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 14,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 15,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 8,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 8,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 8,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 8,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 8,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
+  } ,{
+    id: 8,
+    image: "https://www.allrecipes.com/thmb/aF6uJ6oDIFIazy2pdQC0kdGDgp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8421914-Marry-Me-Chicken-Soup-4x3-179-843abc8af99247dcadb3f79a91681d49.jpg",
+    title: "Chicken Soup",
+    imageType: "jpg",
+    servings: 4,
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com",
+    instructions: "This is a test instruction",
+    ingredients: [
+      { id: 1, name: "Test Ingredient", amount: 2, unit: "cups", original: "2 cups of test ingredient" }
+    ],
+    nutrition: { calories: "200", protein: "10g", carbs: "30g", fat: "5g" },
+    summary: "chicken soup joint by trying your hand at this recipe for chicken pizza calzone. The best part of this recipe is that it takes under an hour to both prep and cook. Who knew turning your home into a calzone zone could be so easy? "
   }
   ]
-const initialFavorites: Recipe[] = [
-  
-  {
-    image: "https://www.feastingathome.com/wp-content/uploads/2024/04/Spicy-Mexican-Shrimp-20.jpg",
-    title: "Spicy Mexican Shrimp",
-    description: "With over 100 5-star reviews, this Chicken Soup recipe with lemon and ginger is one of the most popular soups on the blog! Brothy and flavorful, it is the perfect base for noodles, rice, beans or grains, or keep it keto and low-carb!"
-  },
-  {
-    image: "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2014/1/23/0/KC0101_Italian-Chicken-Pasta-Salad_s4x3.jpg.rend.hgtvcom.1280.1024.85.suffix/1417624061835.webp",
-    title: "Italian Chicken Pasta Salad",
-    description: "Forget about the gloopy mayonnaise-laced pasta salads you know (and perhaps don't love). GZ's version features bright, fresh produce like cucumber and tomatoes, plus rotisserie chicken for heft and a simple red wine vinaigrette."
-  },
-  {
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLQzQqVBk7LmMbMSaEuRy3AkVv1lyGqThm4Q&s",
-    title: "Corn Dogs",
-    description: "This homemade corn dog recipe delivers a crispy, golden-brown coating with a juicy hot dog inside. Perfect for a snack or meal, it serves 4 and takes about 30 minutes, including prep and frying."
-  }
-];
 
 const initialRecipes: SpoonacularRecipe[] = [...testing];
 
@@ -186,27 +345,27 @@ const MyRecipes = styled.div`
   justify-content: center;
   max-height: 100vh;
   overflow: auto;
-  padding-top:18vh;
+  padding-top:8vh;
   scrollbar-width:none;
-  padding-bottom:1rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
+  padding-bottom:5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  width: 11rem;
+  width: 14rem;
   border-radius: 15px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.61);
   background-color:rgb(255, 255, 255);
   padding: 10px;
   margin-top: 20px;
-  margin-left:0.25rem;
-  margin-right:0.25rem;
+  margin-left:0.5rem;
+  margin-right:0.5rem;
 
   position: relative;
-  max-height:20rem;
+  max-height: 20rem;
   min-height: 18rem;
   transition: transform 0.5s ease;
   &:hover {
@@ -268,10 +427,10 @@ const ButtonContainer = styled.div`
 
 const RecipeCard: React.FC = () => {
   const navigate = useNavigate();
-  const [favorites, setFavorites] = useState<Recipe[]>([]);
+  const [favorites, setFavorites] = useState<SpoonacularRecipe[]>([]);
 
   const handleFavorButtonClick = (index: number) => {
-    const recipe = initialFavorites[index];
+    const recipe = initialRecipes[index];
     setFavorites((prevFavorites) => {
       if (prevFavorites.some((fav) => fav.title === recipe.title)) {
         return prevFavorites.filter((fav) => fav.title !== recipe.title);
@@ -292,7 +451,7 @@ const handleViewRecipeClick = (recipe: SpoonacularRecipe) => {
         <Card key={index}>
          
          <FavorButton onClick={() => handleFavorButtonClick(index)}>
-            <RuxIcon className= "favorbutton_icon" size="2.5rem" icon={favorites.some((fav) => fav.title === recipe.title) ? "star-border" : "star"} />
+            <RuxIcon className= "favorbutton_icon" size="3rem" icon={favorites.some((fav) => fav.id === recipe.id) ? "star-border" : "star"} />
           </FavorButton>
 
           <ImageContainer>

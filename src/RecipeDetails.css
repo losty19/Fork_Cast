@@ -1,13 +1,12 @@
 .Title_recipe{
   font-size: 90%;
-  margin-left: 0%;
-  margin-top: -1%;
-  font-family:monospace;
+  margin-right: 1rem;
+  font-family: monospace;
   color: #ffffff;
 }
 
 .recipe_image {
-width: 35vw;
+width: 25vw;
 max-width: 50%;
 height: auto;
 max-height: 40vh;
@@ -22,27 +21,30 @@ object-fit: cover;
   color: white;
   font-size: 70%;
   width: 40rem;
-  overflow: hidden;
 }
 
 .content-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 1.4rem;
   position: relative;
   background-color: rgb(241, 136, 61);
-  border-radius: 10px;
+  border-radius: 15px;
   margin-bottom: 2%;
-  text-align: left; /* Align text to the left */
+  margin-left: -2rem;
+  text-align: left; 
+  min-height: 62vh;
+  
 }
 
-.expandable-content {
+.expandable-content { 
   margin-top: -5vh;
   padding-bottom: 3%;
   color: white;
   font-size: 18px;
   display: none;
+  align-self: start;
   
 }
 
@@ -52,10 +54,12 @@ object-fit: cover;
 
 .button-container {
   display: flex;
-  position: relative;
-  justify-content: center;
-  margin-top: -1%;
-  margin-bottom: -3%;
+  align-self: flex-end;
+  justify-content: center; 
+  position: absolute;
+  margin-bottom: -1%; ;
+  bottom: 0;
+  width: 100%;
 }
 
 .button-container.expanded {
@@ -68,17 +72,15 @@ object-fit: cover;
 
 .outer-container {
   display: flex;
-  flex-direction: row;
   align-items: flex-start;
   padding-top: 20px;
   padding-bottom: 0%;
-  padding-left: 0%;
+  padding-left: 0rem;
   background-color: rgb(50, 41, 35);
   border-radius: 15px;
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.64);
   margin-bottom: 2%;
   font-size: 200%;
-  overflow-y: hidden;
   padding-right: 4.8rem;
 }
 
@@ -91,17 +93,14 @@ object-fit: cover;
 }
 
 .main-con {
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
-  max-height: 100vh;
-  overflow: auto;
+  overflow-y: auto;
   scrollbar-width: none;
   position: relative;
-  margin-left: 4rem;
-  margin-right: 4rem;
+  margin-left: 7.5rem;
+  margin-right: 7.5rem;
   z-index: 1;
-  padding-top: 18vh;
+  padding-top: 9rem;
+  max-height: 100vh;
 }
 
 .text-wrapper {
@@ -109,8 +108,8 @@ object-fit: cover;
   align-items: flex-start;
   flex-wrap: wrap;
   width: 100%;
-  max-height: 52.3vh;
   gap: 20px;
+  position: relative;
 }
 li {
   background-color: transparent;

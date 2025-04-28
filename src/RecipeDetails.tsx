@@ -8,13 +8,6 @@ import SideBar from "./SideBar.tsx";
 import "./RecipeDetails.css";
 import LSideBar from "./Left_SideBar.tsx";
 
-
-interface Recipe {
-  image: string;
-  title: string;
-  description: string;
-  extraContent: string;
-}
 interface SpoonacularRecipe {
   id: number;
   title: string;
@@ -57,17 +50,19 @@ const RecipeDetails: React.FC = () => {
           <div className = "Title_recipe">{recipe.title}</div>
           <div className="content-container">
           <div className="text-wrapper">
-            <img className="recipe_image" src={recipe.image} alt="Food" />    
+            <img className="recipe_image" src={recipe.image} />    
               <div className="description-container">
               <p>{recipe.summary}</p>
             </div>
           </div>
-
-        <div className={`button-container ${expanded ? "expanded" : ""}`}>
+            <div className={`button-container ${expanded ? "expanded" : ""}`}>
                 <button className="style-button" onClick={() => setExpanded(!expanded)}>
                   <RuxIcon icon={expanded ? "keyboard-arrow-up" : "keyboard-arrow-down"} style={{ color: "rgb(31, 39, 50)" }} />
                 </button>
               </div>
+          
+
+        
   
   <div className={`expandable-content ${expanded ? "expanded" : ""}`}>
     <h3 style={{color:"white"}}>Ingredients:</h3>
