@@ -4,6 +4,7 @@ import './MainPage.css';
 import './RecipeCard.css'
 import SideBar from "./SideBar";
 import MyRecipes from "./RecipeCard";
+import './Chatbot.css';
 // import { Authenticator } from '@aws-amplify/ui-react';
 
 // AI imports // 
@@ -15,7 +16,6 @@ import outputs from "../amplify_outputs.json";
 import { Schema } from "../amplify/data/resource";
 import { Amplify } from "aws-amplify";
 
-Amplify.configure(outputs);
 const client = generateClient<Schema>();
 const { useAIConversation } = createAIHooks(client);
 
@@ -60,18 +60,15 @@ function AIchatbot() {
   );
 }
 
-const MainPage: React.FC = () => {
+const Chatbot: React.FC = () => {
   return (
     <>
       <SideBar />
-      <div className="my-recipes-text">
-          My Recipes
+      <div className="center-ai">
+        <AIchatbot />
       </div>
-      <br>
-      </br>
-      <MyRecipes />
     </>
   );
 }
 
-export default MainPage;
+export default Chatbot;

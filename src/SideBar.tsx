@@ -273,6 +273,9 @@ const SideBar = () => {
       </button>
       
         <div className="sidebar">
+          <button className="icon-button" onClick={() => navigate("/chatbot")}>
+            <RuxIcon className="icon-image" size="small" icon="chat"></RuxIcon>
+          </button>
           <button className="icon-button" onClick={buttonPressed}>
             <RuxIcon className="icon-image" size="35px" icon="add-circle-outline"></RuxIcon>
           </button>

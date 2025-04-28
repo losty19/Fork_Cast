@@ -12,6 +12,7 @@ import outputs from "../amplify_outputs.json";
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import Chatbot from "./Chatbot";
 
 Amplify.configure(outputs);
 
@@ -79,6 +80,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </ProtectedRoute>
           } 
         />
+        <Route
+          path="/chatbot"
+          element={
+            <ProtectedRoute>
+              <Chatbot />
+            </ProtectedRoute>
+          }
+        />
+
 
       </Routes>
     </Router>
