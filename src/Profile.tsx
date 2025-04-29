@@ -25,21 +25,15 @@ const Profile: React.FC = () => {
   };
 
   const [likedFoods, setLikedFoods] = useState<OptionType[]>([]);
+  // Updated handler for liked foods - now directly setting newValue.
   const handleLikedFoodsChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setLikedFoods((prev) => [...prev, ...newValue]);
-    } else {
-      setLikedFoods(newValue);
-    }
+    setLikedFoods(newValue);
   };
 
   const [dislikedFoods, setDislikedFoods] = useState<OptionType[]>([]);
+  // Updated handler for disliked foods - now directly setting newValue.
   const handleDislikedFoodsChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setDislikedFoods((prev) => [...prev, ...newValue]);
-    } else {
-      setDislikedFoods(newValue);
-    }
+    setDislikedFoods(newValue);
   };
 
   const [selectedDiet, setSelectedDiet] = useState<OptionType[]>([]);
@@ -123,8 +117,8 @@ const Profile: React.FC = () => {
 
   return (
     <>
-    <SideBar />
-    <div>
+      <SideBar />
+      <div>
         <RuxContainer className="profile-container light-theme">
           <div slot="header">Profile</div>
           <div slot="footer">
@@ -133,12 +127,12 @@ const Profile: React.FC = () => {
           <div className="profile-content">
             <div slot="label" >Liked Foods</div>
             <CreatableSelect
-            isClearable
-            isMulti
-            options={ingredientOptions}
-            value={likedFoods}
-            onChange={handleLikedFoodsChange}
-             />
+              isClearable
+              isMulti
+              options={ingredientOptions}
+              value={likedFoods}
+              onChange={handleLikedFoodsChange}
+            />
             <div slot="label">Disliked Foods</div>
             <CreatableSelect
               isClearable
