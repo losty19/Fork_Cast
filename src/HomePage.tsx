@@ -44,9 +44,9 @@ const HomePage: React.FC = () => {
 
       // Create new UserProfile
       const { data: newProfile, errors: createErrors } = await client.models.UserProfile.create({
-        userId,
+        userId: userId,
         username: username || 'Guest',
-        email,
+        email: email || '',
         dietaryPreferences: '', // Default empty string
         likedFoods: '',
         allergies: '',

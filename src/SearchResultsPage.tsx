@@ -7,34 +7,7 @@ import SideBar from "./SideBar";
 import { generateClient } from 'aws-amplify/api';
 import { Schema } from '../amplify/data/resource';
 import { getCurrentUser } from "aws-amplify/auth";
-
-// The response from Spoonacular API follows:
-// interface SpoonacularRecipe {
-//   id: number;
-//   title: string;
-//   image: string;
-//   imageType: string;
-//   readyInMinutes: number;
-//   servings: number;
-//   sourceUrl: string;
-//   summary: string;
-//   cuisines: string[];
-//   dishTypes: string[];
-//   diets: string[];
-//   occasions: string[];
-//   analyzedInstructions: Array<{
-//     name: string;
-//     steps: Array<{
-//       number: number;
-//       step: string;
-//       ingredients: Array<{ id: number; name: string; localizedName: string; image: string }>;
-//       equipment: Array<{ id: number; name: string; localizedName: string; image: string }>;
-//       length?: { number: number; unit: string };
-//     }>;
-//   }>;
-//   spoonacularScore: number;
-//   spoonacularSourceUrl: string;
-// }
+import { SpoonacularRecipe } from "./types/SpoonacularRecipe";
 
 const MyRecipes = styled.div`
   display: flex;
@@ -133,17 +106,81 @@ const client = generateClient<Schema>();
 const SearchResultsPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const recipes = location.state?.recipes || [];
+  const recipes: SpoonacularRecipe[] = location.state?.recipes || [];
 
-  const handleFavorite = async (recipe: any) => {
+  const transformInstructions = (
+    analyzedInstructions?: Array<{
+      name?: string | null;
+      steps?: Array<{
+        number?: number | null;
+        step?: string | null;
+        ingredients?: Array<{
+          id?: number | null;
+          name?: string | null;
+          localizedName?: string | null;
+          image?: string | null;
+        }> | null;
+      }> | null;
+    }> | null
+  ) => {
+    if (!analyzedInstructions) return null;
+    return analyzedInstructions
+      .flatMap(instruction =>
+        instruction.steps?.map(step => ({
+          number: step.number ?? 0,
+          step: step.step ?? '',
+          ingredients: step.ingredients?.filter(ing => ing?.name).map(ing => ing!.name!) ?? [],
+        })) ?? []
+      )
+      .filter(step => step.step); // Remove steps with empty step text
+  };
+
+  const handleFavorite = async (recipe: SpoonacularRecipe) => {
     try {
       // This sends data to DynamoDB model
+      const userId = (await getCurrentUser()).userId;
+      // Convert the API response of analyzedInstructions to a simplified format I created
+      const simplifiedInstructions = transformInstructions(recipe.analyzedInstructions);
+      
       const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
         recipeId: recipe.id.toString(),
+        userId,
         title: recipe.title,
         image: recipe.image,
+        readyInMinutes: recipe.readyInMinutes,
+        servings: recipe.servings,
         summary: recipe.summary,
+        vegetarian: recipe.vegetarian,
+        vegan: recipe.vegan,
+        glutenFree: recipe.glutenFree,
+        dairyFree: recipe.dairyFree,
+        veryHealthy: recipe.veryHealthy,
+        cheap: recipe.cheap,
+        veryPopular: recipe.veryPopular,
+        sustainable: recipe.sustainable,
+        lowFodmap: recipe.lowFodmap,
+        weightWatcherSmartPoints: recipe.weightWatcherSmartPoints,
+        gaps: recipe.gaps,
+        preparationMinutes: recipe.preparationMinutes,
+        cookingMinutes: recipe.cookingMinutes,
+        aggregateLikes: recipe.aggregateLikes,
+        healthScore: recipe.healthScore,
+        creditsText: recipe.creditsText,
+        license: recipe.license,
+        sourceName: recipe.sourceName,
+        pricePerServing: recipe.pricePerServing,
+        cuisines: recipe.cuisines,
+        dishTypes: recipe.dishTypes,
+        diets: recipe.diets,
+        occasions: recipe.occasions,
+        simplifiedInstructions: simplifiedInstructions,
+        instructions: recipe.instructions,
       });
+
+      if (errors) {
+        console.error('Error saving favorite:', errors);
+        return;
+      }
       console.log('Recipe saved successfully: ', newRecipe);
     } catch (error) {
       console.error('Error saving favorite: ', error);
@@ -173,10 +210,10 @@ const SearchResultsPage: React.FC = () => {
       <SideBar />
       <MyRecipes>
         {recipes.length > 0 ? (
-          recipes.map((recipe: any) => (
+          recipes.map((recipe) => (
             <Card key={recipe.id}>
               <ImageContainer>
-                <StyledImage src={recipe.image} alt={recipe.title} />
+                <StyledImage src={recipe.image || 'https://via.placeholder.com/150'} alt={recipe.title} />
                 <VignetteOverlay />
               </ImageContainer>
               <h3>{recipe.title}</h3>

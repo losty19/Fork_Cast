@@ -166,29 +166,33 @@ const schema = a.schema({
       dishTypes: a.string().array(),
       diets: a.string().array(),
       occasions: a.string().array(),
-      analyzedInstructions: a.customType({
-        name: a.string(),
-        steps: a.customType({
-          number: a.integer(),
-          step: a.string(),
-          ingredients: a.customType({
-            id: a.integer(),
-            name: a.string(),
-            localizedName: a.string(),
-            image: a.string(),
-          }),
-          equipment: a.customType({
-            id: a.integer(),
-            name: a.string(),
-            localizedName: a.string(),
-            image: a.string(),
-          }),
-          length: a.customType({
-            number: a.integer(),
-            unit: a.string(),
-          }),
-        })//.array(), // Array of steps
-      }),//.array(), // Array of instructions
+      simplifiedInstructions: a.ref("simplifiedInstructions").array(), // Reference to simplifiedInstructions
+      
+      // Got rid of analyzedInstructions because we use a simplified version of it
+      
+      // analyzedInstructions: a.customType({
+      //   name: a.string(),
+      //   steps: a.customType({
+      //     number: a.integer(),
+      //     step: a.string(),
+      //     ingredients: a.customType({
+      //       id: a.integer(),
+      //       name: a.string(),
+      //       localizedName: a.string(),
+      //       image: a.string(),
+      //     }),
+      //     equipment: a.customType({
+      //       id: a.integer(),
+      //       name: a.string(),
+      //       localizedName: a.string(),
+      //       image: a.string(),
+      //     }),
+      //     length: a.customType({
+      //       number: a.integer(),
+      //       unit: a.string(),
+      //     }),
+      //   })//.array(), // Array of steps
+      // }),//.array(), // Array of instructions
       instructions: a.string(),
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
@@ -197,6 +201,12 @@ const schema = a.schema({
     .secondaryIndexes((index) => [
       index('userId').name('byUserId'),
     ]),
+
+    simplifiedInstructions: a.customType({
+      number: a.integer(),
+      step: a.string(),
+      ingredients: a.string().array(),
+    }),
 
   // Meal Plan
   // MealPlan: a
