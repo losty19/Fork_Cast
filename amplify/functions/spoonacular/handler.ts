@@ -36,6 +36,8 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
     const { path, httpMethod, queryStringParameters, pathParameters } = event.arguments;
     const route = `${httpMethod} ${path}`;
     console.log("route: ", route);
+    console.log("queryStringParameters: ", queryStringParameters);
+
     switch (route) {
       // Get recipe by complex search 
       // DOCS: https://spoonacular.com/food-api/docs#Search-Recipes-Complex 
@@ -47,28 +49,9 @@ export const handler: Schema["SpoonacularGetRecipe"]["functionHandler"] = async 
               apiKey: env.SPOONACULAR_API_KEY
             }
           });
+          console.log('response.data: ', response.data);
           return response.data; // Amplify adds statusCode, headers I think
-          /*  Format of response.data
-          {
-              "offset": 0,
-              "number": 2,
-              "results": [
-                  {
-                      "id": 716429,
-                      "title": "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
-                      "image": "https://img.spoonacular.com/recipes/716429-312x231.jpg",
-                      "imageType": "jpg",
-                  },
-                  {
-                      "id": 715538,
-                      "title": "What to make for dinner tonight?? Bruschetta Style Pork & Pasta",
-                      "image": "https://img.spoonacular.com/recipes/715538-312x231.jpg",
-                      "imageType": "jpg",
-                  }
-              ],
-              "totalResults": 86
-          }
-          */
+          
         } catch (error) {
           console.error('Error searching recipes:', error);
           throw new Error('Error searching recipes');
