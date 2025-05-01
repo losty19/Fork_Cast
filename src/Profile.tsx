@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import Select from 'react-select';
-import { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import Select, { MultiValue } from 'react-select';
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
-import { RuxButton, RuxContainer } from "@astrouxds/react";
+import { RuxButton, RuxContainer, RuxToast } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import './Profile.css';
 import CreatableSelect from 'react-select/creatable';
 import { commonIngredients } from './data/ingredients';
-
+import { useAuthenticator } from "@aws-amplify/ui-react";
+import { getCurrentUser } from 'aws-amplify/auth';
 import { generateClient } from 'aws-amplify/api';
 import { Schema } from '../amplify/data/resource';
+
 const client = generateClient<Schema>();
 
 interface OptionType {
@@ -18,43 +19,14 @@ interface OptionType {
 }
 
 const Profile: React.FC = () => {
+  const { user } = useAuthenticator((context) => [context.user]);
   const [selectedIntolerances, setSelectedIntolerances] = useState<OptionType[]>([]);
-  const handleIntolerancesChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setSelectedIntolerances((prev) => [...prev, ...newValue]);
-    } else {
-      setSelectedIntolerances(newValue);
-    }
-  };
-
   const [likedFoods, setLikedFoods] = useState<OptionType[]>([]);
-  const handleLikedFoodsChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setLikedFoods((prev) => [...prev, ...newValue]);
-    } else {
-      setLikedFoods(newValue);
-    }
-  };
-
   const [dislikedFoods, setDislikedFoods] = useState<OptionType[]>([]);
-  const handleDislikedFoodsChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setDislikedFoods((prev) => [...prev, ...newValue]);
-    } else {
-      setDislikedFoods(newValue);
-    }
-  };
-
   const [selectedDiet, setSelectedDiet] = useState<OptionType[]>([]);
-  const handleDietChange = (newValue: any, actionMeta: any) => {
-    if (actionMeta.action === 'create-option') {
-      setSelectedDiet((prev) => [...prev, ...newValue]);
-    } else {
-      setSelectedDiet(newValue);
-    }
-  };
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const intolerances = [
+  const intolerances: ReadonlyArray<OptionType> = [
     { value: 'dairy', label: 'Dairy' },
     { value: 'egg', label: 'Egg' },
     { value: 'gluten', label: 'Gluten' },
@@ -69,7 +41,7 @@ const Profile: React.FC = () => {
     { value: 'wheat', label: 'Wheat' }
   ];
 
-  const dietOptions = [
+  const dietOptions: ReadonlyArray<OptionType> = [
     { value: 'glutenFree', label: 'Gluten Free' },
     { value: 'ketogenic', label: 'Ketogenic' },
     { value: 'vegetarian', label: 'Vegetarian' },
@@ -88,103 +60,156 @@ const Profile: React.FC = () => {
     label: ingredient,
   }));
 
-  const exportIntolerances = (): string => {
-    return selectedIntolerances.map(option => option.label).join(',');
-  };
-
-  const exportLikedFoods = (): string => {
-    return likedFoods.map(option => option.label).join(',');
-  };
-
-  const exportDislikedFoods = (): string => {
-    return dislikedFoods.map(option => option.label).join(',');
-  };
-
   useEffect(() => {
-    const savedIntolerances = localStorage.getItem('selectedIntolerances');
-    const savedLikedFoods = localStorage.getItem('likedFoods');
-    const savedDislikedFoods = localStorage.getItem('dislikedFoods');
-    const savedDiet = localStorage.getItem('selectedDiet');
-    if (savedIntolerances) setSelectedIntolerances(JSON.parse(savedIntolerances));
-    if (savedLikedFoods) setLikedFoods(JSON.parse(savedLikedFoods));
-    if (savedDislikedFoods) setDislikedFoods(JSON.parse(savedDislikedFoods));
-    if (savedDiet) setSelectedDiet(JSON.parse(savedDiet));
-  }, []);
+    const fetchUserProfile = async () => {
+      if (!user) return;
+      try {
+        const userId = (await getCurrentUser()).userId;
+        const { data: profiles, errors } = await client.models.UserProfile.list({
+          filter: { userId: { eq: userId } },
+        });
+
+        if (errors) {
+          console.error('Error fetching UserProfile:', errors);
+          setToastMessage('Failed to load profile data.');
+          return;
+        }
+
+        if (profiles.length > 0) {
+          const profile = profiles[0];
+          // Convert comma-separated strings to OptionType arrays
+          setLikedFoods(
+            profile.likedFoods
+              ?.split(',')
+              .filter(Boolean)
+              .map(item => ({ value: item.toLowerCase(), label: item })) ?? []
+          );
+          setDislikedFoods(
+            profile.dislikedFoods
+              ?.split(',')
+              .filter(Boolean)
+              .map(item => ({ value: item.toLowerCase(), label: item })) ?? []
+          );
+          setSelectedIntolerances(
+            profile.intolerances
+              ?.split(',')
+              .filter(Boolean)
+              .map(item => ({ value: item.toLowerCase(), label: item })) ?? []
+          );
+          setSelectedDiet(
+            profile.diet
+              ?.split(',')
+              .filter(Boolean)
+              .map(item => ({ value: item.toLowerCase(), label: item })) ?? []
+          );
+        }
+      } catch (error) {
+        console.error('Error fetching UserProfile:', error);
+        setToastMessage('Failed to load profile data.');
+      }
+    };
+    fetchUserProfile();
+  }, [user]);
+
+  // Simplified change handlers
+  const handleIntolerancesChange = (newValue: MultiValue<OptionType>) => {
+    setSelectedIntolerances(newValue as OptionType[]);
+  };
+
+  const handleLikedFoodsChange = (newValue: MultiValue<OptionType>) => {
+    setLikedFoods(newValue as OptionType[]);
+  };
+
+  const handleDislikedFoodsChange = (newValue: MultiValue<OptionType>) => {
+      setDislikedFoods(newValue as OptionType[]);
+  };
+
+  const handleDietChange = (newValue: MultiValue<OptionType>) => {
+    setSelectedDiet(newValue as OptionType[]);
+  };
 
   const handleSubmit = async () => {
-    localStorage.setItem('selectedIntolerances', JSON.stringify(selectedIntolerances));
-    localStorage.setItem('likedFoods', JSON.stringify(likedFoods));
-    localStorage.setItem('dislikedFoods', JSON.stringify(dislikedFoods));
-    localStorage.setItem('selectedDiet', JSON.stringify(selectedDiet));
-    console.log(`&likedfoods=${exportLikedFoods().toLowerCase()}`);
-    console.log(`&dislikedfoods=${exportDislikedFoods().toLowerCase()}`);
-    console.log(`&intolerances=${exportIntolerances().toLowerCase()}`);
-    console.log(`&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`);
-    const submitVar = `&likedfoods=${exportLikedFoods().toLowerCase()}&dislikedfoods=${exportDislikedFoods().toLowerCase()}&intolerances=${exportIntolerances().toLowerCase()}&diet=${selectedDiet.map(option => option.label.toLowerCase()).join(',')}`;
-    console.log(submitVar);
-
-    // List all the user profiles in the userprofile table
-    // This is just for testing purposes, you can remove this part later
-    const { errors: listerrors, data: userProfiles } = await client.models.UserProfile.list({ limit: 10 });
-    if (listerrors) {
-      console.log('Error listing user profiles: ', listerrors);
-    } else {
-      console.log('User profiles: ', userProfiles);
-    }
-    // Check if the user already exists in the userprofile table
-    const { errors, data: user } = await client.models.UserProfile.get({ id: '1' });
-    // Update user preferences in the database
-    if (user) {
-      const { errors, data: updatedUser } = await client.models.UserProfile.update({
-        id: '1',
-        likedFoods: exportLikedFoods(),
-        dislikedFoods: exportDislikedFoods(),
-        intolerances: exportIntolerances(),
-        diet: selectedDiet.map(option => option.label.toLowerCase()).join(',')
-      });
-      if (errors) {
-        console.log('Error updating user profile: ', errors);
-      }
-      else {
-        console.log('User profile updated successfully: ', updatedUser);
-      }
-    } else {
-      // Create a new user profile if it doesn't exist
-      const { errors, data: newUser } = await client.models.UserProfile.create({
-        id: '1',
-        likedFoods: exportLikedFoods(),
-        dislikedFoods: exportDislikedFoods(),
-        intolerances: exportIntolerances(),
-        diet: selectedDiet.map(option => option.label.toLowerCase()).join(',')
-      });
-      if (errors) {
-        console.log('Error creating user profile: ', errors);
-      }
-      else {
-        console.log('User profile created successfully: ', newUser);
-      }
+    if (!user) {
+      setToastMessage('Please sign in to save your profile.');
+      return;
     }
 
-  }
+    try {
+      const userId = (await getCurrentUser()).userId;
+      const profileData = {
+        likedFoods: likedFoods.map(option => option.label).join(','),
+        dislikedFoods: dislikedFoods.map(option => option.label).join(','),
+        intolerances: selectedIntolerances.map(option => option.label).join(','),
+        diet: selectedDiet.map(option => option.label).join(','),
+      };
+
+      // Check if UserProfile exists
+      const { data: profiles, errors } = await client.models.UserProfile.list({
+        filter: { userId: { eq: userId } },
+      });
+
+      if (errors) {
+        console.error('Error fetching UserProfile:', errors);
+        setToastMessage('Failed to save profile.');
+        return;
+      }
+
+      if (profiles.length > 0) {
+        // Update existing UserProfile
+        const profile = profiles[0];
+        const { errors: updateErrors, data: updatedUser } = await client.models.UserProfile.update({
+          id: profile.id,
+          ...profileData,
+        });
+
+        if (updateErrors) {
+          console.error('Error updating UserProfile:', updateErrors);
+          setToastMessage('Failed to save profile.');
+        } else {
+          console.log('UserProfile updated successfully:', updatedUser);
+          setToastMessage('Profile saved successfully!');
+        }
+      } else {
+        // Create new UserProfile
+        const { errors: createErrors, data: newUser } = await client.models.UserProfile.create({
+          userId,
+          username: user.signInDetails?.loginId?.split('@')[0] ?? 'Guest',
+          email: user.signInDetails?.loginId ?? '',
+          ...profileData,
+        });
+
+        if (createErrors) {
+          console.error('Error creating UserProfile:', createErrors);
+          setToastMessage('Failed to save profile.');
+        } else {
+          console.log('UserProfile created successfully:', newUser);
+          setToastMessage('Profile saved successfully!');
+        }
+      }
+    } catch (error) {
+      console.error('Error saving UserProfile:', error);
+      setToastMessage('Failed to save profile.');
+    }
+  };
 
   return (
     <>
-    <SideBar />
-    <div>
+      <SideBar />
+      <div>
         <RuxContainer className="profile-container light-theme">
           <div slot="header">Profile</div>
           <div slot="footer">
             <RuxButton onClick={handleSubmit}>Save</RuxButton>
           </div>
           <div className="profile-content">
-            <div slot="label" >Liked Foods</div>
+            <div slot="label">Liked Foods</div>
             <CreatableSelect
-            isClearable
-            isMulti
-            options={ingredientOptions}
-            value={likedFoods}
-            onChange={handleLikedFoodsChange}
-             />
+              isClearable
+              isMulti
+              options={ingredientOptions}
+              value={likedFoods}
+              onChange={handleLikedFoodsChange}
+            />
             <div slot="label">Disliked Foods</div>
             <CreatableSelect
               isClearable
@@ -209,6 +234,12 @@ const Profile: React.FC = () => {
             />
           </div>
         </RuxContainer>
+        {toastMessage && (
+          <RuxToast
+            message={toastMessage}
+            closeAfter={3000}
+          />
+        )}
       </div>
     </>
   );
