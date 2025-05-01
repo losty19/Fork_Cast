@@ -226,12 +226,12 @@ const SideBar = () => {
 
 
         // Save the json response to dynamodb
-        const { errors, data: newRecipeJson } = await client.models.SavedRecipeJSON.create({
-          json: JSON.stringify(response.data),
-        });
-        if (errors) {
-          console.log("Error saving recipe:", errors);
-        }
+        // const { errors, data: newRecipeJson } = await client.models.SavedRecipeJSON.create({
+        //   json: JSON.stringify(response.data),
+        // });
+        // if (errors) {
+        //   console.log("Error saving recipe:", errors);
+        // }
 
         if (response.data) {
           // Check if response.data is a string and parse it if necessary
