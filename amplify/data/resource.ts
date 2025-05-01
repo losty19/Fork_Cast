@@ -113,20 +113,11 @@ const schema = a.schema({
       intolerances: a.string(), // Comma se-separated string of intolerances
 
       savedRecipes: a.hasMany("SavedRecipe", "userId"), // Reference to SavedRecipe
-      savedRecipesJSON: a.hasMany("SavedRecipeJSON", "userId"), // Reference to SavedRecipeJSON
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
     .authorization((allow) => [allow.owner()]),
   
-  SavedRecipeJSON: a
-    .model({
-      id: a.id(),
-      userProfile: a.belongsTo("UserProfile", "userId"), // Reference to UserProfile
-      userId: a.id(),
-      json: a.json(),
-    })
-    .authorization((allow) => [allow.authenticated()]),
 
   // Saved Recipes - Cache of Spoonacular recipes
   SavedRecipe: a
