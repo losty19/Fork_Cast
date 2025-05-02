@@ -33,9 +33,27 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   const [EditOpen, setEditOpen] = useState(false);
   const navigate = useNavigate();
   const [icon, setIcon] = useState("start");
-  const [message, setMessage] = useState(recipe.summary);
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  
+  const [editedRecipe, setEditedRecipe] = useState(recipe);
+  const [descriptionHeight, setDescriptionHeight] = useState<number | undefined>(undefined);
+ 
+
+  const getTextAreaHeight = (text: string, width = 700, font = "16px sans-serif") => {
+    const hidden = document.createElement("textarea");
+    hidden.style.position = "absolute";
+    hidden.style.visibility = "hidden";
+    hidden.style.height = "auto";
+    hidden.style.width = `${width}px`;
+    hidden.style.font = font;
+    hidden.style.padding = "10px";
+    hidden.style.boxSizing = "border-box";
+    hidden.style.lineHeight = "1.5";
+    hidden.value = text;
+    document.body.appendChild(hidden);
+    const height = hidden.scrollHeight;
+    document.body.removeChild(hidden);
+    return height;
+  };
+
   const handleAddToGroceryList = () => {
     const stored = localStorage.getItem('groceryItems');
     let existingItems = stored ? JSON.parse(stored) : [];
@@ -54,22 +72,31 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
     navigate("/grocery-list");
   };
   
+  
   const buttonPressed = () => {
       setEditOpen(!EditOpen);
   };
 
-  const handleSubmit = async () => {};
-  
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
-    }
-  }, [message]);
+  const handleSubmit = async (updatedRecipe: SpoonacularRecipe) => {
+ 
+    // Add logic to save the updated recipe
+
+    setEditOpen(false);
+  };
 
   const handleDialogClose = () => {
+    setEditedRecipe(recipe);
     setEditOpen(false);
   }
+  
+ 
+  useEffect(() => {
+    if (EditOpen) {
+      const height = getTextAreaHeight(editedRecipe.summary, 700, "16px sans-serif");
+      setDescriptionHeight(height);
+    }
+  }, [EditOpen, editedRecipe.summary]);
+  
   return (
     <>
       
@@ -105,35 +132,113 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
           </div>
 
          
-      <RuxDialog
-        className="edit-recipe-container light-theme" 
-        open={EditOpen}
-        header="Edit Recipe"
-        confirmText=""
-        denyText=""
+          <RuxDialog
+  className="edit-recipe-container light-theme" 
+  open={EditOpen}
+  header="Edit Recipe"
+  confirmText=""
+  denyText=""
+  style={{ width: "80vw", maxWidth: "900px" }} 
+>
+  <div>Recipe Title</div>
+  <textarea
+    value={editedRecipe.title}
+    onChange={(e) => {
+      setEditedRecipe((prev) => ({ ...prev, title: e.target.value }));
+      const textarea = e.target;
+      textarea.style.height = "auto"; // Reset height to auto
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set height to scrollHeight
 
-        style={{ width: "80vw", maxWidth: "900px" }} 
-      >
-        <textarea
-          ref={textareaRef}
-          className="MRInput"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          style={{
-            width: "100%",
-            minHeight: "50vh",
-            maxHeight: "70vh",
-            overflow: "auto",
-            resize: "none",
-            padding: "10px",
-            fontSize: "1rem",
+    }}
+    style={{
+      width: "100%",
+      overflow: "clip",
+      resize: "none",
+      padding: "10px",
+      fontSize: "1rem",
+    }}
+  />
+
+  <div>Recipe Description</div>
+  <textarea
+    value={editedRecipe.summary}
+    onChange={(e) => 
+      setEditedRecipe((prev) => ({ ...prev, summary: e.target.value }))}
+      style={{
+      width: "100%",
+      overflow: "clip",
+      resize: "none",
+      padding: "10px",
+      fontSize: "1rem",
+      height: descriptionHeight ? `${descriptionHeight}px` : "auto",
+    }}
+  />
+
+  <div>Ingredients</div>
+  <ul className="grocery-list">
+    {recipe.ingredients.map((ingredient, index) => (
+      <li key={index} className="grocery-item">
+        <input
+          type="text"
+          value={ingredient.name}
+          onChange={(e) => {
+            const updatedIngredients = [...recipe.ingredients];
+            updatedIngredients[index].name = e.target.value;
+            // setEditedRecipe((prev) => ({
+            //   ...prev,
+            //   ingredients: updatedIngredients,
+            // }));
           }}
+          className="edit-input"
+          style={{ width: "45%", marginRight: "10px" }}
         />
-        <div className="dialog-buttons">
-          <button className="mrCancel" onClick={handleDialogClose}>Cancel</button>
-          <button className="mrSubmit" onClick={handleSubmit}>Submit</button>
-        </div>
-      </RuxDialog>
+        <input
+          type="text"
+          value={`${ingredient.amount} ${ingredient.unit}`}
+          onChange={(e) => {
+            const updatedIngredients = [...recipe.ingredients];
+            const [amount, unit] = e.target.value.split(" ");
+            updatedIngredients[index].amount = parseFloat(amount) || 0;
+            updatedIngredients[index].unit = unit || "";
+            // setEditedRecipe((prev) => ({
+            //   ...prev,
+            //   ingredients: updatedIngredients,
+            // }));
+          }}
+          className="edit-input"
+          style={{ width: "45%" }}
+        />
+      </li>
+    ))}
+  </ul>
+
+  <div>Recipe Instructions</div>
+  <textarea
+    value={editedRecipe.instructions}
+    onChange={(e) =>
+      setEditedRecipe((prev) => ({ ...prev, instructions: e.target.value })) 
+    }
+    style={{
+      width: "100%",
+      overflow: "clip",
+      resize: "none",
+      padding: "10px",
+      fontSize: "1rem",
+    }}
+  />
+
+  <div className="dialog-buttons">
+    <button className="mrCancel" onClick={handleDialogClose}>Cancel</button>
+    <button
+      className="mrSubmit"
+      onClick={() => {
+        handleSubmit(recipe); 
+      }}
+    >
+      Submit
+    </button>
+  </div>
+</RuxDialog>
     </>
   );
 };

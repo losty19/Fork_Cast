@@ -15,6 +15,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 
 //Amplify.configure(outputs);
 
+
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const { user } = useAuthenticator((context) => [context.user]);
 

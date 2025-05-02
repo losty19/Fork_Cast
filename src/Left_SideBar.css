@@ -46,4 +46,15 @@ font-size: 190%;
   color: #f90d0d;
   border-radius: 15px;
   overflow: hidden;
+  top: 3%;
+  width: 700px;
+  max-height: 80Vh;
+
 }
+
+.edit-recipe-container::part(dialog){
+  top: 3%;
+  width: 700px;
+  max-height: 80Vh;
+}
+

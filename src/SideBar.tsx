@@ -44,7 +44,8 @@ interface SpoonacularRecipe {
 
 interface GroceryListItemProps {
   item: GroceryItem;
-  onEdit: (id: number, name: string, measurement: string) => void;
+  onEdit: (id: number, name: string, measurement: number, unit: string) => void;
+  onDelete: (id: number) => void; 
 }
 interface SpoonacularResponse {
   results: SpoonacularRecipe[];
@@ -57,22 +58,40 @@ interface RuxInputEvent extends Event {
   target: HTMLInputElement;
 }
 
+const unitOptions = [
+  { value: 'cup', label: 'Cup' },
+  { value: 'tablespoon', label: 'Tablespoon' },
+  { value: 'teaspoon', label: 'Teaspoon' },
+  { value: 'pint', label: 'Pint' },
+  { value: 'quart', label: 'Quart' },
+  { value: 'liter', label: 'Liter' },
+  { value: 'gram', label: 'Gram' },
+  { value: 'kilogram', label: 'Kilogram' },
+  { value: 'ounce', label: 'Ounce' },
+  { value: 'pound', label: 'Pound' },
+  { value: 'slice', label: 'Slice' },
+  { value: 'piece', label: 'Piece' },
+];
+
 interface GroceryItem {
   id: number;
   name: string;
-  measurement: string;
+  measurement: number;
+  unit: string;
 }
-const GroceryListItem: React.FC<GroceryListItemProps> = ({ item, onEdit }) => {
+const GroceryListItem: React.FC<GroceryListItemProps> = ({ item, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
       const [newName, setNewName] = useState(item.name);
-      const [newMeasurement, setNewMeasurement] = useState(item.measurement);
+      const [newMeasurement, setNewMeasurement] = useState(item.measurement||undefined);
+      const [newUnit, setNewUnit] = useState(item.unit);
     
       const handleEditToggle = () => {
         if (isEditing) {
-          onEdit(item.id, newName, newMeasurement);
+          onEdit(item.id, newName, Number(newMeasurement), newUnit);
         }
         setIsEditing(!isEditing);
       };
+      
     
       return (
           
@@ -85,25 +104,55 @@ const GroceryListItem: React.FC<GroceryListItemProps> = ({ item, onEdit }) => {
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 className="edit-input"
-                style={{width:"11.25vw", height:"5vh"}}
+                style={{height:"5vh",width: "9vw"}}
               />
               <input
-                type="text"
-                value={newMeasurement}
-                onChange={(e) => setNewMeasurement(e.target.value)}
-                className="edit-input"
-                style={{width:"11.25vw", height:"5vh"}}
-              />
+                        type="text"
+                        placeholder="Measurement"
+                        value={newMeasurement !== undefined ? newMeasurement.toString() : ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '') {
+                            setNewMeasurement(undefined); 
+                          } else if (!isNaN(Number(value))) {
+                            setNewMeasurement(Number(value)); 
+                          }
+                        }}
+                        className="input-field"
+                        style={{ height:"5vh",width: "9vw"}}
+                      />
+              <Select
+                        value={unitOptions.find(o => o.value === newUnit) || null}
+                        onChange={(selectedOption) =>
+                          setNewUnit(selectedOption ? selectedOption.value : '')
+                        }
+                        options={unitOptions}
+                        className="input-field-select-meal"
+                        placeholder="Unit"
+                        styles={{
+                          control: (base) => ({
+                            ...base,
+                            height: "5vh",
+                            width: "9vw",
+                            borderRadius: "10px",
+                          }),
+                        }}
+                      />
+               <button onClick={() => onDelete(item.id)} className="delete-butn">
+                  <div>delete</div>
+              </button>
             </div>
           ) : (
-            <div className="display-mode">
+            <div className="display-mode"style={{fontSize: "1.25rem"}}>
               <span className="item-name" style={{color:"black"}}>{item.name}</span>
-              <span className="item-measurement"style={{color:"black"}}>{item.measurement}</span>
+              <span className="item-measurement">{item.measurement}</span>
+              <span className="item-unit">{item.unit}</span>
             </div>
           )}
-          <button onClick={handleEditToggle} className="edit-butn">
+          <button onClick={handleEditToggle} className="edit-button">
                   {isEditing ? 'Save' : 'Edit'}
               </button>
+           
         </li>
       );
     };
@@ -118,7 +167,9 @@ const SideBar = () => {
     const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
     const instructionsRef = useRef<HTMLTextAreaElement | null>(null);
     const [newItemName, setNewItemName] = useState('');
-    const [newItemMeasurement, setNewItemMeasurement] = useState('');
+    const [newItemMeasurement, setNewItemMeasurement] = useState<number | undefined>(undefined);
+    const [newItemunit, setNewItemUnit] = useState('');
+
 
     const cuisineOptions = [
       { value: 'african', label: 'African' },
@@ -149,6 +200,7 @@ const SideBar = () => {
       { value: 'thai', label: 'Thai' },
       { value: 'vietnamese', label: 'Vietnamese' }
     ];
+    
 
     const [selectedPrefCuisines, setSelectedPrefCuisines] = useState<OptionType[]>([]);
     const [selectedExcludeCuisines, setSelectedExcludeCuisines] = useState<OptionType[]>([]);
@@ -171,27 +223,31 @@ const SideBar = () => {
     const [items, setItems] = useState<GroceryItem[]>([
           ]);
           const handleAddItem = () => {
-            if (!newItemName.trim() || !newItemMeasurement.trim()) return;
+            if (!newItemName.trim() || (newItemMeasurement === 0 )|| (newItemMeasurement === undefined) || !newItemunit.trim()) return;
           
             const newItem: GroceryItem = {
               id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
               name: newItemName,
               measurement: newItemMeasurement,
+              unit: newItemunit,
             };
           
             setItems((prevItems) => [...prevItems, newItem]);
             setNewItemName('');
-            setNewItemMeasurement('');
+            setNewItemMeasurement(undefined);
+            setNewItemUnit('');
           };
           
-    const handleEdit = (id: number, name: string, measurement: string) => {
+    const handleEdit = (id: number, name: string, measurement: number, unit: string) => {
       const updatedItems = items.map((item) =>
-        item.id === id ? { ...item, name, measurement } : item
+        item.id === id ? { ...item, name, measurement, unit} : item
       );
       setItems(updatedItems);
     };
   
-
+    const handleDelete = (id: number) => {
+      setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    };
     const navigate = useNavigate();
 
     const buttonPressed = () => {
@@ -302,7 +358,7 @@ const SideBar = () => {
         
         {isMealRequestOpen && (
                 <RuxDialog 
-                  className="light-theme" 
+                  className="add_meals light-theme" 
                   open={isMealRequestOpen} 
                   confirmText=""
                   denyText=""
@@ -346,6 +402,7 @@ const SideBar = () => {
             resize: "none",
             padding: "10px",
             fontSize: "1rem",
+            borderRadius: "10px",
           }}
         />
                       <div>Recipe Description</div>
@@ -358,6 +415,8 @@ const SideBar = () => {
             resize: "none",
             padding: "10px",
             fontSize: "1rem",
+            borderRadius: "10px",
+
           }}
         />           
                       <div>Ingredients</div>
@@ -368,6 +427,7 @@ const SideBar = () => {
                           key={item.id}
                           item={item}
                           onEdit={handleEdit}
+                          onDelete={handleDelete}
                         />
                       ))}
                     </ul>
@@ -380,17 +440,44 @@ const SideBar = () => {
                         value={newItemName}
                         onChange={(e) => setNewItemName(e.target.value)}
                         className="input-field"
-                        style={{width:"11.25vw", height:"5vh"}}
+                        style={{ height:"5vh",width: "9vw"}}
                       />
                       <input
                         type="text"
                         placeholder="Measurement"
-                        value={newItemMeasurement}
-                        onChange={(e) => setNewItemMeasurement(e.target.value)}
+                        value={newItemMeasurement !== undefined ? newItemMeasurement.toString() : ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                      
+                          // Check if the input is empty or a valid number
+                          if (value === '') {
+                            setNewItemMeasurement(undefined); // Reset to undefined if input is cleared
+                          } else if (!isNaN(Number(value))) {
+                            setNewItemMeasurement(Number(value)); // Update if the input is a valid number
+                          }
+                          // Do nothing if the input is not a valid number
+                        }}
                         className="input-field"
-                        style={{width:"11.25vw", height:"5vh"}}
+                        style={{ height:"5vh",width: "9vw"}}
                       />
-                      <button onClick={handleAddItem} className="add-item-butn">
+                      <Select
+                        value={unitOptions.find(o => o.value === newItemunit) || null}
+                        onChange={(selectedOption) =>
+                          setNewItemUnit(selectedOption ? selectedOption.value : '')
+                        }
+                        options={unitOptions}
+                        className="input-field-select-meal"
+                        placeholder="Unit"
+                        styles={{
+                          control: (base) => ({
+                            ...base,
+                            height: "5vh",
+                            width: "9vw",
+                            borderRadius: "10px",
+                          }),
+                        }}
+                      />
+                      <button onClick={handleAddItem} className="add-item-butn" >
                         Add Item
                       </button>
                       
@@ -406,6 +493,8 @@ const SideBar = () => {
                           resize: "none",
                           padding: "10px",
                           fontSize: "1rem",
+                          borderRadius: "10px",
+
                         }}
                      />        
 

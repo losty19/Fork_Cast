@@ -2,6 +2,7 @@ html, body{
   background: radial-gradient(#ffffff, hsl(28, 91%, 66%));
   display: flex;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family:monospace;
   height: 100%;
   width: 100%;
   justify-content: center;
@@ -13,6 +14,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  font-family:monospace;
 }
 
 button {
@@ -66,4 +68,49 @@ p{
   
 }
 
+.input-field-select-meal{
+  padding: 0%;
+  margin: 0%;
+}
 
+.add_meals::part(dialog) {
+  max-height: 90vh;
+  min-height: 40vh;
+}
+
+
+
+.add_meals::part(footer) {
+  max-height: 0vh;
+}
+
+.delete-butn {
+  background-color: #513a18;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  height:5vh;
+  width:4vw;
+}
+
+.delete-butn:hover {
+  background-color:#442d17 ;
+  
+}
+.edit-button {
+  background-color: #513a18;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  height:5vh;
+  width:4vw;
+  justify-self: flex-end;
+  margin-left: auto;
+}
+
+.edit-button:hover {
+  background-color:#442d17 ;
+  
+}
