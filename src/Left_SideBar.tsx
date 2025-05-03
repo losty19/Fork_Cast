@@ -3,6 +3,7 @@ import './Left_SideBar.css';
 import { useState, useRef, useEffect } from "react";
 import { RuxIcon, RuxDialog} from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
 
 interface SpoonacularRecipe {
   id: number;
@@ -28,6 +29,20 @@ interface SpoonacularRecipe {
     fat: string;
   };
 }
+const unitOptions = [
+  { value: 'cup', label: 'Cup' },
+  { value: 'tablespoon', label: 'Tablespoon' },
+  { value: 'teaspoon', label: 'Teaspoon' },
+  { value: 'pint', label: 'Pint' },
+  { value: 'quart', label: 'Quart' },
+  { value: 'liter', label: 'Liter' },
+  { value: 'gram', label: 'Gram' },
+  { value: 'kilogram', label: 'Kilogram' },
+  { value: 'ounce', label: 'Ounce' },
+  { value: 'pound', label: 'Pound' },
+  { value: 'slice', label: 'Slice' },
+  { value: 'piece', label: 'Piece' },
+];
 
 const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   const [EditOpen, setEditOpen] = useState(false);
@@ -35,18 +50,27 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   const [icon, setIcon] = useState("start");
   const [editedRecipe, setEditedRecipe] = useState(recipe);
   const [descriptionHeight, setDescriptionHeight] = useState<number | undefined>(undefined);
- 
+  const [titleHeight, setTitleHeight] = useState<number | undefined>(undefined);
+  const [instructionsHeight, setInstructionHeight] = useState<number | undefined>(undefined);
+  const [newIngredientName, setNewIngredientName] = useState('');
+  const [newIngredientAmount, setNewIngredientAmount] = useState<number | undefined>(undefined);
+  const [newIngredientUnit, setNewIngredientUnit] = useState('');
+  const [editingStates, setEditingStates] = useState<{ [key: number]: boolean }>({}); // Track editing state by ingredient ID
+  const handleEditToggle = (id: number) => {
+    setEditingStates((prev) => ({
+      ...prev,
+      [id]: !prev[id], // Toggle the editing state for the given ingredient ID
+    }));
+  };
 
-  const getTextAreaHeight = (text: string, width = 700, font = "16px sans-serif") => {
+  const getTextAreaHeight = (text: string) => {
     const hidden = document.createElement("textarea");
     hidden.style.position = "absolute";
-    hidden.style.visibility = "hidden";
     hidden.style.height = "auto";
-    hidden.style.width = `${width}px`;
-    hidden.style.font = font;
-    hidden.style.padding = "10px";
-    hidden.style.boxSizing = "border-box";
-    hidden.style.lineHeight = "1.5";
+    hidden.style.width = "34vw";
+    hidden.style.fontFamily = "monospace";
+    hidden.style.fontSize = "16.67px";
+    hidden.style.padding = "7px";
     hidden.value = text;
     document.body.appendChild(hidden);
     const height = hidden.scrollHeight;
@@ -92,10 +116,14 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
  
   useEffect(() => {
     if (EditOpen) {
-      const height = getTextAreaHeight(editedRecipe.summary, 700, "16px sans-serif");
-      setDescriptionHeight(height);
+      const heightTitle = getTextAreaHeight(editedRecipe.title);
+      setTitleHeight(heightTitle);
+      const heightSummary = getTextAreaHeight(editedRecipe.summary);
+      setDescriptionHeight(heightSummary);
+      const heightInstructions = getTextAreaHeight(editedRecipe.instructions);
+      setInstructionHeight(heightInstructions);
     }
-  }, [EditOpen, editedRecipe.summary]);
+  }, [EditOpen, editedRecipe.summary, editedRecipe.instructions, editedRecipe.title]);
   
   return (
     <>
@@ -133,85 +161,205 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
 
          
           <RuxDialog
-  className="edit-recipe-container light-theme" 
-  open={EditOpen}
-  header="Edit Recipe"
-  confirmText=""
-  denyText=""
-  style={{ width: "80vw", maxWidth: "900px" }} 
->
-  <div>Recipe Title</div>
-  <textarea
-    value={editedRecipe.title}
-    onChange={(e) => {
-      setEditedRecipe((prev) => ({ ...prev, title: e.target.value }));
-      const textarea = e.target;
-      textarea.style.height = "auto"; // Reset height to auto
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set height to scrollHeight
+            className="edit-recipe-container light-theme" 
+            open={EditOpen}
+            header="Edit Recipe"
+            confirmText=""
+            denyText=""
+            style={{ width: "80vw", maxWidth: "900px" }} >
+            <div>Recipe Title</div>
+            
+            <textarea
+              value={editedRecipe.title}
+              onChange={(e) => 
+                setEditedRecipe((prev) => ({ ...prev, title: e.target.value }))}
+              style={{
+                width: "34vw",
+                overflow: "hidden",
+                resize: "none",
+                padding: "7px",
+                fontSize: "17px",
+                height: titleHeight ? `${titleHeight}px` : "auto",
 
-    }}
-    style={{
-      width: "100%",
-      overflow: "clip",
-      resize: "none",
-      padding: "10px",
-      fontSize: "1rem",
-    }}
-  />
+              }}
+            />
 
-  <div>Recipe Description</div>
-  <textarea
-    value={editedRecipe.summary}
-    onChange={(e) => 
-      setEditedRecipe((prev) => ({ ...prev, summary: e.target.value }))}
-      style={{
-      width: "100%",
-      overflow: "clip",
-      resize: "none",
-      padding: "10px",
-      fontSize: "1rem",
-      height: descriptionHeight ? `${descriptionHeight}px` : "auto",
-    }}
-  />
+          <div>Recipe Description</div>
+          <textarea
+            value={editedRecipe.summary}
+            onChange={(e) => 
+              setEditedRecipe((prev) => ({ ...prev, summary: e.target.value }))}
+              style={{
+              width: "34vw",
+              overflow: "hidden",
+              resize: "none",
+              padding: "7px",
+              fontSize: "17px",
+              height: descriptionHeight ? `${descriptionHeight}px` : "auto",
+            }}
+          />
 
-  <div>Ingredients</div>
-  <ul className="grocery-list">
-    {recipe.ingredients.map((ingredient, index) => (
-      <li key={index} className="grocery-item">
+<div>Ingredients</div>
+      <ul className="grocery-list">
+        {editedRecipe.ingredients.map((ingredient, index) => (
+          <li key={ingredient.id} className="grocery-item">
+            {editingStates[ingredient.id] ? (
+              // Edit Mode
+              <div className="edit-mode" style={{ display: "flex", flexDirection: "row" }}>
+                <input
+                  type="text"
+                  value={ingredient.name}
+                  onChange={(e) => {
+                    const updatedIngredients = [...editedRecipe.ingredients];
+                    updatedIngredients[index].name = e.target.value;
+                    setEditedRecipe((prev) => ({
+                      ...prev,
+                      ingredients: updatedIngredients,
+                    }));
+                  }}
+                  className="edit-input"
+                  style={{ height: "5vh", width: "9vw" }}
+                />
+                <input
+                  type="text"
+                  placeholder="Measurement"
+                  value={newIngredientAmount !== undefined ? newIngredientAmount.toString() : ''}
+                  
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === '') {
+                        setNewIngredientAmount(undefined); 
+                      } else if (!isNaN(Number(value))) {
+                        setNewIngredientAmount(Number(value)); 
+                      }
+                    }}
+                    className="input-field"
+                  style={{ height: "5vh", width: "9vw" }}
+                />
+                <Select
+                  value={unitOptions.find((o) => o.value === ingredient.unit) || null}
+                  onChange={(selectedOption) => {
+                    const updatedIngredients = [...editedRecipe.ingredients];
+                    updatedIngredients[index].unit = selectedOption ? selectedOption.value : '';
+                    setEditedRecipe((prev) => ({
+                      ...prev,
+                      ingredients: updatedIngredients,
+                    }));
+                  }}
+                  options={unitOptions}
+                  className="input-field-select-meal"
+                  placeholder="Unit"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      height: "5vh",
+                      width: "9vw",
+                      borderRadius: "10px",
+                    }),
+                  }}
+                />
+                    <button
+                  onClick={() => {
+                    const updatedIngredients = editedRecipe.ingredients.filter((_, i) => i !== index);
+                    setEditedRecipe((prev) => ({
+                      ...prev,
+                      ingredients: updatedIngredients,
+                    }));
+                  }}
+                  className="delete-butn"
+                >
+                  Delete
+                </button>
+
+                <button
+                  onClick={() => handleEditToggle(ingredient.id)} 
+                  className="edit-button"
+                >
+                  Save
+                </button>
+              </div>
+            ) : (
+              // Display Mode
+              <div className="display-mode" style={{fontSize: "1.2rem" }}>
+                <span className="item-name" style={{ color:"black"}}>{ingredient.name}</span>
+                <span className="item-amount" >{ingredient.amount}</span>
+                <span className="item-unit" >{ingredient.unit}</span>
+                <button
+                  onClick={() => handleEditToggle(ingredient.id)} 
+                  className="edit-button"
+                >
+                  Edit
+                </button>
+                
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {/* Add New Ingredient Form */}
+      <div className="add-ingredient" style={{ display: "flex", flexDirection: "row", marginTop: "10px" }}>
         <input
           type="text"
-          value={ingredient.name}
-          onChange={(e) => {
-            const updatedIngredients = [...recipe.ingredients];
-            updatedIngredients[index].name = e.target.value;
-            // setEditedRecipe((prev) => ({
-            //   ...prev,
-            //   ingredients: updatedIngredients,
-            // }));
-          }}
-          className="edit-input"
-          style={{ width: "45%", marginRight: "10px" }}
+          placeholder="Ingredient Name"
+          value={newIngredientName}
+          onChange={(e) => setNewIngredientName(e.target.value)}
+          className="input-field"
+          style={{ height: "5vh", width: "9vw" }}
         />
         <input
           type="text"
-          value={`${ingredient.amount} ${ingredient.unit}`}
+          placeholder="Measurement"
+          value={newIngredientAmount !== undefined ? newIngredientAmount.toString() : ''}
           onChange={(e) => {
-            const updatedIngredients = [...recipe.ingredients];
-            const [amount, unit] = e.target.value.split(" ");
-            updatedIngredients[index].amount = parseFloat(amount) || 0;
-            updatedIngredients[index].unit = unit || "";
-            // setEditedRecipe((prev) => ({
-            //   ...prev,
-            //   ingredients: updatedIngredients,
-            // }));
-          }}
-          className="edit-input"
-          style={{ width: "45%" }}
+            const value = e.target.value;
+            if (value === '') {
+              setNewIngredientAmount(undefined); 
+          } else if (!isNaN(Number(value))) {
+            setNewIngredientAmount(Number(value)); 
+          }}}
+          className="input-field"
+          style={{ height: "5vh", width: "9vw" }}
         />
-      </li>
-    ))}
-  </ul>
-
+        <Select
+          value={unitOptions.find((o) => o.value === newIngredientUnit) || null}
+          onChange={(selectedOption) => setNewIngredientUnit(selectedOption ? selectedOption.value : '')}
+          options={unitOptions}
+          className="input-field-select-meal"
+          placeholder="Unit"
+          styles={{
+            control: (base) => ({
+              ...base,
+              height: "5vh",
+              width: "9vw",
+              borderRadius: "10px",
+            }),
+          }}
+        />
+        <button
+          onClick={() => {
+            if (newIngredientName.trim() && newIngredientAmount && newIngredientUnit) {
+              const newIngredient = {
+                id: Date.now(),
+                name: newIngredientName,
+                amount: (newIngredientAmount),
+                unit: newIngredientUnit,
+                original: `${newIngredientAmount} ${newIngredientUnit} ${newIngredientName}`, 
+              };
+              setEditedRecipe((prev: SpoonacularRecipe): SpoonacularRecipe => ({
+                ...prev, 
+                ingredients: [...prev.ingredients, newIngredient], 
+              }));
+              setNewIngredientName('');
+              setNewIngredientAmount(undefined);
+              setNewIngredientUnit('');
+            }
+          }}
+          className="add-item-butn"
+        >
+          Add Item
+        </button>
+      </div>
   <div>Recipe Instructions</div>
   <textarea
     value={editedRecipe.instructions}
@@ -220,10 +368,11 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
     }
     style={{
       width: "100%",
-      overflow: "clip",
+      overflow: "hidden",
       resize: "none",
-      padding: "10px",
-      fontSize: "1rem",
+      padding: "7px",
+      fontSize: "17px",
+      height: instructionsHeight ? `${instructionsHeight}px` : "auto",
     }}
   />
 

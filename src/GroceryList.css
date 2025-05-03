@@ -1,15 +1,15 @@
 /* GroceryList.css */
 .grocery-list-container {
   display: flex;
-  margin-top: 4rem;
+  margin-top: 6rem;
   justify-content: space-between;
-  align-self: start;
+  align-self: center;
   justify-self: center;
   padding: 1.5rem;
   background-color: #f4f4f4;
   border-radius: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  height: 85vh;
+  max-height: 85vh;
   width: 80%;
 }
 
@@ -27,24 +27,23 @@ h3 {
 .add-item-container {
   padding: 10px;
   background-color: #fff;
-  border-radius: 15px;
+  border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .input-field {
   width: 100%;
-  padding: 15px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 8px;
+  height: 4.2vh;
+  
 }
 
 .input-field-select
 {
   width: 100%;
   padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .input-field-select * {
@@ -57,7 +56,7 @@ h3 {
   border: none;
   padding: 10px 20px;
   margin: 10px 0;
-  border-radius: 15px;
+  border-radius: 8px;
 
   cursor: pointer;
   width: 100%;
@@ -70,7 +69,7 @@ h3 {
   position: relative;
   padding: 10px 20px;
   margin: 10px 0;
-  border-radius: 15px;
+  border-radius: 8px;
   cursor: pointer;
   width: 100%;
 }
@@ -83,7 +82,7 @@ h3 {
 .list-container {
   padding: 10px;
   background-color: #fff;
-  border-radius: 15px;
+  border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: scroll;
   scrollbar-width: none;
@@ -96,14 +95,18 @@ h3 {
   padding: 0px;
   margin: 0px;
   overflow: visible;
+  max-width: 34vw;
+  
 }
 
 
 .grocery-item {
-  background-color: transparent;
   padding: 0px;
-  margin: 5px 0;
+  margin: 4px 0;
   display: flex;
+  align-items: center;
+  max-width: 34vw;
+
 }
 
 .grocery-item.checked {
@@ -123,13 +126,13 @@ h3 {
 
 .display-mode {
   display: flex;
-  align-items: center;
   gap: 5px;
 }
 
 .item-name {
   font-weight: bold;
   color: #855353;
+  margin-right: auto;
 }
 
 .item-info {
@@ -150,13 +153,15 @@ h3 {
 .edit-mode {
   display: flex;
   flex-direction: column;
+  align-items: center;
+ 
 }
 
 .edit-input {
 
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 8px;
   width: 100%;
   margin-left: 0%;
 }
@@ -191,4 +196,20 @@ h3 {
 
 .delete-btn:hover {
   background-color: #8e3737;
+}
+
+.export-list-btn {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 34%;
+
+}
+
+.export-list-btn:hover {
+  background-color: #45a049;
 }

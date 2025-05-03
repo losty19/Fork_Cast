@@ -91,7 +91,7 @@ p{
   border-radius: 10px;
   cursor: pointer;
   height:5vh;
-  width:4vw;
+  width:3.87vw;
 }
 
 .delete-butn:hover {
@@ -106,7 +106,6 @@ p{
   cursor: pointer;
   height:5vh;
   width:4vw;
-  justify-self: flex-end;
   margin-left: auto;
 }
 
