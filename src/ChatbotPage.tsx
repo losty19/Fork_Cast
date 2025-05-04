@@ -65,17 +65,17 @@ const ChatPage: React.FC = () => {
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <SideBar />
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div className="chat-page" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-                    <div className="AIConversation">
-                        <AIConversation 
-                            messages={messages}
-                            isLoading={isLoading}
-                            handleSendMessage={handleSendMessage}
-                            aiContext={() => userProfile || {}}
-                        />
-                    </div>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f0f0' }}>
+            <div className="chat-page" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', padding: '20px', backgroundColor: '#ffffff', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                <div className="AIConversation">
+                <AIConversation 
+                    messages={messages}
+                    isLoading={isLoading}
+                    handleSendMessage={handleSendMessage}
+                    aiContext={() => userProfile || {}}
+                />
                 </div>
+            </div>
             </div>
         </div>
     );
