@@ -130,6 +130,16 @@ const SideBar = () => {
     { value: 'vietnamese', label: 'Vietnamese' }
   ];
 
+  // Valid Spoonacular parameter values
+  const validDiets = [
+    'gluten free', 'ketogenic', 'vegetarian', 'lacto-vegetarian', 'ovo-vegetarian',
+    'vegan', 'pescetarian', 'paleo', 'primal', 'low fodmap', 'whole30'
+  ];
+  const validIntolerances = [
+    'dairy', 'egg', 'gluten', 'grain', 'peanut', 'seafood', 'sesame',
+    'shellfish', 'soy', 'sulfite', 'tree nut', 'wheat'
+  ];
+
  
   // Fetch UserProfile on mount
   useEffect(() => {
@@ -241,7 +251,7 @@ const SideBar = () => {
         console.log("Selected excluded cuisines:", selectedExcludeCuisines);
         queryParams.excludeCuisine = selectedExcludeCuisines.map(option => option.value).join(',');
       }
-
+      console.log("Query parameters:", queryParams);
       const response = await client.queries.SpoonacularGetRecipe({
         path: '/recipes/complexSearch',
         httpMethod: 'GET',
