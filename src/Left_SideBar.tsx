@@ -51,7 +51,7 @@ const LSideBar = ({ recipe }: { recipe: SpoonacularRecipe }) => {
   return (
     <>
       <div className="side_container">
-        <button className="side-button" onClick={() => navigate("/main")}>
+        <button className="side-button" onClick={() => navigate(-1)}>
           <RuxIcon className="side-image" icon="reply" size="3.3rem" />
           <h2 style={{ marginTop: '-10%' }}>BACK</h2>
         </button>

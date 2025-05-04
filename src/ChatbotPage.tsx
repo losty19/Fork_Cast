@@ -61,7 +61,7 @@ const ChatPage: React.FC = () => {
     // Initialize the AI conversation hook for the "chat" route
     const [ { data: { messages }, isLoading }, handleSendMessage ] = useAIConversation('chat');
     // 'conversationAI' corresponds to the key we defined in amplify/data/resource.ts:contentReference[oaicite:11]{index=11}
-    console.log("messages: ", messages);
+    // console.log("messages: ", messages);
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <SideBar />
