@@ -108,9 +108,15 @@ const client = generateClient<Schema>();
 const SearchResultsPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const recipes: SpoonacularRecipe[] = location.state?.recipes || [];
+  const rawRecipes: SpoonacularRecipe[] = location.state?.recipes || [];
   const [favoritedIds, setFavoritedIds] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Populate the simplifiedInstructions
+  const recipes = rawRecipes.map(recipe => ({
+    ...recipe,
+    simplifiedInstructions: transformInstructions(recipe.analyzedInstructions),
+  }));
 
   // Fetch initial favorited recipes
   React.useEffect(() => {
@@ -160,7 +166,7 @@ const SearchResultsPage: React.FC = () => {
   const handleFavorite = async (recipe: SpoonacularRecipe) => {
     try {
       const userId = (await getCurrentUser()).userId;
-      // const recipeId = recipe.id.toString();
+      const recipeId = recipe.id.toString();
 
       if (favoritedIds.includes(recipe.recipeId ?? '')) {
         // Remove from favorites
@@ -174,7 +180,10 @@ const SearchResultsPage: React.FC = () => {
         }
       } else {
         // Add to favorites
-        const simplifiedInstructions = transformInstructions(recipe.analyzedInstructions);
+        console.log("(SRP)The recipe.recipeId is: ", recipe.recipeId);
+        console.log("(SRP)The recipe.id is: ", recipe.id);
+        console.log("(SRP)The recipeId is: ", recipeId);
+        const simplifiedInstructions = transformInstructions(recipe.analyzedInstructions) || recipe.simplifiedInstructions;
         const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
           recipeId: recipe.recipeId,
           userId,
@@ -260,7 +269,7 @@ const SearchResultsPage: React.FC = () => {
                 <RuxIcon
                   className="favorbutton_icon"
                   size="2.5rem"
-                  icon={favoritedIds.includes(recipe.id.toString()) ? "star" : "star-border"}
+                  icon={favoritedIds.includes(recipe.recipeId ?? recipe.id.toString()) ? "star" : "star-border"}
                 />
               </FavorButton>
               <ImageContainer>
