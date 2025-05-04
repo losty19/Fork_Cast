@@ -373,6 +373,13 @@ const SideBar = () => {
             <div className="logo-text">ForkCast</div>
           </button>
           <div className="sidebar">
+            <button 
+              className='icon-button' 
+              onClick={() => navigate("/chatbot")} 
+              style={{ backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '5px', padding: '5px' }}
+            >
+              <RuxIcon className="icon-image" size="small" icon="chatbubbles" />
+            </button>
             <button className="icon-button" onClick={buttonPressed}>
               <RuxIcon className="icon-image" size="35px" icon="add-circle-outline" />
             </button>
