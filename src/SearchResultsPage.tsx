@@ -108,15 +108,15 @@ const client = generateClient<Schema>();
 const SearchResultsPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const rawRecipes: SpoonacularRecipe[] = location.state?.recipes || [];
+  const recipes: SpoonacularRecipe[] = location.state?.recipes || [];
   const [favoritedIds, setFavoritedIds] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Populate the simplifiedInstructions
-  const recipes = rawRecipes.map(recipe => ({
-    ...recipe,
-    simplifiedInstructions: transformInstructions(recipe.analyzedInstructions),
-  }));
+  // // Populate the simplifiedInstructions
+  // const recipes = rawRecipes.map(recipe => ({
+  //   ...recipe,
+  //   simplifiedInstructions: transformInstructions(recipe.analyzedInstructions),
+  // }));
 
   // Fetch initial favorited recipes
   React.useEffect(() => {
