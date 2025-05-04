@@ -11,26 +11,26 @@ const client = generateClient<Schema>({ authMode: 'userPool' });
 const { useAIConversation } = createAIHooks(client);
 
 const ChatPage: React.FC = () => {
-  // Initialize the AI conversation hook for the "chat" route
-  const [ { data: { messages }, isLoading }, handleSendMessage ] = useAIConversation('conversationAI')
-  // 'conversationAI' corresponds to the key we defined in amplify/data/resource.ts:contentReference[oaicite:11]{index=11}
-
-return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-        <SideBar />
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div className="chat-page">
-                <div className="AIConversation">
-                    <AIConversation 
-                        messages={messages}
-                        isLoading={isLoading}
-                        handleSendMessage={handleSendMessage}
-                    />
+    // Initialize the AI conversation hook for the "chat" route
+    const [ { data: { messages }, isLoading }, handleSendMessage ] = useAIConversation('conversationAI')
+    // 'conversationAI' corresponds to the key we defined in amplify/data/resource.ts:contentReference[oaicite:11]{index=11}
+    console.log("messages: ", messages);
+    return (
+        <div style={{ display: 'flex', height: '100vh' }}>
+            <SideBar />
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div className="chat-page">
+                    <div className="AIConversation">
+                        <AIConversation 
+                            messages={messages}
+                            isLoading={isLoading}
+                            handleSendMessage={handleSendMessage}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-);
+    );
 };
 
 export default ChatPage;
