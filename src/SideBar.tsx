@@ -130,6 +130,16 @@ const SideBar = () => {
     { value: 'vietnamese', label: 'Vietnamese' }
   ];
 
+  // Valid Spoonacular parameter values
+  const validDiets = [
+    'gluten free', 'ketogenic', 'vegetarian', 'lacto-vegetarian', 'ovo-vegetarian',
+    'vegan', 'pescetarian', 'paleo', 'primal', 'low fodmap', 'whole30'
+  ];
+  const validIntolerances = [
+    'dairy', 'egg', 'gluten', 'grain', 'peanut', 'seafood', 'sesame',
+    'shellfish', 'soy', 'sulfite', 'tree nut', 'wheat'
+  ];
+
  
   // Fetch UserProfile on mount
   useEffect(() => {
@@ -234,12 +244,14 @@ const SideBar = () => {
 
       // Add cuisine preferences
       if (selectedPrefCuisines.length > 0) {
+        console.log("Selected preferred cuisines:", selectedPrefCuisines);
         queryParams.cuisine = selectedPrefCuisines.map(option => option.value).join(',');
       }
       if (selectedExcludeCuisines.length > 0) {
+        console.log("Selected excluded cuisines:", selectedExcludeCuisines);
         queryParams.excludeCuisine = selectedExcludeCuisines.map(option => option.value).join(',');
       }
-
+      console.log("Query parameters:", queryParams);
       const response = await client.queries.SpoonacularGetRecipe({
         path: '/recipes/complexSearch',
         httpMethod: 'GET',
@@ -248,8 +260,10 @@ const SideBar = () => {
       });
 
       if (response.data) {
+        console.log("Raw response:", response.data);
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         const recipes = data.results || [];
+        console.log("Fetched recipes:", recipes);
         navigate('/searchResults', { state: { recipes } });
       } else {
         console.error("No data in response:", response);
