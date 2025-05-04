@@ -3,46 +3,49 @@
   display: flex;
   margin-top: 4rem;
   justify-content: space-between;
-  align-self: start;
-  justify-self: center;
-  padding: 1.5rem;
+  align-self: center;
+  gap: 0.5rem;
+  padding: 1rem;
   background-color: #f4f4f4;
   border-radius: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  height: 85vh;
-  width: 80%;
+  min-height: calc(100vh - 120px);
+  width: 90%;
+  max-width: 1400px;
+  min-width: 600px;
 }
 
 .list-container {
-  width: 55%
-}
-
-.add-item-container {
-  width: 34%;
-}
-h3 {
-  color: #855353;
-}
-
-.add-item-container {
-  padding: 10px;
+  width: 60%;
+  padding: 1rem;
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.add-item-container {
+  width: 40%;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  color: #855353;
+}
+
 .input-field {
   width: 100%;
-  padding: 15px;
+  padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
 }
 
-.input-field-select
-{
+.input-field-select {
   width: 100%;
-  padding: 15px;
+  padding: 8px;
   margin-bottom: 10px;
   border-radius: 10px;
 }
@@ -75,17 +78,11 @@ h3 {
 }
 
 .add-item-btn:hover {
-  background-color:#8e3737 ;
-  
+  background-color: #8e3737;
 }
 
-.list-container {
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  overflow: scroll;
-  scrollbar-width: none;
+.clear-list-btn:hover {
+  background-color: #8e3737;
 }
 
 .grocery-list {
@@ -115,10 +112,9 @@ h3 {
 
 .checkbox {
   margin-right: 10px;
-  width: 20px; 
+  width: 20px;
   height: 20px;
   transform: scale(1.2);
-
 }
 
 .display-mode {
@@ -140,11 +136,15 @@ h3 {
 .input-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.input-row > * {
-  flex: 1;
+.input-row .input-field {
+  flex: 0 0 40%;
+}
+
+.input-row .input-field-select {
+  flex: 0 0 60%;
 }
 
 .edit-mode {
@@ -191,4 +191,33 @@ h3 {
 
 .delete-btn:hover {
   background-color: #8e3737;
+}
+
+@media (max-width: 768px) {
+  .grocery-list-container {
+    flex-direction: column;
+    width: 95%;
+    min-width: 0;
+    margin-top: 3.5rem;
+    min-height: calc(100vh - 110px);
+  }
+
+  .list-container {
+    width: 100%;
+  }
+
+  .add-item-container {
+    width: 100%;
+  }
+
+  .input-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .input-row .input-field,
+  .input-row .input-field-select {
+    flex: 0 0 auto;
+    width: 100%;
+  }
 }

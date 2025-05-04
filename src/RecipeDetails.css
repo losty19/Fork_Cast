@@ -20,7 +20,7 @@ object-fit: cover;
 .description-container {
   flex: 1;
   color: white;
-  font-size: 70%;
+  font-size: 18px;
   width: 40rem;
   overflow: hidden;
 }

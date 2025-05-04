@@ -3,35 +3,37 @@ html, body {
     margin: 0;
     padding: 0;
     background-color: rgb(0, 0, 0);
-    }
-    
-    .container {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    width: 100vw;
-    background-color: rgb(0, 0, 0);
-    color: white;
+    width: 100%; /* Ensure it spans the full width */
+    /* background-color: rgb(0, 0, 0); */
+    color: black;
     text-align: center;
-    }
-    
-    h1 {
+}
+
+h1 {
     font-size: 4rem;
     margin-bottom: 1.5rem;
-    }
-    
-    .button-container {
+}
+
+.button-container {
     display: flex;
     gap: 1rem;
-    }
-    
-    .astro-button {
+}
+
+.astro-button {
     font-size: 1.2rem;
-    }
-    
-    .Title {
-        padding-bottom: 200px;
-        font-size: 120px;
-    }
+}
+
+.Title {
+    padding-bottom: 200px;
+    font-size: 120px;
+    text-align: center; /* Ensure title is centered */
+}

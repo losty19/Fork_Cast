@@ -13,6 +13,8 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
+import "./global.css";
+
 Amplify.configure(outputs);
 
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -32,7 +34,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Router>
       <Routes>
         {/* Public Route */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={
+          <div className="page-container">
+            <HomePage />
+          </div>
+        }/>
 
         {/* Protected Routes */}
         <Route 

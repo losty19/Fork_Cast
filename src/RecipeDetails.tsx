@@ -21,18 +21,26 @@ const RecipeDetails: React.FC = () => {
         <div className="outer-container">
           <LSideBar recipe={recipe} />
           <div className="title-and-content">
-            <div className="Title_recipe">{recipe.title}</div>
+            <h1 className="Title_recipe">{recipe.title}</h1>
             <div className="content-container">
-              <div className="text-wrapper">
+                <div className="text-wrapper">
                 <img
                   className="recipe_image"
-                  src={recipe.image || 'https://via.placeholder.com/150'}
+                  src={recipe.image || '../public/vite.svg'}
                   alt={recipe.title}
                 />
                 <div className="description-container">
-                  <p>{recipe.summary || 'No summary available.'}</p>
+                  <h3 style={{ color: "white" }}>Summary:</h3>
+                  <p
+                  className={`summary-text ${expanded ? "expanded" : ""}`}
+                  dangerouslySetInnerHTML={{
+                    __html: recipe.summary
+                    ? recipe.summary.replace(/<a /g, '<a style="color: white;" ')
+                    : 'No summary available.'
+                  }}
+                  ></p>
                 </div>
-              </div>
+                </div>
 
               <div className={`button-container ${expanded ? "expanded" : ""}`}>
                 <button className="style-button" onClick={() => setExpanded(!expanded)}>
