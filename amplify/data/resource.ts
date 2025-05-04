@@ -232,17 +232,17 @@ const schema = a.schema({
   //   .authorization((allow) => [allow.owner()]),
 
 
-  conversationAI: a.conversation({
-    aiModel: a.ai.model("Amazon Nova Micro"),
+  chat: a.conversation({
+    aiModel: a.ai.model("Claude 3.5 Sonnet"),
     systemPrompt: "You are a helpful assistant that helps users find recipes. " +
                   "You will take their preferences and dietary restrictions into account.",
-    tools: [
-      a.ai.dataTool({
-        name: "SpoonacularGetRecipe",
-        description: "Search via natural language for a recipe based on the user's preferences and requests",
-        query: a.ref('SpoonacularGetRecipe'),
-      }),
-    ],
+    // tools: [
+    //   a.ai.dataTool({
+    //     name: "SpoonacularGetRecipe",
+    //     description: "Search via natural language for a recipe based on the user's preferences and requests",
+    //     query: a.ref('SpoonacularGetRecipe'),
+    //   }),
+    // ],
   })
   .authorization((allow) => allow.owner()),
 
