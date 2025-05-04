@@ -185,7 +185,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
               />
             </FavorButton>
             <ImageContainer>
-              <StyledImage src={recipe.image || '../public/vite.svg'} alt={recipe.title} />
+              <StyledImage src={recipe.image || '/vite.svg'} alt={recipe.title} />
               <VignetteOverlay />
             </ImageContainer>
             <h2 className="recipe-title">{recipe.title}</h2>

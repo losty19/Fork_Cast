@@ -6,6 +6,8 @@ import Profile from './Profile';
 import RecipeDetails from './RecipeDetails';
 import SearchResultsPage from "./SearchResultsPage";
 import GroceryList from "./GroceryList";
+import ChatbotPage from "./ChatbotPage";
+
 import "./index.css";
 import { Amplify } from "aws-amplify";
 import outputs from "../amplify_outputs.json";
@@ -82,6 +84,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           element={
             <ProtectedRoute>
              <GroceryList />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/chatbot" 
+          element={
+            <ProtectedRoute>
+             <ChatbotPage />
             </ProtectedRoute>
           } 
         />

@@ -234,16 +234,12 @@ const schema = a.schema({
 
   conversationAI: a.conversation({
     aiModel: a.ai.model("Amazon Nova Micro"),
-    systemPrompt: 'You are a helpful assistant that helps users find recipes. \
-                    You will take their preferences and dietary restrictions into account.\
-                    You will focus your response to be availble to use with the Spoonacular API.',
-    inferenceConfiguration: { // Can also set temperature and topP
-      maxTokens: 1000,
-    },
+    systemPrompt: "You are a helpful assistant that helps users find recipes. " +
+                  "You will take their preferences and dietary restrictions into account.",
     tools: [
       a.ai.dataTool({
-        name: "AIsearchRecipe",
-        description: "Search for a recipe based on the user's preferences and requests",
+        name: "SpoonacularGetRecipe",
+        description: "Search via natural language for a recipe based on the user's preferences and requests",
         query: a.ref('SpoonacularGetRecipe'),
       }),
     ],
@@ -277,12 +273,12 @@ export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
-  // authorizationModes: {
-  //   // This tells the data client in your app (generateClient())
-  //   // to sign API requests with the user authentication token.
+  authorizationModes: {
+    // This tells the data client in your app (generateClient())
+    // to sign API requests with the user authentication token.
 
-  //   defaultAuthorizationMode: "userPool",
-  // },
+    defaultAuthorizationMode: "userPool",
+  },
 });
 
 /*== STEP 2 ===============================================================
