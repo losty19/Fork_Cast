@@ -46,6 +46,8 @@ const schema = a.schema({
         offset: a.integer(),
         diet: a.string(),
         intolerances: a.string(),
+        cuisine: a.string(),
+        excludeCuisine: a.string(),
         type: a.string(),
         includeIngredients: a.string(),
         excludeIngredients: a.string(),
