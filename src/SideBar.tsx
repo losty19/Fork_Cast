@@ -286,7 +286,7 @@ const SideBar = () => {
         userId,
         recipeId: `custom-${Date.now()}`,
         title: customTitle,
-        image: '../public/vite.svg',
+        image: '/vite.svg',
         summary: customSummary || 'Custom recipe created by user.',
         instructions: customInstructions || '',
         simplifiedInstructions: items.map((item, index) => ({

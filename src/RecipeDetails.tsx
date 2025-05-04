@@ -26,7 +26,7 @@ const RecipeDetails: React.FC = () => {
                 <div className="text-wrapper">
                 <img
                   className="recipe_image"
-                  src={recipe.image || '../public/vite.svg'}
+                  src={recipe.image || '/vite.svg'}
                   alt={recipe.title}
                 />
                 <div className="description-container">
