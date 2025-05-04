@@ -166,7 +166,7 @@ const SearchResultsPage: React.FC = () => {
   const handleFavorite = async (recipe: SpoonacularRecipe) => {
     try {
       const userId = (await getCurrentUser()).userId;
-      // const recipeId = recipe.id.toString();
+      const recipeId = recipe.id.toString();
 
       if (favoritedIds.includes(recipe.recipeId ?? '')) {
         // Remove from favorites
@@ -180,6 +180,9 @@ const SearchResultsPage: React.FC = () => {
         }
       } else {
         // Add to favorites
+        console.log("(SRP)The recipe.recipeId is: ", recipe.recipeId);
+        console.log("(SRP)The recipe.id is: ", recipe.id);
+        console.log("(SRP)The recipeId is: ", recipeId);
         const simplifiedInstructions = transformInstructions(recipe.analyzedInstructions) || recipe.simplifiedInstructions;
         const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
           recipeId: recipe.recipeId,
