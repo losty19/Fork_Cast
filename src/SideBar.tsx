@@ -1,4 +1,5 @@
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
+import defaultViteLogo from './assets/vite.svg';
 import './MainPage.css';
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { useState, useRef, useEffect } from "react";
@@ -267,7 +268,7 @@ const SideBar = () => {
         navigate('/searchResults', { state: { recipes } });
       } else {
         console.error("No data in response:", response);
-        setError('No data returned from Spoonacular');
+        setToastMessage('No data returned from Spoonacular.');
       }
     } catch (error) {
       console.error("Detailed error:", error);
@@ -300,7 +301,7 @@ const SideBar = () => {
         userId,
         recipeId: `custom-${Date.now()}`,
         title: customTitle,
-        image: '/vite.svg',
+        image: defaultViteLogo,
         summary: customSummary || 'Custom recipe created by user.',
         instructions: customInstructions || '',
         simplifiedInstructions: items.map((item, index) => ({
