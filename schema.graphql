@@ -1,0 +1,992 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+interface AmplifyAIConversationMessage {
+  aiContext: AWSJSON
+  associatedUserMessageId: ID
+  content: [AmplifyAIContentBlock]
+  conversationId: ID!
+  createdAt: AWSDateTime
+  id: ID!
+  owner: String
+  role: AmplifyAIConversationParticipantRole
+  toolConfiguration: AmplifyAIToolConfiguration
+  updatedAt: AWSDateTime
+}
+
+type AmplifyAIContentBlock @aws_cognito_user_pools @aws_iam {
+  document: AmplifyAIDocumentBlock
+  image: AmplifyAIImageBlock
+  text: String
+  toolResult: AmplifyAIToolResultBlock
+  toolUse: AmplifyAIToolUseBlock
+}
+
+type AmplifyAIContentBlockDocument {
+  document: AmplifyAIDocumentBlock
+}
+
+type AmplifyAIContentBlockImage {
+  image: AmplifyAIImageBlock
+}
+
+type AmplifyAIContentBlockText {
+  text: String
+}
+
+type AmplifyAIContentBlockToolResult {
+  toolResult: AmplifyAIToolResultBlock
+}
+
+type AmplifyAIContentBlockToolUse {
+  toolUse: AmplifyAIToolUseBlock
+}
+
+type AmplifyAIConversationMessageStreamPart @aws_cognito_user_pools {
+  associatedUserMessageId: ID!
+  contentBlockDeltaIndex: Int
+  contentBlockDoneAtIndex: Int
+  contentBlockIndex: Int
+  contentBlockText: String
+  contentBlockToolUse: AmplifyAIToolUseBlock
+  conversationId: ID!
+  errors: [AmplifyAIConversationTurnError]
+  id: ID!
+  owner: String
+  p: String
+  stopReason: String
+}
+
+type AmplifyAIConversationTurnError @aws_cognito_user_pools {
+  errorType: String!
+  message: String!
+}
+
+type AmplifyAIDocumentBlock @aws_cognito_user_pools @aws_iam {
+  format: String!
+  name: String!
+  source: AmplifyAIDocumentBlockSource!
+}
+
+type AmplifyAIDocumentBlockSource @aws_cognito_user_pools @aws_iam {
+  bytes: String
+}
+
+type AmplifyAIImageBlock @aws_cognito_user_pools @aws_iam {
+  format: String!
+  source: AmplifyAIImageBlockSource!
+}
+
+type AmplifyAIImageBlockSource @aws_cognito_user_pools @aws_iam {
+  bytes: String
+}
+
+type AmplifyAITool @aws_cognito_user_pools @aws_iam {
+  toolSpec: AmplifyAIToolSpecification
+}
+
+type AmplifyAIToolConfiguration @aws_cognito_user_pools @aws_iam {
+  tools: [AmplifyAITool]
+}
+
+type AmplifyAIToolInputSchema @aws_cognito_user_pools @aws_iam {
+  json: AWSJSON
+}
+
+type AmplifyAIToolResultBlock @aws_cognito_user_pools @aws_iam {
+  content: [AmplifyAIToolResultContentBlock!]!
+  status: String
+  toolUseId: String!
+}
+
+type AmplifyAIToolResultContentBlock @aws_cognito_user_pools @aws_iam {
+  document: AmplifyAIDocumentBlock
+  image: AmplifyAIImageBlock
+  json: AWSJSON
+  text: String
+}
+
+type AmplifyAIToolSpecification @aws_cognito_user_pools @aws_iam {
+  description: String
+  inputSchema: AmplifyAIToolInputSchema!
+  name: String!
+}
+
+type AmplifyAIToolUseBlock @aws_cognito_user_pools @aws_iam {
+  input: AWSJSON!
+  name: String!
+  toolUseId: String!
+}
+
+type ConversationConversationAI @aws_cognito_user_pools @aws_iam {
+  createdAt: AWSDateTime!
+  id: ID!
+  messages(filter: ModelConversationMessageConversationAIFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelConversationMessageConversationAIConnection
+  metadata: AWSJSON
+  name: String
+  owner: String
+  updatedAt: AWSDateTime!
+}
+
+type ConversationMessageConversationAI implements AmplifyAIConversationMessage @aws_cognito_user_pools @aws_iam {
+  aiContext: AWSJSON
+  associatedUserMessageId: ID
+  content: [AmplifyAIContentBlock]
+  conversation: ConversationConversationAI
+  conversationId: ID!
+  createdAt: AWSDateTime!
+  id: ID!
+  owner: String
+  role: AmplifyAIConversationParticipantRole
+  toolConfiguration: AmplifyAIToolConfiguration
+  updatedAt: AWSDateTime!
+}
+
+type ModelConversationConversationAIConnection @aws_cognito_user_pools @aws_iam {
+  items: [ConversationConversationAI]!
+  nextToken: String
+}
+
+type ModelConversationMessageConversationAIConnection @aws_cognito_user_pools @aws_iam {
+  items: [ConversationMessageConversationAI]!
+  nextToken: String
+}
+
+type ModelSavedRecipeConnection @aws_cognito_user_pools @aws_iam {
+  items: [SavedRecipe]!
+  nextToken: String
+}
+
+type ModelUserProfileConnection @aws_cognito_user_pools @aws_iam {
+  items: [UserProfile]!
+  nextToken: String
+}
+
+type Mutation {
+  SaveFavoriteRecipe(image: String, recipeId: String!, title: String!, userId: String!): SavedRecipe @aws_cognito_user_pools @aws_iam
+  conversationAI(aiContext: AWSJSON, content: [AmplifyAIContentBlockInput], conversationId: ID!, toolConfiguration: AmplifyAIToolConfigurationInput): AmplifyAIConversationMessage @aws_cognito_user_pools @aws_iam
+  createAssistantResponseConversationAI(input: CreateConversationMessageConversationAIAssistantInput!): ConversationMessageConversationAI @aws_cognito_user_pools
+  createAssistantResponseStreamConversationAI(input: CreateConversationMessageConversationAIAssistantStreamingInput!): AmplifyAIConversationMessageStreamPart @aws_cognito_user_pools
+  createConversationConversationAI(condition: ModelConversationConversationAIConditionInput, input: CreateConversationConversationAIInput!): ConversationConversationAI @aws_cognito_user_pools @aws_iam
+  createConversationMessageConversationAI(condition: ModelConversationMessageConversationAIConditionInput, input: CreateConversationMessageConversationAIInput!): ConversationMessageConversationAI @aws_cognito_user_pools @aws_iam
+  createSavedRecipe(condition: ModelSavedRecipeConditionInput, input: CreateSavedRecipeInput!): SavedRecipe @aws_cognito_user_pools @aws_iam
+  createUserProfile(condition: ModelUserProfileConditionInput, input: CreateUserProfileInput!): UserProfile @aws_cognito_user_pools @aws_iam
+  deleteConversationConversationAI(condition: ModelConversationConversationAIConditionInput, input: DeleteConversationConversationAIInput!): ConversationConversationAI @aws_cognito_user_pools @aws_iam
+  deleteConversationMessageConversationAI(condition: ModelConversationMessageConversationAIConditionInput, input: DeleteConversationMessageConversationAIInput!): ConversationMessageConversationAI @aws_cognito_user_pools @aws_iam
+  deleteSavedRecipe(condition: ModelSavedRecipeConditionInput, input: DeleteSavedRecipeInput!): SavedRecipe @aws_cognito_user_pools @aws_iam
+  deleteUserProfile(condition: ModelUserProfileConditionInput, input: DeleteUserProfileInput!): UserProfile @aws_cognito_user_pools @aws_iam
+  updateConversationConversationAI(condition: ModelConversationConversationAIConditionInput, input: UpdateConversationConversationAIInput!): ConversationConversationAI @aws_cognito_user_pools @aws_iam
+  updateSavedRecipe(condition: ModelSavedRecipeConditionInput, input: UpdateSavedRecipeInput!): SavedRecipe @aws_cognito_user_pools @aws_iam
+  updateUserProfile(condition: ModelUserProfileConditionInput, input: UpdateUserProfileInput!): UserProfile @aws_cognito_user_pools @aws_iam
+}
+
+type Query {
+  SpoonacularGetRecipe(httpMethod: String!, path: String!, pathParameters: SpoonacularGetRecipePathParametersInput, queryStringParameters: SpoonacularGetRecipeQueryStringParametersInput): AWSJSON @aws_cognito_user_pools @aws_iam
+  getConversationConversationAI(id: ID!): ConversationConversationAI @aws_cognito_user_pools @aws_iam
+  getConversationMessageConversationAI(id: ID!): ConversationMessageConversationAI @aws_cognito_user_pools @aws_iam
+  getSavedRecipe(id: ID!): SavedRecipe @aws_cognito_user_pools @aws_iam
+  getUserProfile(id: ID!): UserProfile @aws_cognito_user_pools @aws_iam
+  listConversationConversationAIS(filter: ModelConversationConversationAIFilterInput, limit: Int, nextToken: String): ModelConversationConversationAIConnection @aws_cognito_user_pools @aws_iam
+  listConversationMessageConversationAIS(filter: ModelConversationMessageConversationAIFilterInput, limit: Int, nextToken: String): ModelConversationMessageConversationAIConnection @aws_cognito_user_pools @aws_iam
+  listSavedRecipeByUserId(filter: ModelSavedRecipeFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection, userId: ID!): ModelSavedRecipeConnection @aws_cognito_user_pools @aws_iam
+  listSavedRecipes(filter: ModelSavedRecipeFilterInput, id: ID, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelSavedRecipeConnection @aws_cognito_user_pools @aws_iam
+  listUserProfiles(filter: ModelUserProfileFilterInput, limit: Int, nextToken: String): ModelUserProfileConnection @aws_cognito_user_pools @aws_iam
+}
+
+type SavedRecipe @aws_cognito_user_pools @aws_iam {
+  aggregateLikes: Int
+  cheap: Boolean
+  cookingMinutes: Int
+  createdAt: AWSDateTime
+  creditsText: String
+  cuisines: [String]
+  dairyFree: Boolean
+  diets: [String]
+  dishTypes: [String]
+  gaps: String
+  glutenFree: Boolean
+  healthScore: Float
+  id: ID!
+  image: String
+  instructions: String
+  license: String
+  lowFodmap: Boolean
+  occasions: [String]
+  preparationMinutes: Int
+  pricePerServing: Float
+  readyInMinutes: Int
+  recipeId: String
+  servings: Int
+  simplifiedInstructions: [simplifiedInstructions]
+  sourceName: String
+  summary: String
+  sustainable: Boolean
+  title: String
+  updatedAt: AWSDateTime
+  userId: ID
+  userProfile: UserProfile
+  vegan: Boolean
+  vegetarian: Boolean
+  veryHealthy: Boolean
+  veryPopular: Boolean
+  weightWatcherSmartPoints: Int
+}
+
+type Subscription {
+  onCreateAssistantResponseConversationAI(conversationId: ID): AmplifyAIConversationMessageStreamPart @aws_cognito_user_pools @aws_subscribe(mutations : ["createAssistantResponseStreamConversationAI"])
+  onCreateConversationMessageConversationAI(filter: ModelSubscriptionConversationMessageConversationAIFilterInput, owner: String): ConversationMessageConversationAI @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["createConversationMessageConversationAI"])
+  onCreateSavedRecipe(filter: ModelSubscriptionSavedRecipeFilterInput): SavedRecipe @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["createSavedRecipe"])
+  onCreateUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["createUserProfile"])
+  onDeleteSavedRecipe(filter: ModelSubscriptionSavedRecipeFilterInput): SavedRecipe @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["deleteSavedRecipe"])
+  onDeleteUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["deleteUserProfile"])
+  onUpdateSavedRecipe(filter: ModelSubscriptionSavedRecipeFilterInput): SavedRecipe @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["updateSavedRecipe"])
+  onUpdateUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["updateUserProfile"])
+}
+
+type UserProfile @aws_cognito_user_pools @aws_iam {
+  allergies: String
+  createdAt: AWSDateTime
+  diet: String
+  dietaryPreferences: String
+  dislikedFoods: String
+  email: String
+  id: ID!
+  intolerances: String
+  likedFoods: String
+  owner: String
+  savedRecipes(filter: ModelSavedRecipeFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelSavedRecipeConnection
+  updatedAt: AWSDateTime
+  userId: String
+  username: String
+}
+
+type simplifiedInstructions @aws_cognito_user_pools @aws_iam {
+  ingredients: [String]
+  number: Int
+  step: String
+}
+
+enum AmplifyAIConversationParticipantRole {
+  assistant
+  user
+}
+
+enum ModelAttributeTypes {
+  _null
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+enum SpoonacularGetRecipeQueryStringParametersDiet {
+  Gluten_Free
+  Ketogenic
+  Lacto_Vegetarian
+  Ovo_Vegetarian
+  Paleo
+  Pescetarian
+  Primal
+  Vegan
+  Vegetarian
+  Whole30
+}
+
+enum SpoonacularGetRecipeQueryStringParametersIntolerances {
+  Dairy
+  Egg
+  Fish
+  Peanut
+  Shellfish
+  Soy
+  Wheat
+}
+
+enum SpoonacularGetRecipeQueryStringParametersSort {
+  healthiness
+  popularity
+  price
+  random
+  sustainability
+  time
+}
+
+enum SpoonacularGetRecipeQueryStringParametersSortDirection {
+  asc
+  desc
+}
+
+enum SpoonacularGetRecipeQueryStringParametersType {
+  appetizer
+  beverage
+  bread
+  breakfast
+  dessert
+  drink
+  fingerfood
+  main_course
+  marinade
+  salad
+  sauce
+  side_dish
+  snack
+  soup
+}
+
+input AmplifyAIContentBlockInput {
+  document: AmplifyAIDocumentBlockInput
+  image: AmplifyAIImageBlockInput
+  text: String
+  toolResult: AmplifyAIToolResultBlockInput
+  toolUse: AmplifyAIToolUseBlockInput
+}
+
+input AmplifyAIConversationTurnErrorInput {
+  errorType: String!
+  message: String!
+}
+
+input AmplifyAIDocumentBlockInput {
+  format: String!
+  name: String!
+  source: AmplifyAIDocumentBlockSourceInput!
+}
+
+input AmplifyAIDocumentBlockSourceInput {
+  bytes: String
+}
+
+input AmplifyAIImageBlockInput {
+  format: String!
+  source: AmplifyAIImageBlockSourceInput!
+}
+
+input AmplifyAIImageBlockSourceInput {
+  bytes: String
+}
+
+input AmplifyAIToolConfigurationInput {
+  tools: [AmplifyAIToolInput]
+}
+
+input AmplifyAIToolInput {
+  toolSpec: AmplifyAIToolSpecificationInput
+}
+
+input AmplifyAIToolInputSchemaInput {
+  json: AWSJSON
+}
+
+input AmplifyAIToolResultBlockInput {
+  content: [AmplifyAIToolResultContentBlockInput!]!
+  status: String
+  toolUseId: String!
+}
+
+input AmplifyAIToolResultContentBlockInput {
+  document: AmplifyAIDocumentBlockInput
+  image: AmplifyAIImageBlockInput
+  json: AWSJSON
+  text: String
+}
+
+input AmplifyAIToolSpecificationInput {
+  description: String
+  inputSchema: AmplifyAIToolInputSchemaInput!
+  name: String!
+}
+
+input AmplifyAIToolUseBlockInput {
+  input: AWSJSON!
+  name: String!
+  toolUseId: String!
+}
+
+input CreateConversationConversationAIInput {
+  id: ID
+  metadata: AWSJSON
+  name: String
+}
+
+input CreateConversationMessageConversationAIAssistantInput {
+  associatedUserMessageId: ID
+  content: [AmplifyAIContentBlockInput]
+  conversationId: ID
+}
+
+input CreateConversationMessageConversationAIAssistantStreamingInput {
+  accumulatedTurnContent: [AmplifyAIContentBlockInput]
+  associatedUserMessageId: ID!
+  contentBlockDeltaIndex: Int
+  contentBlockDoneAtIndex: Int
+  contentBlockIndex: Int
+  contentBlockText: String
+  contentBlockToolUse: AWSJSON
+  conversationId: ID!
+  errors: [AmplifyAIConversationTurnErrorInput]
+  p: String
+  stopReason: String
+}
+
+input CreateConversationMessageConversationAIInput {
+  aiContext: AWSJSON
+  associatedUserMessageId: ID
+  content: [AmplifyAIContentBlockInput]
+  conversationId: ID!
+  id: ID
+  role: AmplifyAIConversationParticipantRole
+  toolConfiguration: AmplifyAIToolConfigurationInput
+}
+
+input CreateSavedRecipeInput {
+  aggregateLikes: Int
+  cheap: Boolean
+  cookingMinutes: Int
+  createdAt: AWSDateTime
+  creditsText: String
+  cuisines: [String]
+  dairyFree: Boolean
+  diets: [String]
+  dishTypes: [String]
+  gaps: String
+  glutenFree: Boolean
+  healthScore: Float
+  id: ID
+  image: String
+  instructions: String
+  license: String
+  lowFodmap: Boolean
+  occasions: [String]
+  preparationMinutes: Int
+  pricePerServing: Float
+  readyInMinutes: Int
+  recipeId: String
+  servings: Int
+  simplifiedInstructions: [SimplifiedInstructionsInput]
+  sourceName: String
+  summary: String
+  sustainable: Boolean
+  title: String
+  updatedAt: AWSDateTime
+  userId: ID
+  vegan: Boolean
+  vegetarian: Boolean
+  veryHealthy: Boolean
+  veryPopular: Boolean
+  weightWatcherSmartPoints: Int
+}
+
+input CreateUserProfileInput {
+  allergies: String
+  createdAt: AWSDateTime
+  diet: String
+  dietaryPreferences: String
+  dislikedFoods: String
+  email: String
+  id: ID
+  intolerances: String
+  likedFoods: String
+  updatedAt: AWSDateTime
+  userId: String
+  username: String
+}
+
+input DeleteConversationConversationAIInput {
+  id: ID!
+}
+
+input DeleteConversationMessageConversationAIInput {
+  id: ID!
+}
+
+input DeleteSavedRecipeInput {
+  id: ID!
+}
+
+input DeleteUserProfileInput {
+  id: ID!
+}
+
+input ModelAmplifyAIConversationParticipantRoleInput {
+  eq: AmplifyAIConversationParticipantRole
+  ne: AmplifyAIConversationParticipantRole
+}
+
+input ModelBooleanInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelConversationConversationAIConditionInput {
+  and: [ModelConversationConversationAIConditionInput]
+  createdAt: ModelStringInput
+  metadata: ModelStringInput
+  name: ModelStringInput
+  not: ModelConversationConversationAIConditionInput
+  or: [ModelConversationConversationAIConditionInput]
+  owner: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input ModelConversationConversationAIFilterInput {
+  and: [ModelConversationConversationAIFilterInput]
+  createdAt: ModelStringInput
+  id: ModelIDInput
+  metadata: ModelStringInput
+  name: ModelStringInput
+  not: ModelConversationConversationAIFilterInput
+  or: [ModelConversationConversationAIFilterInput]
+  owner: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input ModelConversationMessageConversationAIConditionInput {
+  aiContext: ModelStringInput
+  and: [ModelConversationMessageConversationAIConditionInput]
+  associatedUserMessageId: ModelIDInput
+  conversationId: ModelIDInput
+  createdAt: ModelStringInput
+  not: ModelConversationMessageConversationAIConditionInput
+  or: [ModelConversationMessageConversationAIConditionInput]
+  owner: ModelStringInput
+  role: ModelAmplifyAIConversationParticipantRoleInput
+  updatedAt: ModelStringInput
+}
+
+input ModelConversationMessageConversationAIFilterInput {
+  aiContext: ModelStringInput
+  and: [ModelConversationMessageConversationAIFilterInput]
+  associatedUserMessageId: ModelIDInput
+  conversationId: ModelIDInput
+  createdAt: ModelStringInput
+  id: ModelIDInput
+  not: ModelConversationMessageConversationAIFilterInput
+  or: [ModelConversationMessageConversationAIFilterInput]
+  owner: ModelStringInput
+  role: ModelAmplifyAIConversationParticipantRoleInput
+  updatedAt: ModelStringInput
+}
+
+input ModelFloatInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+}
+
+input ModelIDInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelSavedRecipeConditionInput {
+  aggregateLikes: ModelIntInput
+  and: [ModelSavedRecipeConditionInput]
+  cheap: ModelBooleanInput
+  cookingMinutes: ModelIntInput
+  createdAt: ModelStringInput
+  creditsText: ModelStringInput
+  cuisines: ModelStringInput
+  dairyFree: ModelBooleanInput
+  diets: ModelStringInput
+  dishTypes: ModelStringInput
+  gaps: ModelStringInput
+  glutenFree: ModelBooleanInput
+  healthScore: ModelFloatInput
+  image: ModelStringInput
+  instructions: ModelStringInput
+  license: ModelStringInput
+  lowFodmap: ModelBooleanInput
+  not: ModelSavedRecipeConditionInput
+  occasions: ModelStringInput
+  or: [ModelSavedRecipeConditionInput]
+  preparationMinutes: ModelIntInput
+  pricePerServing: ModelFloatInput
+  readyInMinutes: ModelIntInput
+  recipeId: ModelStringInput
+  servings: ModelIntInput
+  sourceName: ModelStringInput
+  summary: ModelStringInput
+  sustainable: ModelBooleanInput
+  title: ModelStringInput
+  updatedAt: ModelStringInput
+  userId: ModelIDInput
+  vegan: ModelBooleanInput
+  vegetarian: ModelBooleanInput
+  veryHealthy: ModelBooleanInput
+  veryPopular: ModelBooleanInput
+  weightWatcherSmartPoints: ModelIntInput
+}
+
+input ModelSavedRecipeFilterInput {
+  aggregateLikes: ModelIntInput
+  and: [ModelSavedRecipeFilterInput]
+  cheap: ModelBooleanInput
+  cookingMinutes: ModelIntInput
+  createdAt: ModelStringInput
+  creditsText: ModelStringInput
+  cuisines: ModelStringInput
+  dairyFree: ModelBooleanInput
+  diets: ModelStringInput
+  dishTypes: ModelStringInput
+  gaps: ModelStringInput
+  glutenFree: ModelBooleanInput
+  healthScore: ModelFloatInput
+  id: ModelIDInput
+  image: ModelStringInput
+  instructions: ModelStringInput
+  license: ModelStringInput
+  lowFodmap: ModelBooleanInput
+  not: ModelSavedRecipeFilterInput
+  occasions: ModelStringInput
+  or: [ModelSavedRecipeFilterInput]
+  preparationMinutes: ModelIntInput
+  pricePerServing: ModelFloatInput
+  readyInMinutes: ModelIntInput
+  recipeId: ModelStringInput
+  servings: ModelIntInput
+  sourceName: ModelStringInput
+  summary: ModelStringInput
+  sustainable: ModelBooleanInput
+  title: ModelStringInput
+  updatedAt: ModelStringInput
+  userId: ModelIDInput
+  vegan: ModelBooleanInput
+  vegetarian: ModelBooleanInput
+  veryHealthy: ModelBooleanInput
+  veryPopular: ModelBooleanInput
+  weightWatcherSmartPoints: ModelIntInput
+}
+
+input ModelSizeInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelStringInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionBooleanInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelSubscriptionConversationMessageConversationAIFilterInput {
+  aiContext: ModelSubscriptionStringInput
+  and: [ModelSubscriptionConversationMessageConversationAIFilterInput]
+  associatedUserMessageId: ModelSubscriptionIDInput
+  conversationId: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  or: [ModelSubscriptionConversationMessageConversationAIFilterInput]
+  owner: ModelStringInput
+  role: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionFloatInput {
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  in: [Float]
+  le: Float
+  lt: Float
+  ne: Float
+  notIn: [Float]
+}
+
+input ModelSubscriptionIDInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  in: [ID]
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  notIn: [ID]
+}
+
+input ModelSubscriptionIntInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  in: [Int]
+  le: Int
+  lt: Int
+  ne: Int
+  notIn: [Int]
+}
+
+input ModelSubscriptionSavedRecipeFilterInput {
+  aggregateLikes: ModelSubscriptionIntInput
+  and: [ModelSubscriptionSavedRecipeFilterInput]
+  cheap: ModelSubscriptionBooleanInput
+  cookingMinutes: ModelSubscriptionIntInput
+  createdAt: ModelSubscriptionStringInput
+  creditsText: ModelSubscriptionStringInput
+  cuisines: ModelSubscriptionStringInput
+  dairyFree: ModelSubscriptionBooleanInput
+  diets: ModelSubscriptionStringInput
+  dishTypes: ModelSubscriptionStringInput
+  gaps: ModelSubscriptionStringInput
+  glutenFree: ModelSubscriptionBooleanInput
+  healthScore: ModelSubscriptionFloatInput
+  id: ModelSubscriptionIDInput
+  image: ModelSubscriptionStringInput
+  instructions: ModelSubscriptionStringInput
+  license: ModelSubscriptionStringInput
+  lowFodmap: ModelSubscriptionBooleanInput
+  occasions: ModelSubscriptionStringInput
+  or: [ModelSubscriptionSavedRecipeFilterInput]
+  preparationMinutes: ModelSubscriptionIntInput
+  pricePerServing: ModelSubscriptionFloatInput
+  readyInMinutes: ModelSubscriptionIntInput
+  recipeId: ModelSubscriptionStringInput
+  servings: ModelSubscriptionIntInput
+  sourceName: ModelSubscriptionStringInput
+  summary: ModelSubscriptionStringInput
+  sustainable: ModelSubscriptionBooleanInput
+  title: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  userId: ModelSubscriptionIDInput
+  vegan: ModelSubscriptionBooleanInput
+  vegetarian: ModelSubscriptionBooleanInput
+  veryHealthy: ModelSubscriptionBooleanInput
+  veryPopular: ModelSubscriptionBooleanInput
+  weightWatcherSmartPoints: ModelSubscriptionIntInput
+}
+
+input ModelSubscriptionStringInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  in: [String]
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  notIn: [String]
+}
+
+input ModelSubscriptionUserProfileFilterInput {
+  allergies: ModelSubscriptionStringInput
+  and: [ModelSubscriptionUserProfileFilterInput]
+  createdAt: ModelSubscriptionStringInput
+  diet: ModelSubscriptionStringInput
+  dietaryPreferences: ModelSubscriptionStringInput
+  dislikedFoods: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  intolerances: ModelSubscriptionStringInput
+  likedFoods: ModelSubscriptionStringInput
+  or: [ModelSubscriptionUserProfileFilterInput]
+  owner: ModelStringInput
+  updatedAt: ModelSubscriptionStringInput
+  userId: ModelSubscriptionStringInput
+  username: ModelSubscriptionStringInput
+}
+
+input ModelUserProfileConditionInput {
+  allergies: ModelStringInput
+  and: [ModelUserProfileConditionInput]
+  createdAt: ModelStringInput
+  diet: ModelStringInput
+  dietaryPreferences: ModelStringInput
+  dislikedFoods: ModelStringInput
+  email: ModelStringInput
+  intolerances: ModelStringInput
+  likedFoods: ModelStringInput
+  not: ModelUserProfileConditionInput
+  or: [ModelUserProfileConditionInput]
+  owner: ModelStringInput
+  updatedAt: ModelStringInput
+  userId: ModelStringInput
+  username: ModelStringInput
+}
+
+input ModelUserProfileFilterInput {
+  allergies: ModelStringInput
+  and: [ModelUserProfileFilterInput]
+  createdAt: ModelStringInput
+  diet: ModelStringInput
+  dietaryPreferences: ModelStringInput
+  dislikedFoods: ModelStringInput
+  email: ModelStringInput
+  id: ModelIDInput
+  intolerances: ModelStringInput
+  likedFoods: ModelStringInput
+  not: ModelUserProfileFilterInput
+  or: [ModelUserProfileFilterInput]
+  owner: ModelStringInput
+  updatedAt: ModelStringInput
+  userId: ModelStringInput
+  username: ModelStringInput
+}
+
+input SimplifiedInstructionsInput {
+  ingredients: [String]
+  number: Int
+  step: String
+}
+
+input SpoonacularGetRecipePathParametersInput {
+  path_id: Int
+}
+
+input SpoonacularGetRecipeQueryStringParametersInput {
+  addRecipeInformation: Boolean
+  addRecipeNutrition: Boolean
+  author: String
+  diet: SpoonacularGetRecipeQueryStringParametersDiet
+  excludeIngredients: String
+  fillIngredients: Boolean
+  ignorePantry: Boolean
+  includeIngredients: String
+  instructionsRequired: Boolean
+  intolerances: SpoonacularGetRecipeQueryStringParametersIntolerances
+  maxCalories: Int
+  maxCarbs: Int
+  maxProtein: Int
+  maxReadyTime: Int
+  minCalories: Int
+  minCarbs: Int
+  minProtein: Int
+  number: Int
+  offset: Int
+  query: String
+  recipeBoxId: Int
+  sort: SpoonacularGetRecipeQueryStringParametersSort
+  sortDirection: SpoonacularGetRecipeQueryStringParametersSortDirection
+  tags: String
+  titleMatch: String
+  type: SpoonacularGetRecipeQueryStringParametersType
+}
+
+input UpdateConversationConversationAIInput {
+  id: ID!
+  metadata: AWSJSON
+  name: String
+}
+
+input UpdateSavedRecipeInput {
+  aggregateLikes: Int
+  cheap: Boolean
+  cookingMinutes: Int
+  createdAt: AWSDateTime
+  creditsText: String
+  cuisines: [String]
+  dairyFree: Boolean
+  diets: [String]
+  dishTypes: [String]
+  gaps: String
+  glutenFree: Boolean
+  healthScore: Float
+  id: ID!
+  image: String
+  instructions: String
+  license: String
+  lowFodmap: Boolean
+  occasions: [String]
+  preparationMinutes: Int
+  pricePerServing: Float
+  readyInMinutes: Int
+  recipeId: String
+  servings: Int
+  simplifiedInstructions: [SimplifiedInstructionsInput]
+  sourceName: String
+  summary: String
+  sustainable: Boolean
+  title: String
+  updatedAt: AWSDateTime
+  userId: ID
+  vegan: Boolean
+  vegetarian: Boolean
+  veryHealthy: Boolean
+  veryPopular: Boolean
+  weightWatcherSmartPoints: Int
+}
+
+input UpdateUserProfileInput {
+  allergies: String
+  createdAt: AWSDateTime
+  diet: String
+  dietaryPreferences: String
+  dislikedFoods: String
+  email: String
+  id: ID!
+  intolerances: String
+  likedFoods: String
+  updatedAt: AWSDateTime
+  userId: String
+  username: String
+}
