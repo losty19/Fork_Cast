@@ -1,4 +1,5 @@
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
+import defaultViteLogo from './assets/vite.svg';
 import './MainPage.css';
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { useState, useRef, useEffect } from "react";
@@ -267,7 +268,7 @@ const SideBar = () => {
         navigate('/searchResults', { state: { recipes } });
       } else {
         console.error("No data in response:", response);
-        setError('No data returned from Spoonacular');
+        setToastMessage('No data returned from Spoonacular.');
       }
     } catch (error) {
       console.error("Detailed error:", error);
@@ -300,7 +301,7 @@ const SideBar = () => {
         userId,
         recipeId: `custom-${Date.now()}`,
         title: customTitle,
-        image: '/vite.svg',
+        image: defaultViteLogo,
         summary: customSummary || 'Custom recipe created by user.',
         instructions: customInstructions || '',
         simplifiedInstructions: items.map((item, index) => ({
@@ -387,12 +388,8 @@ const SideBar = () => {
             <div className="logo-text">ForkCast</div>
           </button>
           <div className="sidebar">
-            <button 
-              className='icon-button' 
-              onClick={() => navigate("/chatbot")} 
-              style={{ backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '5px', padding: '5px' }}
-            >
-              <RuxIcon className="icon-image" size="small" icon="chatbubbles" />
+            <button className='icon-button' onClick={() => navigate("/chatbot")}>
+              <RuxIcon className="icon-image" size="small" icon="chat" />
             </button>
             <button className="icon-button" onClick={buttonPressed}>
               <RuxIcon className="icon-image" size="35px" icon="add-circle-outline" />

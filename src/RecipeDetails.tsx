@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
+import DefaultViteLogo from './assets/vite.svg';
 import {RuxIcon } from "@astrouxds/react";
 import SideBar from "./SideBar.tsx";
 import "./RecipeDetails.css";
@@ -26,7 +27,7 @@ const RecipeDetails: React.FC = () => {
                 <div className="text-wrapper">
                 <img
                   className="recipe_image"
-                  src={recipe.image || '/vite.svg'}
+                  src={recipe.image || DefaultViteLogo}
                   alt={recipe.title}
                 />
                 <div className="description-container">

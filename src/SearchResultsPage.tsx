@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import './SearchResultsPage.css';
+import defaultViteLogo from './assets/vite.svg';
 import { RuxIcon, RuxToast } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import { generateClient } from 'aws-amplify/api';
@@ -263,7 +264,7 @@ const SearchResultsPage: React.FC = () => {
                 />
               </FavorButton>
               <ImageContainer>
-                <StyledImage src={recipe.image || '/vite.svg'} alt={recipe.title} />
+                <StyledImage src={recipe.image || defaultViteLogo} alt={recipe.title} />
                 <VignetteOverlay />
               </ImageContainer>
               <h2 className="recipe-title">{recipe.title}</h2>
