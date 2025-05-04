@@ -1,5 +1,6 @@
 export interface SpoonacularRecipe {
     id: number;
+    recipeId?: string | null;
     title: string;
     image?: string | null;
     imageType?: string | null;

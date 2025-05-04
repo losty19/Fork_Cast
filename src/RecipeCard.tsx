@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import './MainPage.css';
-import { RuxIcon } from "@astrouxds/react";
+import { RuxIcon, RuxToast } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
 import { generateClient } from 'aws-amplify/api';
 import { Schema } from '../amplify/data/resource';
@@ -15,13 +15,10 @@ const MyRecipes = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-height: 100vh;
-  overflow: auto;
-  padding-top:18vh;
-  scrollbar-width:none;
-  padding-bottom:1rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 3rem;
+  box-sizing: border-box;
 `;
 
 const Card = styled.div`
@@ -30,38 +27,34 @@ const Card = styled.div`
   width: 11rem;
   border-radius: 15px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.61);
-  background-color:rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
   padding: 10px;
-  margin-top: 20px;
-  margin-left:0.25rem;
-  margin-right:0.25rem;
-
+  margin: 0.5rem;
   position: relative;
-  max-height:20rem;
   min-height: 18rem;
+  max-height: 20rem;
   transition: transform 0.5s ease;
   &:hover {
-    transform:scale(1.1);
-    z-index:2;
+    transform: scale(1.1);
+    z-index: 2;
   }
 `;
 
 const StyledImage = styled.img`
   width: 100%;
-  min-height:100%;
+  height: 7rem;
   object-fit: cover;
 `;
 
 const ImageContainer = styled.div`
-  min-height: 7rem;
+  height: 7rem;
   position: relative;
   border-radius: 15px;
   overflow: hidden;
-  margin-bottom: -15px;
-  `;
+  margin-bottom: 5px;
+`;
 
 const VignetteOverlay = styled.div`
-  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -75,25 +68,24 @@ const VignetteOverlay = styled.div`
 const FavorButton = styled.button`
   background: none;
   border: none;
-  cursor: pointe;
-  margin-top:-0.2rem;
-  margin-left: -0.5rem;
+  cursor: pointer;
   position: absolute;
-    z-index: 3;
+  top: 5px;
+  left: 5px;
+  z-index: 3;
   &:focus {
     outline: none;
   }
-    &:active {
+  &:active {
     transform: scale(0.9);
   }
-
 `;
 
 const ButtonContainer = styled.div`
   margin-top: auto;
   display: flex;
   justify-content: center;
-  padding-top: 7px;
+  padding-top: 5px;
 `;
 
 interface RecipeCardProps {
@@ -102,25 +94,30 @@ interface RecipeCardProps {
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
   const navigate = useNavigate();
-  const [favoritedIds, setFavoritedIds] = useState<number[]>(recipes.map(r => r.id));
+  const [favoritedIds, setFavoritedIds] = useState<string[]>(recipes.map(r => r.recipeId ?? ''));
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const handleFavorButtonClick = async (recipe: SpoonacularRecipe) => {
     try {
       const userId = (await getCurrentUser()).userId;
-      if (favoritedIds.includes(recipe.id)) {
+      console.log('recipe.id: ', recipe.id);
+      console.log('recipe.recipeId: ', recipe.recipeId);
+      console.log('favoritedIds: ', favoritedIds);
+
+      if (favoritedIds.includes(recipe.recipeId ?? '')) {
         // Remove from favorites
         const { data: savedRecipes } = await client.models.SavedRecipe.list({
-          filter: { userId: { eq: userId }, recipeId: { eq: recipe.id.toString() } },
+          filter: { userId: { eq: userId }, recipeId: { eq: recipe.recipeId ?? '' } },
         });
         if (savedRecipes.length > 0) {
           await client.models.SavedRecipe.delete({ id: savedRecipes[0].id });
-          setFavoritedIds(prev => prev.filter(id => id !== recipe.id));
+          setFavoritedIds(prev => prev.filter(id => id !== recipe.recipeId));
         }
       } else {
 
         // Add to favorites
         const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
-          recipeId: recipe.id.toString(),
+          recipeId: recipe.recipeId,
           userId,
           title: recipe.title,
           image: recipe.image,
@@ -157,9 +154,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
 
         if (errors) {
           console.error('Error saving favorite:', errors);
+          console.log("There was an error saving the recipe to favorites.", errors);
+          setToastMessage('Error saving recipe to favorites.');
           return;
         }
-        setFavoritedIds(prev => [...prev, recipe.id]);
+        setFavoritedIds(prev => [...prev, recipe.recipeId ?? '']);
       }
     } catch (error) {
       console.error('Error handling favorite:', error);
@@ -173,9 +172,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
 
   return (
     <MyRecipes>
-      <div className="My-recipes-text">
-        My Recipes
-      </div>
       {recipes.length === 0 ? (
         <p>No saved recipes found. Try adding some from the search page!</p>
       ) : (
@@ -185,15 +181,22 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
               <RuxIcon
                 className="favorbutton_icon"
                 size="2.5rem"
-                icon={favoritedIds.includes(recipe.id) ? "star" : "star-border"}
+                icon={favoritedIds.includes(recipe.recipeId ?? '') ? "star" : "star-border"}
               />
             </FavorButton>
             <ImageContainer>
-              <StyledImage src={recipe.image || 'https://via.placeholder.com/150'} alt={recipe.title} />
+              <StyledImage src={recipe.image || '../public/vite.svg'} alt={recipe.title} />
               <VignetteOverlay />
             </ImageContainer>
             <h2 className="recipe-title">{recipe.title}</h2>
-            <p className="description">{recipe.summary?.substring(0,100) + '...'}</p>
+            <p
+              className="description"
+              dangerouslySetInnerHTML={{
+              __html: recipe.summary
+                ? recipe.summary.substring(0, 100) + '...'
+                : '',
+              }}
+            ></p>
             <ButtonContainer>
               <button className="view-recipe" onClick={() => handleViewRecipeClick(recipe)}>
                 View Recipe
@@ -202,6 +205,31 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
           </Card>
         ))
       )}
+      {toastMessage && (
+          <div style={{
+            position: 'fixed',
+            top: '80px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10,
+            width: 'fit-content',
+            maxWidth: '90%',
+          }}>
+            <RuxToast
+              message={toastMessage}
+              closeAfter={3000}
+              style={{
+                backgroundColor: '#e27e36',
+                color: '#ffffff',
+                fontFamily: 'Cambria, Cochin',
+                fontSize: '1rem',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+              }}
+            />
+          </div>
+        )}
     </MyRecipes>
   );
 };

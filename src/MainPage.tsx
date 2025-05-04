@@ -92,6 +92,7 @@ const MainPage: React.FC = () => {
         // Map SavedRecipe to SpoonacularRecipe interface ( in /src/types/SpoonacularRecipe.ts )
         const mappedRecipes = data.map((recipe) => ({
           id: recipe.recipeId ? parseInt(recipe.recipeId, 10) : 0, // Convert to number or use a default value
+          recipeId: recipe.recipeId ?? null,
           title: recipe.title ?? "Untitled Recipe", // Provide a default value for null
           image: recipe.image ?? "", // Provide a default value for null
           imageType: recipe.image?.split('.').pop(),
@@ -142,11 +143,8 @@ const MainPage: React.FC = () => {
   return (
     <>
       <SideBar />
-      <div className="my-recipes-text">
-          My Recipes
-      </div>
-      <br />
-      {/* <AIchatbot /> */}
+      <div className="main-container">
+      <h1 className="my-recipes-text">My Recipes</h1>
       {loading ? (
         <p>Loading recipes...</p>
       ) : error ? (
@@ -154,6 +152,10 @@ const MainPage: React.FC = () => {
       ) : (
         <MyRecipes recipes={recipes} />
       )}
+      </div>
+      <footer className="footer">
+      <p>&copy; 2025 Fork Cast. All rights reserved.</p>
+      </footer>
     </>
   );
 };

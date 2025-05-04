@@ -1,0 +1,38 @@
+/* global.css */
+
+/* 1. Reset box model + remove default margins */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Base html/body */
+html, body {
+  height: 100%;
+  min-height: 100%;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background: radial-gradient(#ffffff, hsl(28, 91%, 66%));
+  color: hsl(233, 8%, 15%);
+  overflow-x: hidden;
+}
+
+/* 3. Prevent overflow issues */
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+h1, h2, h3, h4, p, li, span {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 4. Page container */
+.page-container {
+  padding: 1rem;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: auto;
+}

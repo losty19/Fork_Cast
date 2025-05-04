@@ -213,7 +213,7 @@ const SearchResultsPage: React.FC = () => {
           recipes.map((recipe) => (
             <Card key={recipe.id}>
               <ImageContainer>
-                <StyledImage src={recipe.image || 'https://via.placeholder.com/150'} alt={recipe.title} />
+                <StyledImage src={recipe.image || '../public/vite.svg'} alt={recipe.title} />
                 <VignetteOverlay />
               </ImageContainer>
               <h3>{recipe.title}</h3>

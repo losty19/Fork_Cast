@@ -45,7 +45,7 @@ const GroceryListItem: React.FC<GroceryListItemProps> = ({ item, onEdit }) => {
   return (
     <li className="grocery-item">
       {isEditing ? (
-        <div className="edit-mode" style={{ display: "flex", flexDirection: "row" }}>
+        <div className="edit-mode" style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
           <input
             type="text"
             value={newName}
@@ -81,9 +81,14 @@ const SideBar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [message, setMessage] = useState("");
+  const [customTitle, setCustomTitle] = useState('');
+  const [customSummary, setCustomSummary] = useState('');
+  const [customServings, setCustomServings] = useState<number | ''>('');
+  const [customReadyInMinutes, setCustomReadyInMinutes] = useState<number | ''>('');
+  const [customInstructions, setCustomInstructions] = useState('');
   const [newItemName, setNewItemName] = useState('');
   const [newItemMeasurement, setNewItemMeasurement] = useState('');
+  const [items, setItems] = useState<GroceryItem[]>([]);
   const [selectedPrefCuisines, setSelectedPrefCuisines] = useState<OptionType[]>([]);
   const [selectedExcludeCuisines, setSelectedExcludeCuisines] = useState<OptionType[]>([]);
   const [userProfile, setUserProfile] = useState<{
@@ -92,9 +97,8 @@ const SideBar = () => {
     diet?: string | null;
     intolerances?: string | null;
   } | null>(null);
-  const titleRef = useRef<HTMLTextAreaElement | null>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
-  const instructionsRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const navigate = useNavigate();
 
   const cuisineOptions: ReadonlyArray<OptionType> = [
     { value: 'african', label: 'African' },
@@ -126,10 +130,7 @@ const SideBar = () => {
     { value: 'vietnamese', label: 'Vietnamese' }
   ];
 
-  const [items, setItems] = useState<GroceryItem[]>([]);
-
-  const navigate = useNavigate();
-
+ 
   // Fetch UserProfile on mount
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -264,58 +265,109 @@ const SideBar = () => {
     }
   };
 
-  const handleDialogClose = () => {
-    setItems([]);
-    setIsMealRequestOpen(false);
-  };
-
   // CUSTOM MEAL HANDLER
-  const handleChange = async () => {
+  const handleCustomMealSubmit = async () => {
     if (!user) {
       setToastMessage('Please sign in to save custom meal.');
       return;
     }
+    if (!customTitle.trim()) {
+      setToastMessage('Please enter a recipe title.');
+      return;
+    }
+    if (items.length === 0) {
+      setToastMessage('Please add at least one ingredient.');
+      return;
+    }
+
     try {
       const userId = (await getCurrentUser()).userId;
       const { errors } = await client.models.SavedRecipe.create({
         userId,
         recipeId: `custom-${Date.now()}`,
-        title: titleRef.current?.value || 'Custom Recipe',
-        summary: instructionsRef.current?.value || '',
+        title: customTitle,
+        image: '../public/vite.svg',
+        summary: customSummary || 'Custom recipe created by user.',
+        instructions: customInstructions || '',
         simplifiedInstructions: items.map((item, index) => ({
           number: index + 1,
           step: `Add ${item.name} (${item.measurement}).`,
           ingredients: [item.name],
         })),
+        servings: customServings || 1,
+        readyInMinutes: customReadyInMinutes || 30,
+        vegetarian: false,
+        vegan: false,
+        glutenFree: false,
+        dairyFree: false,
+        veryHealthy: false,
+        cheap: false,
+        veryPopular: false,
+        sustainable: false,
+        lowFodmap: false,
+        weightWatcherSmartPoints: 0,
+        gaps: '',
+        preparationMinutes: 0,
+        cookingMinutes: 0,
+        aggregateLikes: 0,
+        healthScore: 0,
+        creditsText: user.username || 'User',
+        license: '',
+        sourceName: 'Custom',
+        pricePerServing: 0,
+        cuisines: [],
+        dishTypes: [],
+        diets: [],
+        occasions: [],
       });
+
+
       if (errors) {
+        console.error('Error saving custom meal:', errors);
         setToastMessage('Failed to save custom meal.');
       } else {
         setToastMessage('Custom meal saved successfully!');
         setIsMealRequestOpen(false);
+        setCustomTitle('');
+        setCustomSummary('');
+        setCustomServings('');
+        setCustomReadyInMinutes('');
+        setCustomInstructions('');
+        setItems([]);
       }
+
     } catch (error) {
       console.error('Error saving custom meal:', error);
       setToastMessage('Failed to save custom meal.');
     }
   };
 
-  const autoResizeTextarea = (ref: React.RefObject<HTMLTextAreaElement>) => {
-    if (ref.current) {
-      ref.current.style.height = "auto";
-      ref.current.style.height = ref.current.scrollHeight + "px";
-    }
+  const handleDialogClose = () => {
+    setCustomTitle('');
+    setCustomSummary('');
+    setCustomServings('');
+    setCustomReadyInMinutes('');
+    setCustomInstructions('');
+    setItems([]);
+    setIsMealRequestOpen(false);
   };
 
-  useEffect(() => {
-    autoResizeTextarea(titleRef);
-    autoResizeTextarea(descriptionRef);
-    autoResizeTextarea(instructionsRef);
-  }, [message]);
+  // const autoResizeTextarea = (ref: React.RefObject<HTMLTextAreaElement>) => {
+  //   if (ref.current) {
+  //     ref.current.style.height = "auto";
+  //     ref.current.style.height = ref.current.scrollHeight + "px";
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   autoResizeTextarea(titleRef);
+  //   autoResizeTextarea(descriptionRef);
+  //   autoResizeTextarea(instructionsRef);
+  // }, [message]);
 
   return (
     <>
-      <div className="main-container">
+
         <div className="header">
           <button onClick={() => navigate("/main")}>
             <div className="logo-text">ForkCast</div>
@@ -351,21 +403,21 @@ const SideBar = () => {
             </RuxTabs>
             <RuxTabPanels aria-labelledby="tab-set-id-1">
               <RuxTabPanel aria-labelledby="tab-id-1">
-                <div>Preferred Cuisines</div>
+                <div style={{ marginBottom: '10px' }}>Preferred Cuisines</div>
                 <Select
                   options={cuisineOptions}
                   isMulti
                   value={selectedPrefCuisines}
                   onChange={handlePrefCuisinesChange}
                 />
-                <div>Cuisines to Exclude</div>
+                <div style={{ marginBottom: '10px', marginTop: '10px' }}>Cuisines to Exclude</div>
                 <Select
                   options={cuisineOptions}
                   isMulti
                   value={selectedExcludeCuisines}
                   onChange={handleExcludeCuisinesChange}
                 />
-                Request
+                <div style={{ marginBottom: '10px', marginTop: '10px' }}>Search Query</div>
                 <RuxInput
                   class="MRInput"
                   type="text"
@@ -382,31 +434,44 @@ const SideBar = () => {
                 </div>
               </RuxTabPanel>
               <RuxTabPanel aria-labelledby="tab-id-2">
-                Recipe Title
+                <div style={{ marginBottom: '10px' }}>Recipe Title</div>
+                <RuxInput
+                  type="text"
+                  value={customTitle}
+                  onRuxinput={(e: any) => setCustomTitle(e.target.value)}
+                  placeholder="Enter recipe title"
+                />
+                <div style={{ marginBottom: '10px', marginTop: '10px' }}>Description</div>
                 <textarea
-                  ref={titleRef}
-                  onChange={(e) => setMessage(e.target.value)}
+                  value={customSummary}
+                  onChange={(e) => setCustomSummary(e.target.value)}
+                  placeholder="Enter a brief description"
                   style={{
                     width: "100%",
-                    overflow: "clip",
-                    resize: "none",
+                    height: "100px",
+                    resize: "vertical",
                     padding: "10px",
                     fontSize: "1rem",
+                    fontFamily: "Cambria, Cochin",
                   }}
                 />
-                <div>Recipe Description</div>
-                <textarea
-                  ref={descriptionRef}
-                  onChange={(e) => setMessage(e.target.value)}
-                  style={{
-                    width: "100%",
-                    overflow: "clip",
-                    resize: "none",
-                    padding: "10px",
-                    fontSize: "1rem",
-                  }}
+                <div style={{ marginBottom: '10px', marginTop: '10px' }}>Servings</div>
+                <RuxInput
+                  type="number"
+                  value={customServings !== '' ? String(customServings) : ''}
+                  onRuxinput={(e: any) => setCustomServings(Number(e.target.value) || '')}
+                  placeholder="Enter number of servings"
+                  min="1"
                 />
-                <div>Ingredients</div>
+                <div style={{ marginBottom: '10px', marginTop: '10px' }}>Ready in Minutes</div>
+                <RuxInput
+                  type="number"
+                  value={customReadyInMinutes !== '' ? String(customReadyInMinutes) : ''}
+                  onRuxinput={(e: any) => setCustomReadyInMinutes(Number(e.target.value) || '')}
+                  placeholder="Enter preparation time"
+                  min="1"
+                />
+                <div style={{ marginBottom: '10px', marginTop: '10px' }}>Ingredients</div>
                 <ul className="grocery-list">
                   {items.map((item) => (
                     <GroceryListItem
@@ -416,44 +481,44 @@ const SideBar = () => {
                     />
                   ))}
                 </ul>
-                <div className="add-ingredient" style={{ display: "flex", flexDirection: "row" }}>
-                  <input
+                <div className="add-ingredient" style={{ display: "flex", flexDirection: "row", gap: "0.5rem", marginBottom: '10px' }}>
+                  <RuxInput
                     type="text"
                     placeholder="Item name"
                     value={newItemName}
-                    onChange={(e) => setNewItemName(e.target.value)}
-                    className="input-field"
-                    style={{ width: "11.25vw", height: "5vh" }}
+                    onRuxinput={(e: any) => setNewItemName(e.target.value)}
+                    style={{ width: "11.25vw" }}
                   />
-                  <input
+                  <RuxInput
                     type="text"
                     placeholder="Measurement"
                     value={newItemMeasurement}
-                    onChange={(e) => setNewItemMeasurement(e.target.value)}
-                    className="input-field"
-                    style={{ width: "11.25vw", height: "5vh" }}
+                    onRuxinput={(e: any) => setNewItemMeasurement(e.target.value)}
+                    style={{ width: "11.25vw" }}
                   />
                   <button onClick={handleAddItem} className="add-item-butn">
                     Add Item
                   </button>
                 </div>
-                <div>Recipe Instructions</div>
+                <div style={{ marginBottom: '10px' }}>Instructions</div>
                 <textarea
-                  ref={instructionsRef}
-                  onChange={(e) => setMessage(e.target.value)}
+                  value={customInstructions}
+                  onChange={(e) => setCustomInstructions(e.target.value)}
+                  placeholder="Enter step-by-step instructions"
                   style={{
                     width: "100%",
-                    overflow: "clip",
-                    resize: "none",
+                    height: "150px",
+                    resize: "vertical",
                     padding: "10px",
                     fontSize: "1rem",
+                    fontFamily: "Cambria, Cochin",
                   }}
                 />
                 <div className="dialog-buttons">
                   <button className="mrCancel" onClick={handleDialogClose}>
                     Cancel
                   </button>
-                  <button className="mrSubmit" onClick={handleChange}>
+                  <button className="mrSubmit" onClick={handleCustomMealSubmit}>
                     Submit
                   </button>
                 </div>
@@ -464,12 +529,30 @@ const SideBar = () => {
         {isLoading && <div className="loading">Loading...</div>}
         {error && <div className="error">{error}</div>}
         {toastMessage && (
-          <RuxToast
-            message={toastMessage}
-            closeAfter={3000}
-          />
+          <div style={{
+            position: 'fixed',
+            top: '80px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10,
+            width: 'fit-content',
+            maxWidth: '90%',
+          }}>
+            <RuxToast
+              message={toastMessage}
+              closeAfter={3000}
+              style={{
+                backgroundColor: '#e27e36',
+                color: '#ffffff',
+                fontFamily: 'Cambria, Cochin',
+                fontSize: '1rem',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+              }}
+            />
+          </div>
         )}
-      </div>
     </>
   );
 };
