@@ -1,25 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import './SearchResultsPage.css';
-// import { RuxIcon } from "@astrouxds/react"; // Currently not used
+import { RuxIcon, RuxToast } from "@astrouxds/react";
 import SideBar from "./SideBar";
 import { generateClient } from 'aws-amplify/api';
 import { Schema } from '../amplify/data/resource';
 import { getCurrentUser } from "aws-amplify/auth";
 import { SpoonacularRecipe } from "./types/SpoonacularRecipe";
+import './MainPage.css';
+import './RecipeCard.css';
 
 const MyRecipes = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-height: 100vh;
-  overflow: auto;
-  padding-top:18vh;
-  scrollbar-width:none;
-  padding-bottom:1rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 3rem;
+  box-sizing: border-box;
 `;
 
 const Card = styled.div`
@@ -28,64 +27,66 @@ const Card = styled.div`
   width: 11rem;
   border-radius: 15px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.61);
-  background-color:rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
   padding: 10px;
-  margin-top: 20px;
-  margin-left:0.25rem;
-  margin-right:0.25rem;
-
+  margin: 0.5rem;
   position: relative;
-  max-height:20rem;
   min-height: 18rem;
+  max-height: 20rem;
   transition: transform 0.5s ease;
   &:hover {
-    transform:scale(1.1);
-    z-index:2;
+    transform: scale(1.1);
+    z-index: 2;
   }
 `;
 
 const StyledImage = styled.img`
   width: 100%;
-  min-height:100%;
+  height: 7rem;
   object-fit: cover;
 `;
 
 const ImageContainer = styled.div`
-  min-height: 7rem;
+  height: 7rem;
   position: relative;
   border-radius: 15px;
   overflow: hidden;
-  margin-bottom: -15px;
-  `;
+  margin-bottom: 5px;
+`;
 
 
 const VignetteOverlay = styled.div`
-  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
-  background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.5));
+  border-radius: 15px;
+  background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.19));
   z-index: 2;
 `;
 
-const FavoriteButton = styled.button`
+const FavorButton = styled.button`
   background: none;
   border: none;
-  cursor: pointe;
-  margin-top:-0.2rem;
-  margin-left: -0.5rem;
+  cursor: pointer;
   position: absolute;
-    z-index: 3;
+  top: 5px;
+  left: 5px;
+  z-index: 3;
   &:focus {
     outline: none;
   }
-    &:active {
+  &:active {
     transform: scale(0.9);
   }
+`;
 
+const ButtonContainer = styled.div`
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
 `;
 
 const BackButton = styled.button`
@@ -107,6 +108,26 @@ const SearchResultsPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const recipes: SpoonacularRecipe[] = location.state?.recipes || [];
+  const [favoritedIds, setFavoritedIds] = useState<string[]>([]);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Fetch initial favorited recipes
+  React.useEffect(() => {
+    const fetchFavoritedRecipes = async () => {
+      try {
+        const userId = (await getCurrentUser()).userId;
+        const { data: savedRecipes } = await client.models.SavedRecipe.list({
+          filter: { userId: { eq: userId } },
+        });
+        setFavoritedIds(savedRecipes.map(recipe => recipe.recipeId ?? ''));
+      } catch (error) {
+        console.error('Error fetching favorited recipes:', error);
+        setToastMessage('Failed to load favorited recipes.');
+        setTimeout(() => setToastMessage(null), 3000);
+      }
+    };
+    fetchFavoritedRecipes();
+  }, []);
 
   const transformInstructions = (
     analyzedInstructions?: Array<{
@@ -137,58 +158,79 @@ const SearchResultsPage: React.FC = () => {
 
   const handleFavorite = async (recipe: SpoonacularRecipe) => {
     try {
-      // This sends data to DynamoDB model
       const userId = (await getCurrentUser()).userId;
-      // Convert the API response of analyzedInstructions to a simplified format I created
-      const simplifiedInstructions = transformInstructions(recipe.analyzedInstructions);
-      
-      const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
-        recipeId: recipe.id.toString(),
-        userId,
-        title: recipe.title,
-        image: recipe.image,
-        readyInMinutes: recipe.readyInMinutes,
-        servings: recipe.servings,
-        summary: recipe.summary,
-        vegetarian: recipe.vegetarian,
-        vegan: recipe.vegan,
-        glutenFree: recipe.glutenFree,
-        dairyFree: recipe.dairyFree,
-        veryHealthy: recipe.veryHealthy,
-        cheap: recipe.cheap,
-        veryPopular: recipe.veryPopular,
-        sustainable: recipe.sustainable,
-        lowFodmap: recipe.lowFodmap,
-        weightWatcherSmartPoints: recipe.weightWatcherSmartPoints,
-        gaps: recipe.gaps,
-        preparationMinutes: recipe.preparationMinutes,
-        cookingMinutes: recipe.cookingMinutes,
-        aggregateLikes: recipe.aggregateLikes,
-        healthScore: recipe.healthScore,
-        creditsText: recipe.creditsText,
-        license: recipe.license,
-        sourceName: recipe.sourceName,
-        pricePerServing: recipe.pricePerServing,
-        cuisines: recipe.cuisines,
-        dishTypes: recipe.dishTypes,
-        diets: recipe.diets,
-        occasions: recipe.occasions,
-        simplifiedInstructions: simplifiedInstructions,
-        instructions: recipe.instructions,
-      });
+      // const recipeId = recipe.id.toString();
 
-      if (errors) {
-        console.error('Error saving favorite:', errors);
-        return;
+      if (favoritedIds.includes(recipe.recipeId ?? '')) {
+        // Remove from favorites
+        const { data: savedRecipes } = await client.models.SavedRecipe.list({
+          filter: { userId: { eq: userId }, recipeId: { eq: recipe.recipeId ?? '' } },
+        });
+        if (savedRecipes.length > 0) {
+          await client.models.SavedRecipe.delete({ id: savedRecipes[0].id });
+          setFavoritedIds(prev => prev.filter(id => id !== recipe.recipeId));
+          setToastMessage('Recipe removed from favorites.');
+        }
+      } else {
+        // Add to favorites
+        const simplifiedInstructions = transformInstructions(recipe.analyzedInstructions);
+        const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
+          recipeId: recipe.recipeId,
+          userId,
+          title: recipe.title,
+          image: recipe.image,
+          readyInMinutes: recipe.readyInMinutes,
+          servings: recipe.servings,
+          summary: recipe.summary,
+          vegetarian: recipe.vegetarian,
+          vegan: recipe.vegan,
+          glutenFree: recipe.glutenFree,
+          dairyFree: recipe.dairyFree,
+          veryHealthy: recipe.veryHealthy,
+          cheap: recipe.cheap,
+          veryPopular: recipe.veryPopular,
+          sustainable: recipe.sustainable,
+          lowFodmap: recipe.lowFodmap,
+          weightWatcherSmartPoints: recipe.weightWatcherSmartPoints,
+          gaps: recipe.gaps,
+          preparationMinutes: recipe.preparationMinutes,
+          cookingMinutes: recipe.cookingMinutes,
+          aggregateLikes: recipe.aggregateLikes,
+          healthScore: recipe.healthScore,
+          creditsText: recipe.creditsText,
+          license: recipe.license,
+          sourceName: recipe.sourceName,
+          pricePerServing: recipe.pricePerServing,
+          cuisines: recipe.cuisines,
+          dishTypes: recipe.dishTypes,
+          diets: recipe.diets,
+          occasions: recipe.occasions,
+          simplifiedInstructions,
+          instructions: recipe.instructions,
+        });
+
+        if (errors) {
+          console.error('Error saving favorite:', errors);
+          setToastMessage('Failed to save recipe to favorites.');
+          return;
+        }
+        setFavoritedIds(prev => [...prev, recipe.recipeId ?? '']);
+        setToastMessage('Recipe saved to favorites!');
       }
-      console.log('Recipe saved successfully: ', newRecipe);
+      setTimeout(() => setToastMessage(null), 3000);
     } catch (error) {
-      console.error('Error saving favorite: ', error);
+      console.error('Error handling favorite:', error);
+      setToastMessage('Error handling favorite.');
+      setTimeout(() => setToastMessage(null), 3000);
     }
   };
 
   const handleBackToMain = () => {
     navigate('/main');
+  };
+
+  const handleViewRecipeClick = (recipe: SpoonacularRecipe) => {
+    navigate("/recipeDetails", { state: { recipe } });
   };
 
   // Ensure recipes is an array
@@ -206,29 +248,72 @@ const SearchResultsPage: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="main-container">
       <SideBar />
+      <h1 className="My-recipes-text">Search Results</h1>
       <MyRecipes>
         {recipes.length > 0 ? (
           recipes.map((recipe) => (
             <Card key={recipe.id}>
+              <FavorButton onClick={() => handleFavorite(recipe)}>
+                <RuxIcon
+                  className="favorbutton_icon"
+                  size="2.5rem"
+                  icon={favoritedIds.includes(recipe.id.toString()) ? "star" : "star-border"}
+                />
+              </FavorButton>
               <ImageContainer>
                 <StyledImage src={recipe.image || '/vite.svg'} alt={recipe.title} />
                 <VignetteOverlay />
               </ImageContainer>
-              <h3>{recipe.title}</h3>
-              <FavoriteButton onClick={() => handleFavorite(recipe)}>
-                Favorite
-              </FavoriteButton>
+              <h2 className="recipe-title">{recipe.title}</h2>
+              <p
+                className="description"
+                dangerouslySetInnerHTML={{
+                  __html: recipe.summary
+                    ? recipe.summary.substring(0, 100) + '...'
+                    : '',
+                }}
+              ></p>
+              <ButtonContainer>
+                <button className="view-recipe" onClick={() => handleViewRecipeClick(recipe)}>
+                  View Recipe
+                </button>
+              </ButtonContainer>
             </Card>
           ))
         ) : (
-          <div>
-            <p>No recipes found. Please try again.</p>
-            <BackButton onClick={handleBackToMain}>Back to Main</BackButton>
-          </div>
+          <p>No recipes found. Please try another search.</p>
         )}
       </MyRecipes>
+      {toastMessage && (
+        <div style={{
+          position: 'fixed',
+          top: '80px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          width: 'fit-content',
+          maxWidth: '90%',
+        }}>
+          <RuxToast
+            message={toastMessage}
+            closeAfter={3000}
+            style={{
+              backgroundColor: '#e27e36',
+              color: '#ffffff',
+              fontFamily: 'Cambria, Cochin',
+              fontSize: '1rem',
+              padding: '10px 20px',
+              borderRadius: '5px',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+            }}
+          />
+        </div>
+      )}
+      <footer className="footer">
+        <p>&copy; 2025 Fork Cast. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
