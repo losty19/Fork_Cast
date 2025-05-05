@@ -1,21 +1,23 @@
-.side_container{
+.side_container {
   flex-direction: column;
-  position:relative;
-  left:101%;
+  position: relative;
+  left: 101%;
   display: flex;
-  max-width:4%;
+  max-width: 4%;
 }
-h2{
-font-size: 190%;
+
+h2 {
+  font-size: 190%;
 }
+
 .side-button {
   color: #855353;
   font-size: 7px;
-  font-family:monospace;
+  font-family: monospace;
   min-height: 50px;
   min-width: 50px;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   border: none;
@@ -24,15 +26,18 @@ font-size: 190%;
   padding: 0%;
   margin-bottom: 0%;
 }
+
 .side-button:hover {
   transition: 0.3s ease;
-  color: #513413; 
+  color: #513413;
 }
+
 .side-button:hover .side-image {
   transition: 0.3s ease;
-  color: #513413; 
-  }
-.side-buttom:focus {
+  color: #513413;
+}
+
+.side-button:focus {
   outline: none;
 }
 
@@ -43,9 +48,142 @@ font-size: 190%;
 .side-image {
   color: #f48d17;
 }
+
 .light-theme::part(dialog) {
   background: #e47d29;
   color: #f90d0d;
   border-radius: 15px;
   overflow: hidden;
+}
+
+.edit-button {
+  background-color: #eab992;
+  color: #855353;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.edit-button:hover {
+  background-color: #d5a37a;
+}
+
+.delete-butn {
+  background-color: #b34848;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.delete-butn:hover {
+  background-color: #8e3737;
+}
+
+.add-item-butn {
+  background-color: #b34848;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.add-item-butn:hover {
+  background-color: #8e3737;
+}
+
+.input-field-select-meal {
+  width: 9vw;
+  max-width: 150px;
+}
+
+.input-field-select-meal * {
+  color: black !important;
+}
+
+.edit-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-right: 10px;
+  max-width: 150px;
+}
+
+.grocery-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.grocery-item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  margin: 5px 0;
+}
+
+.display-mode {
+  display: flex;
+  align-items: center;
+}
+
+/* Left_SideBar.css */
+
+/* 1) Push the dialog down & constrain overall height */
+.edit-recipe-container::part(dialog) {
+  /* move the popup down so the top isn’t covered */
+  margin-top: 12vh !important;
+  /* limit how tall the popup can grow */
+  max-height: 80vh !important;
+  /* ensure any overflow inside scrolls */
+  overflow: hidden !important;
+  /* Make wider */
+  width: 50vw !important;
+}
+
+/* 2) Make the dialog’s internal body scrollable */
+.edit-recipe-container::part(body) {
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+  padding: 1rem !important; /* optional: keep some inner padding */
+}
+
+/* 3) Constrain the ingredients list */
+.edit-recipe-container .grocery-list {
+  max-height: 25vh;         /* or whatever fits your design */
+  overflow-y: auto;         /* scroll if too many items */
+  padding-left: 1rem;       /* match your list styling */
+}
+
+.scrollable-textarea {
+  width: 100%;           /* full width of form */
+  max-height: 150px;     /* adjust to taste */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  
+  /* scroll when content exceeds max-height */
+  overflow-y: auto;
+  
+  /* allows the user to resize vertically if you like */
+  resize: vertical;
+}
+
+/* shrink ingredient lines inside the Edit-Recipe dialog */
+.edit-recipe-container::part(body) .grocery-item {
+  /* about 14px if your base is 16px */
+  font-size: 0.85rem !important;
+  /* tighten up the spacing between lines (if you have multi-line names) */
+  line-height: 1.3 !important;
+}
+
+/* if you also want the <span> text inside each item even smaller */
+.edit-recipe-container::part(body) .grocery-item span {
+  font-size: 0.8rem !important;
 }
