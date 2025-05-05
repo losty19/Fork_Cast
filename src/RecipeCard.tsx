@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import defaultViteLogo from './assets/vite.svg';
+import logo_color from './assets/logo_color.svg';
 import './MainPage.css';
 import { RuxIcon, RuxToast } from "@astrouxds/react";
 import { useNavigate } from "react-router-dom";
@@ -186,7 +187,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
               />
             </FavorButton>
             <ImageContainer>
-              <StyledImage src={recipe.image || defaultViteLogo} alt={recipe.title} />
+              <StyledImage src={recipe.image || logo_color} alt={recipe.title} />
               <VignetteOverlay />
             </ImageContainer>
             <h2 className="recipe-title">{recipe.title}</h2>
