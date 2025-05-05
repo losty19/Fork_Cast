@@ -154,7 +154,7 @@ const MainPage: React.FC = () => {
       )}
       </div>
       <footer className="footer">
-      <p>&copy; 2025 Fork Cast. All rights reserved.</p>
+      <p>&copy; 2025 ForkCast. All rights reserved.</p>
       </footer>
     </>
   );

@@ -24,6 +24,7 @@ const ChatPage: React.FC = () => {
         dislikedFoods?: string | null;
         diet?: string | null;
         intolerances?: string | null;
+        savedRecipes?: { name: string }[];
       } | null>(null);
 
     React.useEffect(() => {
@@ -35,6 +36,25 @@ const ChatPage: React.FC = () => {
                 const { data: profiles, errors } = await client.models.UserProfile.list({
                     filter: { userId: { eq: currentUser.userId } },
                 });
+                const { data: savedRecipes, errors: savedRecipesErrors } = await client.models.SavedRecipe.list({
+                    filter: { userId: { eq: currentUser.userId } },
+                });
+
+                if (savedRecipesErrors) {
+                    console.error('Error fetching SavedRecipes:', savedRecipesErrors);
+                    return;
+                }
+
+                setProfiles(profiles);
+                setErrors(errors);
+
+                if (savedRecipes && savedRecipes.length > 0) {
+                    setUserProfile((prevProfile) => ({
+                        ...prevProfile,
+                        savedRecipes: savedRecipes.map((recipe) => ({ name: recipe.title ?? '' })),
+                    }));
+                    console.log("setUserProfile after saved recipes: ", userProfile)
+                }
 
                 if (errors) {
                     console.error('Error fetching UserProfile:', errors);
@@ -42,13 +62,14 @@ const ChatPage: React.FC = () => {
                 }
                 console.log('Fetched UserProfile: ', profiles);
                 if (profiles.length > 0) {
-                    setUserProfile({
-                        likedFoods: profiles[0].likedFoods,
-                        dislikedFoods: profiles[0].dislikedFoods,
-                        diet: profiles[0].diet,
-                        intolerances: profiles[0].intolerances,
-                    });
-                    console.log("User profile looks like: ", userProfile);
+                    setUserProfile((prevProfile) => ({
+                        ...prevProfile,
+                        likedFoods: profiles[0].likedFoods ?? null,
+                        dislikedFoods: profiles[0].dislikedFoods ?? null,
+                        diet: profiles[0].diet ?? null,
+                        intolerances: profiles[0].intolerances ?? null,
+                    }));
+                    console.log("setUserProfile after userPreferences: ", userProfile);
                 }
             } catch (error) {
                 console.error('Error fetching UserProfile:', error);
@@ -63,17 +84,17 @@ const ChatPage: React.FC = () => {
     // 'conversationAI' corresponds to the key we defined in amplify/data/resource.ts:contentReference[oaicite:11]{index=11}
     // console.log("messages: ", messages);
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', justifyContent: 'center' }}>
             <SideBar />
-            <h1 style={{ textAlign: 'center', width: '100%', marginTop: '20px' }}>Chat with AI</h1>
-            <div className="chat-page" style={{ width: '80%', margin: '0 auto', padding: '20px', backgroundColor: '#ffffff', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+            <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Chat with AI</h1>
+            <div className="chat-page" style={{ width: '80%', padding: '20px', backgroundColor: '#ffffff', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
                 <div className="AIConversation">
-                <AIConversation 
-                    messages={messages}
-                    isLoading={isLoading}
-                    handleSendMessage={handleSendMessage}
-                    aiContext={() => userProfile || {}}
-                />
+                    <AIConversation 
+                        messages={messages}
+                        isLoading={isLoading}
+                        handleSendMessage={handleSendMessage}
+                        aiContext={() => userProfile || {}}
+                    />
                 </div>
             </div>
         </div>
