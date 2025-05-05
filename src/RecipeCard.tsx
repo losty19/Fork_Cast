@@ -101,9 +101,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
   const handleFavorButtonClick = async (recipe: SpoonacularRecipe) => {
     try {
       const userId = (await getCurrentUser()).userId;
-      console.log('recipe.id: ', recipe.id);
-      console.log('recipe.recipeId: ', recipe.recipeId);
-      console.log('favoritedIds: ', favoritedIds);
+      console.log('(RC) recipe.id: ', recipe.id);
+      console.log('(RC) recipe.recipeId: ', recipe.recipeId);
+      console.log('(RC) favoritedIds: ', favoritedIds);
 
       if (favoritedIds.includes(recipe.recipeId ?? '')) {
         // Remove from favorites
@@ -155,7 +155,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipes }) => {
 
         if (errors) {
           console.error('Error saving favorite:', errors);
-          console.log("There was an error saving the recipe to favorites.", errors);
+          console.log("(RC) There was an error saving the recipe to favorites.", errors);
           setToastMessage('Error saving recipe to favorites.');
           return;
         }

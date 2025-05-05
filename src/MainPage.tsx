@@ -17,52 +17,7 @@ import { Schema } from "../amplify/data/resource";
 import { getCurrentUser } from "aws-amplify/auth";
 import { SpoonacularRecipe } from "./types/SpoonacularRecipe"
 
-// import { Amplify } from "aws-amplify";
-
-// Amplify.configure(outputs);
 const client = generateClient<Schema>();
-// const { useAIConversation } = createAIHooks(client);
-
-
-// const DataContext = React.createContext<{
-//   data: any;
-//   setData: (value: React.SetStateAction<any>) => void;
-// }>({ data: {}, setData: () => {} });
-
-// function AIchatbot() {
-//   const { data } = React.useContext(DataContext);
-//   const [
-//     {
-//       data: { messages },
-//       isLoading,
-//     },
-//     handleSendMessage,
-//   ] = useAIConversation('conversationAI');
-
-//   return (
-//     <AIConversation
-//       messages={messages}
-//       isLoading={isLoading}
-//       handleSendMessage={handleSendMessage}
-//       welcomeMessage="Hello! I'm your AI assistant. How can I help you today?"
-//       displayText={{
-//         getMessageTimestampText: (date) => new Intl.DateTimeFormat('en-US', {
-//           timeStyle: 'short',
-//           hour12: true,
-//           timeZone: 'EST',
-//         }).format(date)
-//       }}
-//       aiContext={() => {
-//         return {
-//           ...data,
-//         };
-//       }}
-//       FallbackResponseComponent={(props) => {
-//         return <>{JSON.stringify(props)}</>
-//       }}
-//     />
-//   );
-// }
 
 const MainPage: React.FC = () => {
   const { user } = useAuthenticator((context) => [context.user]);

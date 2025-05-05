@@ -261,7 +261,7 @@ const SideBar = () => {
       });
 
       if (response.data) {
-        console.log("Raw response:", response.data);
+        // console.log("Raw response:", response.data); // Very long
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         const recipes = data.results || [];
         console.log("Fetched recipes:", recipes);
