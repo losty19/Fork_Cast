@@ -167,25 +167,33 @@ const SearchResultsPage: React.FC = () => {
     try {
       const userId = (await getCurrentUser()).userId;
       const recipeId = recipe.id.toString();
+      console.log("(SRP)The recipe.recipeId is: ", recipe.recipeId);
+      console.log("(SRP)The recipe.id is: ", recipe.id);
+      console.log("(SRP)The recipeId is: ", recipeId);
+      console.log("(SRP)The favoritedIds is: ", favoritedIds);
 
-      if (favoritedIds.includes(recipe.recipeId ?? '')) {
+
+      if (favoritedIds.includes(recipeId ?? '')) {
+        console.log("(SRP) Inside the favoritedIds.includes() block");
         // Remove from favorites
         const { data: savedRecipes } = await client.models.SavedRecipe.list({
-          filter: { userId: { eq: userId }, recipeId: { eq: recipe.recipeId ?? '' } },
+          filter: { userId: { eq: userId }, recipeId: { eq: recipeId ?? '' } },
         });
         if (savedRecipes.length > 0) {
           await client.models.SavedRecipe.delete({ id: savedRecipes[0].id });
-          setFavoritedIds(prev => prev.filter(id => id !== recipe.recipeId));
+          setFavoritedIds(prev => prev.filter(id => id !== recipeId));
           setToastMessage('Recipe removed from favorites.');
         }
       } else {
         // Add to favorites
-        console.log("(SRP)The recipe.recipeId is: ", recipe.recipeId);
-        console.log("(SRP)The recipe.id is: ", recipe.id);
-        console.log("(SRP)The recipeId is: ", recipeId);
+        console.log("(SRP) In else: The recipe.recipeId is: ", recipe.recipeId);
+        console.log("(SRP) In else: The recipe.id is: ", recipe.id);
+        console.log("(SRP) In else: The recipeId is: ", recipeId);
         const simplifiedInstructions = transformInstructions(recipe.analyzedInstructions) || recipe.simplifiedInstructions;
+        console.log("(SRP) The simplifiedInstructions is: ", simplifiedInstructions);
+
         const { errors, data: newRecipe } = await client.models.SavedRecipe.create({
-          recipeId: recipe.recipeId,
+          recipeId,
           userId,
           title: recipe.title,
           image: recipe.image,
