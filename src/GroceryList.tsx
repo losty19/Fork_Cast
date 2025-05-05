@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './GroceryList.css';
 import SideBar from "./SideBar.tsx";
 import Select from 'react-select';
+import { toPng } from 'html-to-image';
 
 interface GroceryItem {
   id: number;
@@ -81,6 +82,29 @@ const GroceryList: React.FC = () => {
         setItems(items.filter(item => item.id !== id));
     };
 
+    const handleExportToImage = () => {
+      const listContainer = document.querySelector('.list-container') as HTMLElement;
+      const editButtons = document.querySelectorAll('.edit-btn') as NodeListOf<HTMLElement>;
+
+      editButtons.forEach((button) => (button.style.display = 'none'));
+
+      if (listContainer) {
+          toPng(listContainer)
+              .then((dataUrl) => {
+                  const link = document.createElement('a');
+                  link.download = 'grocery-list.png';
+                  link.href = dataUrl;
+                  link.click();
+              })
+              .catch((error) => {
+                  console.error('Error exporting to image:', error);
+              })
+              .finally(() => {
+                  editButtons.forEach((button) => (button.style.display = ''));
+              });
+      }
+  };
+
     return (
         <>
           <SideBar/>
@@ -131,6 +155,9 @@ const GroceryList: React.FC = () => {
               </button>
               <button onClick={handleClear} className="clear-list-btn">
                 Clear List
+              </button>
+              <button onClick={handleExportToImage} className="export-list-btn">
+                Export to Image
               </button>
             </div>
           </div>
