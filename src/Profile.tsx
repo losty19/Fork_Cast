@@ -193,9 +193,8 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="main-container">
       <SideBar />
-      <div>
         <RuxContainer className="profile-container light-theme">
           <div slot="header">Profile</div>
           <div slot="footer">
@@ -240,8 +239,7 @@ const Profile: React.FC = () => {
             closeAfter={3000}
           />
         )}
-      </div>
-    </>
+    </div>
   );
 };
 
