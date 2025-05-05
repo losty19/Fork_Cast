@@ -1,11 +1,35 @@
-.profile-container {
-    color: #a5561e;
-    background-color: #ffa500; /* Added background color */
-}
+/* Profile.css */
 
-.light-theme::part(dialog) {
-    background: #f9f9f9;
-    color: #000; 
-    border-radius: 15px;
-    overflow: hidden;
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* horizontal centering */
+    justify-content: center;   /* vertical centering */
+    padding: 20px;
+    min-width: 600px;          /* a bit wider */
+    min-height: 100vh;         /* fill the viewport height */
+    margin: 0 auto;
   }
+  
+  .profile-container {
+    width: 100%;
+    max-width: 800px;          /* allow it to grow a bit more */
+  }
+  
+  /* Ensure the inner dialog part also respects the new widths */
+  .profile-container::part(dialog) {
+    min-width: 50%;
+    max-width: 800px;
+  }
+  
+  /* Ensure the “profile-content” wrapper never shrinks below 600px */
+.profile-container .profile-content {
+    min-width: 400px !important;
+    width: auto !important;
+  }
+  
+  /* If RuxContainer exposes a body part, also bump its min-width */
+  .profile-container::part(body) {
+    min-width: 50% !important;
+  }
+  

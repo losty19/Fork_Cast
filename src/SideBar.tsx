@@ -1,5 +1,7 @@
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css';
 import defaultViteLogo from './assets/vite.svg';
+import logo_color from './assets/logo_color.svg';
+
 import './MainPage.css';
 // import { Authenticator } from '@aws-amplify/ui-react';
 import { useState, useRef, useEffect } from "react";
@@ -301,7 +303,7 @@ const SideBar = () => {
         userId,
         recipeId: `custom-${Date.now()}`,
         title: customTitle,
-        image: defaultViteLogo,
+        image: logo_color,
         summary: customSummary || 'Custom recipe created by user.',
         instructions: customInstructions || '',
         simplifiedInstructions: items.map((item, index) => ({
